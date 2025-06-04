@@ -1,11 +1,23 @@
 import MSG from '@/constants/msg'
-import { CreateUserReqBody, UserLoginReqBody, UserLogoutReqBody } from '@/models/requests/user.request'
+import { LIMIT, PAGE } from '@/constants/pagination'
+import {
+  ChangePasswordReqBody,
+  CreateUserReqBody,
+  Pagination,
+  TokenPayLoad,
+  UpdateProfileReqBody,
+  UpdateUserReqBody,
+  UserListReqQuery,
+  UserLoginReqBody,
+  UserLogoutReqBody
+} from '@/models/requests/user.request'
+import mediaService from '@/services/media.service'
 import userService from '@/services/user.service'
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { User } from 'generated/prisma'
 
-export const userLoginController = async (req: Request<ParamsDictionary, any, UserLoginReqBody>, res: Response) => {
+export const loginController = async (req: Request<ParamsDictionary, any, UserLoginReqBody>, res: Response) => {
   const user = req.user as User
   const result = await userService.login({ user_id: user.id, verify: user.verify })
   res.json({
@@ -15,7 +27,7 @@ export const userLoginController = async (req: Request<ParamsDictionary, any, Us
   return
 }
 
-export const userLogoutController = async (req: Request<ParamsDictionary, any, UserLogoutReqBody>, res: Response) => {
+export const logoutController = async (req: Request<ParamsDictionary, any, UserLogoutReqBody>, res: Response) => {
   const { refresh_token } = req.body
   const result = await userService.logout(refresh_token)
   res.json(result)
@@ -26,5 +38,62 @@ export const createUserController = async (req: Request<ParamsDictionary, any, C
   const { email, password } = req.body
   const result = await userService.createUser({ email, password })
   res.json(result)
+  return
+}
+
+export const updateUserController = async (req: Request<ParamsDictionary, any, UpdateUserReqBody>, res: Response) => {
+  const payload = req.body
+  const result = await userService.updateUser(payload)
+  res.json(result)
+  return
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
+  res: Response
+) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const { password } = req.body
+  const result = await userService.changePassword({ user_id, password })
+  res.json(result)
+  return
+}
+
+export const updateProfileController = async (
+  req: Request<ParamsDictionary, any, UpdateProfileReqBody>,
+  res: Response
+) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const payload = req.body
+  const result = await userService.updateProfile({ user_id, payload })
+  return
+}
+
+export const uploadAvatarController = async (req: Request, res: Response) => {
+  const result = await mediaService.handleUploadImage(req)
+  res.json({
+    message: MSG.UPLOAD_AVATAR_SUCCESSFULLY,
+    data: result
+  })
+  return
+}
+
+export const getListUserController = async (
+  req: Request<ParamsDictionary, any, any, UserListReqQuery>,
+  res: Response
+) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const payload = req.query
+  const { users, totalUsers, limit, page } = await userService.userList({ user_id, payload })
+  const totalPages = Math.ceil(totalUsers / limit)
+  res.json({
+    message: MSG.GET_LIST_USER_SUCCESS,
+    data: {
+      users,
+      page,
+      limit,
+      totalPages
+    }
+  })
   return
 }

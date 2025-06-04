@@ -14,7 +14,30 @@ const MSG = {
   TOKEN_NOT_FOUND: 'Không tìm thấy token',
   ACCESS_TOKEN_IS_REQUIRED: 'Access token là bắt buộc',
   CREATED_USER_SUCCESS: 'Tạo tài khoản thành công',
-  VERIFY_USER_INVALID: 'Tài khoản chưa được xác thực'
+  VERIFY_USER_INVALID: 'Tài khoản chưa được xác thực',
+  NO_PERMISSION_CREATE_USER: 'Không đủ quyền để tạo user',
+  EMAIL_ALREADY_EXISTS: 'Email đã tồn tại',
+  ID_IS_REQUIRED: 'Id là bắt buộc',
+  ID_MUST_BE_NUMBER: 'Id phải là dạng số',
+  USER_NOT_FOUND: 'Không tìm thấy user',
+  UPDATED_USER_SUCCESS: 'Cập nhật user thành công',
+  FULLNAME_MUST_BE_STRING: 'Họ và tên phải là dạng chuỗi',
+  FULLNAME_LENGTH: 'Họ và tên có độ dài từ 6 đến 160 ký tự',
+  DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
+  AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
+  AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 1000 ký tự',
+  ADDRESS_MUST_BE_STRING: 'Địa chỉ phải là dạng chuỗi',
+  ADDRESS_LENGTH: 'Địa chỉ có độ dài từ 6 đến 160 ký tự',
+  PHONE_MUST_BE_STRING: 'Số điện thoại phải là dạng chuỗi',
+  PHONE_LENGTH: 'Số điện có độ dài 10 ký tự',
+  CODE_MUST_BE_STRING: 'Mã nhân viên phải là dạng chuỗi',
+  CODE_LENGTH: 'Mã nhân viên có độ dài 6 ký tự',
+  ROLE_INVALID: 'Role chưa đúng định dạng',
+  OLD_PASSWORD_INCORRECT: 'Mật khẩu cũ không chính xác',
+  CHANGED_PASSWORD_SUCCESSS: 'Thay đổi mật khẩu thành công',
+  NOT_FOUND: 'Not Found',
+  UPLOAD_AVATAR_SUCCESSFULLY: 'Upload avatar thành công',
+  GET_LIST_USER_SUCCESS: 'Lấy danh sách user thành công'
 } as const
 
 export default MSG

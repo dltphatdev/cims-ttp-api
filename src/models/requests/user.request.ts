@@ -1,9 +1,20 @@
-import { TokenType } from '@/constants/enum'
-import { UserVerifyStatus } from 'generated/prisma'
 import { JwtPayload } from 'jsonwebtoken'
+import { Query } from 'express-serve-static-core'
+import { TokenType } from '@/constants/enum'
+import { UserRole, UserVerifyStatus } from 'generated/prisma'
+
+export interface Pagination extends Query {
+  page?: string
+  limit?: string
+}
+
+export interface UserListReqQuery extends Pagination {
+  fullname?: string
+  phone?: string
+}
 
 export interface TokenPayLoad extends JwtPayload {
-  user_id: string
+  user_id: number
   token_type: TokenType
   verify: UserVerifyStatus
   iat: number
@@ -21,5 +32,31 @@ export interface UserLogoutReqBody {
 
 export interface CreateUserReqBody {
   email: string
+  password: string
+}
+
+export interface UpdateProfileReqBody {
+  fullname?: string
+  avatar?: string
+  address?: string
+  phone?: string
+  code?: string
+  date_of_birth?: string
+}
+
+export interface UpdateUserReqBody {
+  id: number
+  fullname?: string
+  avatar?: string
+  address?: string
+  password?: string
+  phone?: string
+  code?: string
+  date_of_birth?: string
+  role?: UserRole
+}
+
+export interface ChangePasswordReqBody {
+  old_password: string
   password: string
 }

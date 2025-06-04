@@ -1,3 +1,7 @@
+type StringEnumType = {
+  [key: string]: string
+}
+
 function parseExpiration(exp: string): { value: number; unit: string } {
   const match = exp.match(/^(\d+)([smhdwMy])$/) // s: giây, m: phút, h: giờ, d: ngày, w: tuần, M: tháng, y: năm
   if (!match) {
@@ -6,6 +10,10 @@ function parseExpiration(exp: string): { value: number; unit: string } {
   const value = parseInt(match[1], 10)
   const unit = match[2]
   return { value, unit }
+}
+
+export const stringEnumToArray = (stringEnum: StringEnumType) => {
+  return Object.values(stringEnum).filter((value) => typeof value === 'string') as string[]
 }
 
 export function convertToSeconds(exp: string): number {

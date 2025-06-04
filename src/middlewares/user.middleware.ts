@@ -11,7 +11,11 @@ import { verifyToken } from '@/utils/jwt'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { TokenPayLoad } from '@/models/requests/user.request'
-import { UserVerifyStatus } from 'generated/prisma'
+import { UserRole, UserVerifyStatus } from 'generated/prisma'
+import userService from '@/services/user.service'
+import { stringEnumToArray } from '@/utils/common'
+
+const userRole = stringEnumToArray(UserRole)
 
 const emailSchema: ParamSchema = {
   notEmpty: {
@@ -47,7 +51,117 @@ const passwordSchema: ParamSchema = {
   }
 }
 
-export const userLoginValidator = validate(
+const idSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.ID_IS_REQUIRED
+  },
+  custom: {
+    options: async (value: number, { req }) => {
+      if (typeof value !== 'number') {
+        throw new Error(MSG.ID_MUST_BE_NUMBER)
+      }
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: value
+          }
+        })
+        if (user === null) {
+          throw new ErrorsWithStatus({
+            message: MSG.USER_NOT_FOUND,
+            status: HTTP_STATUS_CODE.NOT_FOUND
+          })
+        }
+        return true
+      } catch (error) {
+        throw error
+      }
+    }
+  }
+}
+
+const fullnameSchema: ParamSchema = {
+  isString: {
+    errorMessage: MSG.FULLNAME_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 6,
+      max: 160
+    },
+    errorMessage: MSG.FULLNAME_LENGTH
+  }
+}
+
+const dateOfBirthSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: MSG.DATE_OF_BIRTH_ISO8601
+  }
+}
+
+const avatarSchema: ParamSchema = {
+  isString: {
+    errorMessage: MSG.AVATAR_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 6,
+      max: 1000
+    },
+    errorMessage: MSG.AVATAR_LENGTH
+  }
+}
+
+const addressSchema: ParamSchema = {
+  isString: {
+    errorMessage: MSG.ADDRESS_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 160
+    },
+    errorMessage: MSG.ADDRESS_LENGTH
+  }
+}
+
+const phoneSchema: ParamSchema = {
+  isString: {
+    errorMessage: MSG.PHONE_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 10,
+      max: 10
+    },
+    errorMessage: MSG.PHONE_LENGTH
+  }
+}
+
+const codeSchema: ParamSchema = {
+  isString: {
+    errorMessage: MSG.CODE_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 6,
+      max: 6
+    },
+    errorMessage: MSG.CODE_LENGTH
+  }
+}
+
+export const loginValidator = validate(
   checkSchema(
     {
       email: {
@@ -140,7 +254,6 @@ export const refreshTokenValidator = validate(
                   }
                 })
               ])
-
               if (refresh_token === null) {
                 throw new ErrorsWithStatus({
                   message: MSG.TOKEN_NOT_FOUND,
@@ -179,8 +292,149 @@ export const verifiedUserValidator = (req: Request, res: Response, next: NextFun
   next()
 }
 
-// export const userRoleValidator = async (req: Request, res: Response, next: NextFunction) => {
-//   const { user_id } = req.decode_authorization as TokenPayLoad
-//   const
-//   next()
-// }
+export const userRoleValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const user = await prisma.user.findUnique({
+    where: {
+      id: user_id
+    }
+  })
+  if (user?.role !== UserRole.SuperAdmin) {
+    return next(
+      new ErrorsWithStatus({
+        message: MSG.NO_PERMISSION_CREATE_USER,
+        status: HTTP_STATUS_CODE.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
+
+export const createUserValidator = validate(
+  checkSchema(
+    {
+      email: {
+        ...emailSchema,
+        custom: {
+          options: async (value: string) => {
+            const user = await userService.isExistUser(value)
+            if (user) {
+              throw new ErrorsWithStatus({
+                message: MSG.EMAIL_ALREADY_EXISTS,
+                status: HTTP_STATUS_CODE.CONFLICT
+              })
+            }
+            return true
+          }
+        }
+      },
+      password: passwordSchema
+    },
+    ['body']
+  )
+)
+
+export const updateUserValidator = validate(
+  checkSchema(
+    {
+      id: idSchema,
+      fullname: {
+        ...fullnameSchema,
+        optional: true
+      },
+      address: {
+        ...addressSchema,
+        optional: true
+      },
+      avatar: {
+        ...avatarSchema,
+        optional: true
+      },
+      code: {
+        ...codeSchema,
+        optional: true
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      role: {
+        isIn: {
+          options: [userRole],
+          errorMessage: MSG.ROLE_INVALID
+        },
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      },
+      password: {
+        ...passwordSchema,
+        optional: true
+      }
+    },
+    ['body']
+  )
+)
+
+export const updateProfileValidator = validate(
+  checkSchema(
+    {
+      fullname: {
+        ...fullnameSchema,
+        optional: true
+      },
+      avatar: {
+        ...avatarSchema,
+        optional: true
+      },
+      address: {
+        ...addressSchema,
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      },
+      code: {
+        ...codeSchema,
+        optional: true
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      }
+    },
+    ['body']
+  )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      old_password: {
+        ...passwordSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            const { user_id } = (req as Request).decode_authorization as TokenPayLoad
+            const user = await prisma.user.findUnique({
+              where: {
+                id: user_id
+              }
+            })
+            if (!user) {
+              throw new Error(MSG.USER_NOT_FOUND)
+            }
+            if (user.password !== hashPassword(value)) {
+              throw new Error(MSG.OLD_PASSWORD_INCORRECT)
+            }
+            return true
+          }
+        }
+      },
+      password: passwordSchema
+    },
+    ['body']
+  )
+)

@@ -9,6 +9,8 @@ const isProduction = Boolean(options.production)
 
 export const CONFIG_ENV = {
   PORT: process.env.PORT,
+  SERVER_URL: process.env.SERVER_URL as string,
+  CLIENT_URL: process.env.CLIENT_URL as string,
   STATUS: isProduction ? 'production' : 'development',
   PASSWORD_SECRET: process.env.PASSWORD_SECRET as string,
   JWT_ACCESS_TOKEN_SECRET_KEY: process.env.JWT_ACCESS_TOKEN_SECRET_KEY as StringValue,
