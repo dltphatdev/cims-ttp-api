@@ -6,6 +6,7 @@ import {
   getListUserController,
   loginController,
   logoutController,
+  refreshTokenController,
   updateProfileController,
   updateUserController,
   uploadAvatarController
@@ -137,5 +138,13 @@ userRouter.post(
  * Request Query: UserListReqQuery
  * */
 userRouter.get(`${PREFIX_USER}`, accessTokenValidator, verifiedUserValidator, wrapRequestHandler(getListUserController))
+
+/*
+ * Description: Refresh token when access token is expired
+ * Path: /refresh-token
+ * Method: POST
+ * Request Body: { refresh_token: string }
+ */
+userRouter.post(`${PREFIX_USER}/refresh-token`, refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 export default userRouter

@@ -252,6 +252,67 @@ class UserService {
       limit
     }
   }
+
+  async refreshToken({
+    user_id,
+    exp,
+    refresh_token,
+    verify
+  }: {
+    user_id: number
+    exp: number
+    refresh_token: string
+    verify: UserVerifyStatus
+  }) {
+    const [new_access_token, new_refresh_token] = await Promise.all([
+      this.signAccessToken({
+        user_id,
+        verify
+      }),
+      this.signRefreshToken({ user_id, exp, verify }),
+      prisma.refreshToken.delete({
+        where: {
+          token: refresh_token
+        }
+      })
+    ])
+    const decode_refresh_token = await this.decodeRefreshToken(new_refresh_token)
+    const [user] = await Promise.all([
+      prisma.user.findUnique({
+        where: {
+          id: user_id
+        },
+        select: {
+          id: true,
+          email: true,
+          fullname: true,
+          verify: true,
+          avatar: true,
+          address: true,
+          phone: true,
+          code: true,
+          role: true,
+          date_of_birth: true,
+          created_at: true,
+          updated_at: true
+        }
+      }),
+      prisma.refreshToken.create({
+        data: {
+          user_id,
+          token: new_refresh_token,
+          iat: new Date(decode_refresh_token.iat * 1000),
+          exp: new Date(decode_refresh_token.exp * 1000)
+        }
+      })
+    ])
+
+    return {
+      access_token: new_access_token,
+      refresh_token: new_refresh_token,
+      user
+    }
+  }
 }
 
 const userService = new UserService()

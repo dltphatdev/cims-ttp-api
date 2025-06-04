@@ -4,6 +4,7 @@ import {
   ChangePasswordReqBody,
   CreateUserReqBody,
   Pagination,
+  RefreshTokenReqBody,
   TokenPayLoad,
   UpdateProfileReqBody,
   UpdateUserReqBody,
@@ -94,6 +95,20 @@ export const getListUserController = async (
       limit,
       totalPages
     }
+  })
+  return
+}
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
+  res: Response
+) => {
+  const { user_id, exp, verify } = req.decode_refresh_token as TokenPayLoad
+  const { refresh_token } = req.body
+  const result = await userService.refreshToken({ user_id, refresh_token, exp, verify })
+  res.json({
+    message: MSG.REFRESH_TOKEN_SUCCESS,
+    data: result
   })
   return
 }

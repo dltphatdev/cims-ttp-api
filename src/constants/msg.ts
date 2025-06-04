@@ -37,7 +37,8 @@ const MSG = {
   CHANGED_PASSWORD_SUCCESSS: 'Thay đổi mật khẩu thành công',
   NOT_FOUND: 'Not Found',
   UPLOAD_AVATAR_SUCCESSFULLY: 'Upload avatar thành công',
-  GET_LIST_USER_SUCCESS: 'Lấy danh sách user thành công'
+  GET_LIST_USER_SUCCESS: 'Lấy danh sách user thành công',
+  REFRESH_TOKEN_SUCCESS: 'Refresh token thành công'
 } as const
 
 export default MSG
