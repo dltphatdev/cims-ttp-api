@@ -215,20 +215,26 @@ class UserService {
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
     let whereCondition: any = {}
-    whereCondition.OR = []
-    if (payload.fullname) {
-      whereCondition.OR.push({
-        fullname: {
-          contains: payload.fullname.toLocaleLowerCase()
-        }
-      })
-    }
-    if (payload.phone) {
-      whereCondition.OR.push({
-        phone: {
-          contains: payload.phone
-        }
-      })
+    if (payload.fullname || payload.phone) {
+      whereCondition = {
+        OR: []
+      }
+
+      if (payload.fullname) {
+        whereCondition.OR.push({
+          fullname: {
+            contains: payload.fullname.toLocaleLowerCase()
+          }
+        })
+      }
+
+      if (payload.phone) {
+        whereCondition.OR.push({
+          phone: {
+            contains: payload.phone
+          }
+        })
+      }
     }
     whereCondition.id = {
       not: user_id

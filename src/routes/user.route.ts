@@ -48,6 +48,7 @@ userRouter.post(`${PREFIX_USER}/logout`, refreshTokenValidator, wrapRequestHandl
  * Description: Change password user account
  * Method: PUT
  * Path: /change-password
+ * Request header: { Authorization: Bearer <access_token> }
  * Request body: { old_password: string; password: string }
  * */
 userRouter.put(
