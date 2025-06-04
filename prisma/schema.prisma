@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserVerifyStatus {
+  Unverified
+  Verified
+  Banned
+}
+
+enum UserRole {
+  SuperAdmin
+  Admin
+  Sale
+}
+
+model User {
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
+  password      String
+  fullname      String?
+  verify        UserVerifyStatus @default(Unverified)
+  avatar        String?
+  address       String?
+  phone         String?
+  code          String?
+  refreshTokens RefreshToken[]
+  date_of_birth DateTime?
+  created_at    DateTime         @default(now())
+  updated_at    DateTime         @updatedAt
+  role          UserRole         @default(Sale)
+
+  @@index([email, password])
+}
+
+model RefreshToken {
+  id      Int      @id @default(autoincrement())
+  token   String   @unique
+  user_id Int
+  iat     DateTime
+  exp     DateTime
+  user    User     @relation(fields: [user_id], references: [id])
+
+  @@index([token])
+  @@index([exp])
+}
