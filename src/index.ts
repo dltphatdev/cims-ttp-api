@@ -6,6 +6,7 @@ import { defaultErrorHandle } from '@/middlewares/errors.middleware'
 import { PrismaClient } from '../generated/prisma'
 import userRouter from '@/routes/user.route'
 import { PREFIX_API } from '@/constants/path'
+import { hashPassword } from '@/utils/crypto'
 
 initFolder()
 

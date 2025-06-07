@@ -321,7 +321,7 @@ export const createUserValidator = validate(
             if (user) {
               throw new ErrorsWithStatus({
                 message: MSG.EMAIL_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.CONFLICT
+                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
               })
             }
             return true

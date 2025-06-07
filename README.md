@@ -27,7 +27,7 @@ Authorization: Bearer <your_access_token>
 
 ```json
 {
-  "email": "admin@ttptelecomvn.com",
+  "email": "admin@ttptelecom.com",
   "password": "Admin@123@123456"
 }
 ```

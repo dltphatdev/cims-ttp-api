@@ -42,7 +42,12 @@ userRouter.post(`${PREFIX_USER}/login`, loginValidator, wrapRequestHandler(login
  * Path: /logout
  * Request body: { refresh_token }
  * */
-userRouter.post(`${PREFIX_USER}/logout`, refreshTokenValidator, wrapRequestHandler(logoutController))
+userRouter.post(
+  `${PREFIX_USER}/logout`,
+  accessTokenValidator,
+  refreshTokenValidator,
+  wrapRequestHandler(logoutController)
+)
 
 /**
  * Description: Change password user account
