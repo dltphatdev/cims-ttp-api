@@ -81,6 +81,33 @@ const idSchema: ParamSchema = {
   }
 }
 
+const idParamsSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.ID_IS_REQUIRED
+  },
+  custom: {
+    options: async (value: string, { req }) => {
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: Number(value)
+          }
+        })
+        if (user === null) {
+          throw new ErrorsWithStatus({
+            message: MSG.USER_NOT_FOUND,
+            status: HTTP_STATUS_CODE.NOT_FOUND
+          })
+        }
+        return true
+      } catch (error) {
+        throw error
+      }
+    }
+  }
+}
+
 const fullnameSchema: ParamSchema = {
   isString: {
     errorMessage: MSG.FULLNAME_MUST_BE_STRING
@@ -436,5 +463,14 @@ export const changePasswordValidator = validate(
       password: passwordSchema
     },
     ['body']
+  )
+)
+
+export const getUserDetailValidator = validate(
+  checkSchema(
+    {
+      id: idParamsSchema
+    },
+    ['params']
   )
 )

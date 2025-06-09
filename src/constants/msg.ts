@@ -38,6 +38,7 @@ const MSG = {
   NOT_FOUND: 'Not Found',
   UPLOAD_AVATAR_SUCCESSFULLY: 'Upload avatar thành công',
   GET_LIST_USER_SUCCESS: 'Lấy danh sách user thành công',
+  GET_DETAIL_USER_SUCCESS: 'Lấy user thành công',
   REFRESH_TOKEN_SUCCESS: 'Refresh token thành công'
 } as const
 

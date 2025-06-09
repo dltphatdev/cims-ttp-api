@@ -1,7 +1,11 @@
 import { JwtPayload } from 'jsonwebtoken'
-import { Query } from 'express-serve-static-core'
+import { Query, ParamsDictionary } from 'express-serve-static-core'
 import { TokenType } from '@/constants/enum'
 import { UserRole, UserVerifyStatus } from 'generated/prisma'
+
+export interface GetUserDetailReqParams extends ParamsDictionary {
+  id: string
+}
 
 export interface Pagination extends Query {
   page?: string

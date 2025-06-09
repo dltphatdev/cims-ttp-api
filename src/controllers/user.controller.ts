@@ -1,9 +1,8 @@
 import MSG from '@/constants/msg'
-import { LIMIT, PAGE } from '@/constants/pagination'
 import {
   ChangePasswordReqBody,
   CreateUserReqBody,
-  Pagination,
+  GetUserDetailReqParams,
   RefreshTokenReqBody,
   TokenPayLoad,
   UpdateProfileReqBody,
@@ -95,6 +94,16 @@ export const getListUserController = async (
       limit,
       totalPages
     }
+  })
+  return
+}
+
+export const getUserDetailController = async (req: Request<GetUserDetailReqParams>, res: Response) => {
+  const id = Number(req.params?.id)
+  const user = await userService.getUserDetail(id)
+  res.json({
+    message: MSG.GET_DETAIL_USER_SUCCESS,
+    data: user
   })
   return
 }

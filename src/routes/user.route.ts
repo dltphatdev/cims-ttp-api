@@ -4,6 +4,7 @@ import {
   changePasswordController,
   createUserController,
   getListUserController,
+  getUserDetailController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -21,7 +22,8 @@ import {
   userRoleValidator,
   verifiedUserValidator,
   changePasswordValidator,
-  updateProfileValidator
+  updateProfileValidator,
+  getUserDetailValidator
 } from '@/middlewares/user.middleware'
 import { UpdateProfileReqBody, UpdateUserReqBody } from '@/models/requests/user.request'
 import { wrapRequestHandler } from '@/utils/handler'
@@ -144,6 +146,22 @@ userRouter.post(
  * Request Query: UserListReqQuery
  * */
 userRouter.get(`${PREFIX_USER}`, accessTokenValidator, verifiedUserValidator, wrapRequestHandler(getListUserController))
+
+/**
+ * Description: get user account detail
+ * Path: /detail/:id
+ * Method: GET
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request params: id: string
+ *  * */
+userRouter.get(
+  `${PREFIX_USER}/detail/:id`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  userRoleValidator,
+  getUserDetailValidator,
+  wrapRequestHandler(getUserDetailController)
+)
 
 /*
  * Description: Refresh token when access token is expired
