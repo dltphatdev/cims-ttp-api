@@ -25,5 +25,5 @@ app.use(PREFIX_API, userRouter)
 app.use(defaultErrorHandle)
 
 app.listen(port, () => {
-  console.log(`Server API running on ${CONFIG_ENV.STATUS} with port = ${port}`)
+  console.log(`Server API running on ${CONFIG_ENV.STATUS} with port ${port}`)
 })
