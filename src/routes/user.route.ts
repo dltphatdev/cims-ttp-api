@@ -92,7 +92,7 @@ userRouter.post(
   `${PREFIX_USER}/create`,
   accessTokenValidator,
   verifiedUserValidator,
-  userRoleValidator,
+  // userRoleValidator,
   createUserValidator,
   wrapRequestHandler(createUserController)
 )
@@ -158,7 +158,7 @@ userRouter.get(
   `${PREFIX_USER}/detail/:id`,
   accessTokenValidator,
   verifiedUserValidator,
-  userRoleValidator,
+  // userRoleValidator,
   getUserDetailValidator,
   wrapRequestHandler(getUserDetailController)
 )

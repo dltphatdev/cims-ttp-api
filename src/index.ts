@@ -9,7 +9,7 @@ import { PREFIX_API } from '@/constants/path'
 import { hashPassword } from '@/utils/crypto'
 
 initFolder()
-console.log(hashPassword('Admin@123@123456'))
+
 export const prisma = new PrismaClient()
 
 const port = CONFIG_ENV.PORT || 8080
