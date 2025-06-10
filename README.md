@@ -343,3 +343,21 @@ Authorization: Bearer <your_access_token>
   }
 }
 ```
+
+# Chạy lại migration cho MySQL
+
+```bash
+npx prisma migrate dev --name init
+```
+
+# Hoặc nếu bạn có schema sẵn mà không cần migration:
+
+```bash
+npx prisma db push
+```
+
+# Tạo lại Prisma Client
+
+```bash
+npx prisma generate
+```

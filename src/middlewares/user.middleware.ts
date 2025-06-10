@@ -11,9 +11,9 @@ import { verifyToken } from '@/utils/jwt'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { TokenPayLoad } from '@/models/requests/user.request'
-import { UserRole, UserVerifyStatus } from 'generated/prisma'
 import userService from '@/services/user.service'
 import { stringEnumToArray } from '@/utils/common'
+import { UserRole, UserVerifyStatus } from '@prisma/client'
 
 const userRole = stringEnumToArray(UserRole)
 

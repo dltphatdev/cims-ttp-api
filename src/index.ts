@@ -3,13 +3,13 @@ import cors from 'cors'
 import { CONFIG_ENV } from '@/constants/config'
 import { initFolder } from '@/utils/file'
 import { defaultErrorHandle } from '@/middlewares/errors.middleware'
-import { PrismaClient } from '../generated/prisma'
+import { PrismaClient } from '@prisma/client'
 import userRouter from '@/routes/user.route'
 import { PREFIX_API } from '@/constants/path'
 import { hashPassword } from '@/utils/crypto'
 
 initFolder()
-
+console.log(hashPassword('Admin@123@123456'))
 export const prisma = new PrismaClient()
 
 const port = CONFIG_ENV.PORT || 8080

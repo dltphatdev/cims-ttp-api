@@ -12,7 +12,7 @@ import {
 import { convertToSeconds } from '@/utils/common'
 import { hashPassword } from '@/utils/crypto'
 import { signToken, verifyToken } from '@/utils/jwt'
-import { UserVerifyStatus } from 'generated/prisma'
+import { UserVerifyStatus } from '@prisma/client'
 
 class UserService {
   private signAccessToken({ user_id, verify }: { user_id: number; verify: UserVerifyStatus }) {
