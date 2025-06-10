@@ -4,6 +4,7 @@ import {
   changePasswordController,
   createUserController,
   getListUserController,
+  getMeController,
   getUserDetailController,
   loginController,
   logoutController,
@@ -171,5 +172,13 @@ userRouter.get(
  * Request Body: { refresh_token: string }
  */
 userRouter.post(`${PREFIX_USER}/refresh-token`, refreshTokenValidator, wrapRequestHandler(refreshTokenController))
+
+/**
+ * Description: Get profile account
+ * Path: /me
+ * Method: GET
+ * Request header: { Authorization: Bearer <access_token> }
+ * */
+userRouter.get(`${PREFIX_USER}/me`, accessTokenValidator, wrapRequestHandler(getMeController))
 
 export default userRouter

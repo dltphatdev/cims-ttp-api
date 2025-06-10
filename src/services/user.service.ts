@@ -207,7 +207,7 @@ class UserService {
     })
     return {
       message: MSG.UPDATED_USER_SUCCESS,
-      user
+      data: user
     }
   }
   async userList({ user_id, payload }: { user_id: number; payload: UserListReqQuery }) {
@@ -339,6 +339,29 @@ class UserService {
     const user = await prisma.user.findUnique({
       where: {
         id
+      }
+    })
+    return user
+  }
+
+  async getMe(user_id: number) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: user_id
+      },
+      select: {
+        id: true,
+        email: true,
+        fullname: true,
+        verify: true,
+        avatar: true,
+        address: true,
+        phone: true,
+        code: true,
+        role: true,
+        date_of_birth: true,
+        created_at: true,
+        updated_at: true
       }
     })
     return user

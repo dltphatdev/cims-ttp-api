@@ -13,9 +13,9 @@ import {
 } from '@/models/requests/user.request'
 import mediaService from '@/services/media.service'
 import userService from '@/services/user.service'
+import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { User } from 'generated/prisma'
 
 export const loginController = async (req: Request<ParamsDictionary, any, UserLoginReqBody>, res: Response) => {
   const user = req.user as User
@@ -66,6 +66,7 @@ export const updateProfileController = async (
   const { user_id } = req.decode_authorization as TokenPayLoad
   const payload = req.body
   const result = await userService.updateProfile({ user_id, payload })
+  res.json(result)
   return
 }
 
@@ -118,6 +119,16 @@ export const refreshTokenController = async (
   res.json({
     message: MSG.REFRESH_TOKEN_SUCCESS,
     data: result
+  })
+  return
+}
+
+export const getMeController = async (req: Request, res: Response) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const user = await userService.getMe(user_id)
+  res.json({
+    message: MSG.GET_ME_SUCCESS,
+    data: user
   })
   return
 }

@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client'
 import userRouter from '@/routes/user.route'
 import { PREFIX_API } from '@/constants/path'
 import { hashPassword } from '@/utils/crypto'
+import serveRouter from '@/routes/serve.route'
 
 initFolder()
 
@@ -21,6 +22,7 @@ app.use(
   })
 )
 app.use(express.json())
+app.use('', serveRouter)
 app.use(PREFIX_API, userRouter)
 app.use(defaultErrorHandle)
 

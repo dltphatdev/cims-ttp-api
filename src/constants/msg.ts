@@ -40,7 +40,8 @@ const MSG = {
   GET_LIST_USER_SUCCESS: 'Lấy danh sách user thành công',
   GET_DETAIL_USER_SUCCESS: 'Lấy user thành công',
   REFRESH_TOKEN_SUCCESS: 'Refresh token thành công',
-  USER_VERIFY_STATUS_INVALID: 'Verify status invalid'
+  USER_VERIFY_STATUS_INVALID: 'Verify status invalid',
+  GET_ME_SUCCESS: 'Lấy thông tin profile user thành công'
 } as const
 
 export default MSG
