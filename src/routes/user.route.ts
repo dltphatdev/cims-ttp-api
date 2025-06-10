@@ -44,12 +44,7 @@ userRouter.post(`${PREFIX_USER}/login`, loginValidator, wrapRequestHandler(login
  * Path: /logout
  * Request body: { refresh_token }
  * */
-userRouter.post(
-  `${PREFIX_USER}/logout`,
-  accessTokenValidator,
-  refreshTokenValidator,
-  wrapRequestHandler(logoutController)
-)
+userRouter.post(`${PREFIX_USER}/logout`, refreshTokenValidator, wrapRequestHandler(logoutController))
 
 /**
  * Description: Change password user account
@@ -118,6 +113,7 @@ userRouter.patch(
     'code',
     'date_of_birth',
     'role',
+    'verify',
     'password',
     'phone'
   ]),
@@ -145,7 +141,12 @@ userRouter.post(
  * Request header: { Authorization: Bearer <access_token> }
  * Request Query: UserListReqQuery
  * */
-userRouter.get(`${PREFIX_USER}`, accessTokenValidator, verifiedUserValidator, wrapRequestHandler(getListUserController))
+userRouter.get(
+  `${PREFIX_USER}`,
+  accessTokenValidator,
+  // verifiedUserValidator,
+  wrapRequestHandler(getListUserController)
+)
 
 /**
  * Description: get user account detail

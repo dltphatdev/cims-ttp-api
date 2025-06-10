@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { Query, ParamsDictionary } from 'express-serve-static-core'
 import { TokenType } from '@/constants/enum'
-import { UserRole, UserVerifyStatus } from 'generated/prisma'
+import { UserRole, UserVerifyStatus } from '@prisma/client'
 
 export interface GetUserDetailReqParams extends ParamsDictionary {
   id: string
@@ -54,6 +54,7 @@ export interface UpdateUserReqBody {
   avatar?: string
   address?: string
   password?: string
+  verify?: UserVerifyStatus
   phone?: string
   code?: string
   date_of_birth?: string

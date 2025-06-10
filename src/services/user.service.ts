@@ -220,14 +220,6 @@ class UserService {
         OR: []
       }
 
-      // if (payload.fullname) {
-      //   whereCondition.OR.push({
-      //     fullname: {
-      //       contains: payload.fullname.toLocaleLowerCase()
-      //     }
-      //   })
-      // }
-
       if (Array.isArray(payload.fullname)) {
         payload.fullname.forEach((name) => {
           whereCondition.OR.push({
@@ -243,14 +235,6 @@ class UserService {
           }
         })
       }
-
-      // if (payload.phone) {
-      //   whereCondition.OR.push({
-      //     phone: {
-      //       contains: payload.phone
-      //     }
-      //   })
-      // }
 
       if (Array.isArray(payload.phone)) {
         payload.phone.forEach((phone) => {

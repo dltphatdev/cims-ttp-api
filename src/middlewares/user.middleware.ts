@@ -16,6 +16,7 @@ import { stringEnumToArray } from '@/utils/common'
 import { UserRole, UserVerifyStatus } from '@prisma/client'
 
 const userRole = stringEnumToArray(UserRole)
+const userVerifyStatus = stringEnumToArray(UserVerifyStatus)
 
 const emailSchema: ParamSchema = {
   notEmpty: {
@@ -281,6 +282,7 @@ export const refreshTokenValidator = validate(
                   }
                 })
               ])
+
               if (refresh_token === null) {
                 throw new ErrorsWithStatus({
                   message: MSG.TOKEN_NOT_FOUND,
@@ -389,6 +391,13 @@ export const updateUserValidator = validate(
         isIn: {
           options: [userRole],
           errorMessage: MSG.ROLE_INVALID
+        },
+        optional: true
+      },
+      verify: {
+        isIn: {
+          options: [userVerifyStatus],
+          errorMessage: MSG.USER_VERIFY_STATUS_INVALID
         },
         optional: true
       },
