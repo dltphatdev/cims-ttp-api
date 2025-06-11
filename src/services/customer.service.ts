@@ -1,6 +1,11 @@
 import MSG from '@/constants/msg'
+import { LIMIT, PAGE } from '@/constants/pagination'
 import { prisma } from '@/index'
-import { UpdateCustomerCompanyReqBody } from '@/models/requests/customer.request'
+import {
+  ListCustomerReqQuery,
+  UpdateCustomerCompanyReqBody,
+  UpdateCustomerPersonalReqBody
+} from '@/models/requests/customer.request'
 import { CustomerType } from '@prisma/client'
 
 class CustomerService {
@@ -17,7 +22,7 @@ class CustomerService {
     }
   }
 
-  async updateService(payload: UpdateCustomerCompanyReqBody) {
+  async updateCustomerCompany(payload: UpdateCustomerCompanyReqBody) {
     const customer = await prisma.customer.update({
       where: {
         id: payload.id
@@ -34,10 +39,134 @@ class CustomerService {
         email: true,
         contact_name: true,
         attachment: true,
-        note: true
+        note: true,
+        creator: {
+          select: {
+            fullname: true
+          }
+        },
+        consultantor: {
+          select: {
+            fullname: true
+          }
+        }
       }
     })
     return customer
+  }
+
+  async updateCustomerPersonal(payload: UpdateCustomerPersonalReqBody) {
+    const customer = await prisma.customer.update({
+      where: {
+        id: payload.id
+      },
+      data: payload,
+      select: {
+        id: true,
+        name: true,
+        date_of_birth: true,
+        email: true,
+        phone: true,
+        gender: true,
+        attachment: true,
+        note: true,
+        address_personal: true,
+        creator: {
+          select: {
+            fullname: true
+          }
+        },
+        consultantor: {
+          select: {
+            fullname: true
+          }
+        }
+      }
+    })
+    return customer
+  }
+
+  async serviceList(payload: ListCustomerReqQuery) {
+    const page = Number(payload?.page) || PAGE
+    const limit = Number(payload?.limit) || LIMIT
+    // eslint-disable-next-line prefer-const
+    let whereCondition: any = {}
+    if (payload.name || payload.phone) {
+      whereCondition = {
+        OR: []
+      }
+
+      if (Array.isArray(payload.name)) {
+        payload.name.forEach((item) => {
+          whereCondition.OR.push({
+            name: {
+              contains: item.toLocaleLowerCase()
+            }
+          })
+        })
+      } else if (payload.name) {
+        whereCondition.OR.push({
+          name: {
+            contains: payload.name.toLocaleLowerCase()
+          }
+        })
+      }
+
+      if (Array.isArray(payload.phone)) {
+        payload.phone.forEach((phone) => {
+          whereCondition.OR.push({
+            phone: {
+              contains: phone.toLocaleLowerCase()
+            }
+          })
+        })
+      } else if (payload.phone) {
+        whereCondition.OR.push({
+          phone: {
+            contains: payload.phone.toLocaleLowerCase()
+          }
+        })
+      }
+    }
+    const [customers, totalCustomers] = await Promise.all([
+      prisma.customer.findMany({
+        where: whereCondition,
+        skip: limit * (page - 1),
+        take: limit,
+        orderBy: {
+          created_at: 'asc'
+        },
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          status: true,
+          verify: true,
+          tax_code: true,
+          cccd: true,
+          phone: true,
+          contact_name: true,
+          created_at: true,
+          creator: {
+            select: {
+              fullname: true
+            }
+          },
+          consultantor: {
+            select: {
+              fullname: true
+            }
+          }
+        }
+      }),
+      prisma.customer.count({ where: whereCondition })
+    ])
+    return {
+      customers,
+      totalCustomers,
+      page,
+      limit
+    }
   }
 }
 

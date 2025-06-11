@@ -24,7 +24,8 @@ import {
   verifiedUserValidator,
   changePasswordValidator,
   updateProfileValidator,
-  getUserDetailValidator
+  getUserDetailValidator,
+  paginationValidator
 } from '@/middlewares/user.middleware'
 import { UpdateProfileReqBody, UpdateUserReqBody } from '@/models/requests/user.request'
 import { wrapRequestHandler } from '@/utils/handler'
@@ -145,7 +146,8 @@ userRouter.post(
 userRouter.get(
   `${PREFIX_USER}`,
   accessTokenValidator,
-  // verifiedUserValidator,
+  verifiedUserValidator,
+  paginationValidator,
   wrapRequestHandler(getListUserController)
 )
 

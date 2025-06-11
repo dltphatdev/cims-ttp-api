@@ -5,5 +5,6 @@ export enum TokenType {
 
 export enum MediaType {
   Image = 'image',
-  Video = 'video'
+  Video = 'video',
+  File = 'file'
 }

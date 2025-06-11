@@ -344,6 +344,157 @@ Authorization: Bearer <your_access_token>
 }
 ```
 
+## Enpoint Customer:
+
+1. Thêm mới khách hàng từ 1 user account:
+
+- URL: http://localhost:8080/api/customer/create
+- Method: POST
+- Request body:
+
+```ts
+interface CreateCustomerReqBody {
+  name: string
+  type: CustomerType
+}
+```
+
+- Respone JSON:
+
+```json
+{
+  "message": "Thêm mới khách hàng thành công"
+}
+```
+
+- Chú thích: Khi thêm mới khách hàng thì mặc định nếu không select đối tượng khách hàng thì mặc định là khách hàng doanh nghiệp
+
+2. Cập nhật khách hàng doanh nghiệp:
+
+- URL: http://localhost:8080/api/customer/update-company
+- Method: PATCH
+- Request body:
+
+```ts
+interface UpdateCustomerCompanyReqBody {
+  id: number
+  tax_code: string
+  consultantor_id?: number
+  name?: string
+  website?: string
+  surrogate?: string
+  address_company?: string
+  phone?: string
+  email?: string
+  contact_name?: string
+  attachment?: string
+  note?: string
+  verify?: CustomerVerify
+  status?: CustomerStatus
+}
+```
+
+- Respone JSON:
+
+```json
+{
+  "message": "Cập nhật thông tin khách hàng thành công",
+  "data": {
+    "id": 4,
+    "tax_code": "12345678911",
+    "name": "Cty abcde",
+    "website": null,
+    "surrogate": null,
+    "address_company": null,
+    "phone": null,
+    "email": null,
+    "contact_name": null,
+    "attachment": null,
+    "note": null,
+    "creator": {
+      "fullname": "TTP Supper Admin"
+    },
+    "consultantor": {
+      "fullname": "ABCDE"
+    }
+  }
+}
+```
+
+3. Cập nhật khách hàng cá nhân:
+
+- URL: http://localhost:8080/api/customer/update-personal
+- Method: PATCH
+- Request body:
+
+```ts
+interface UpdateCustomerPersonalReqBody {
+  id: number
+  consultantor_id?: number
+  name?: string
+  date_of_birth?: string
+  email?: string
+  phone?: string
+  gender?: CustomerGender
+  attachment?: string
+  note?: string
+  address_personal?: string
+  verify?: CustomerVerify
+  status?: CustomerStatus
+}
+```
+
+- Respone JSON:
+
+```json
+{
+  "message": "Cập nhật thông tin khách hàng thành công",
+  "data": {
+    "id": 5,
+    "name": "Phat",
+    "date_of_birth": null,
+    "email": null,
+    "phone": null,
+    "gender": null,
+    "attachment": null,
+    "note": null,
+    "address_personal": null,
+    "creator": {
+      "fullname": "ABCDE"
+    },
+    "consultantor": {
+      "fullname": "ABCDE"
+    }
+  }
+}
+```
+
+4. Upload file (bao gồm các định dạng: word, excel, pdf, pp):
+
+- URL: http://localhost:8080/api/customer/upload-file
+- Method: POST
+- Request body:
+
+FormData: {file: string}
+
+- Respone JSON:
+
+```json
+{
+  "message": "Upload file đính kèm thành công",
+  "data": {
+    "url": "http://localhost:8080",
+    "filename": "hd0b3e0l12jaxyrug5es4sct6.pdf",
+    "type": "file"
+  }
+}
+```
+
+5. Serve định dạng trả về client:
+
+- URL: http://localhost:8080/file/hd0b3e0l12jaxyrug5es4sct6.pdf
+- Method: GET
+
 # Chạy lại migration cho MySQL
 
 ```bash

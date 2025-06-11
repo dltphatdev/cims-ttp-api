@@ -1,13 +1,16 @@
+import { checkSchema, ParamSchema } from 'express-validator'
 import HTTP_STATUS_CODE from '@/constants/httpStatusCode'
 import MSG from '@/constants/msg'
 import { prisma } from '@/index'
 import { ErrorsWithStatus } from '@/models/Errors'
 import { stringEnumToArray } from '@/utils/common'
 import { validate } from '@/utils/validation'
-import { CustomerType } from '@prisma/client'
-import { checkSchema, ParamSchema } from 'express-validator'
+import { CustomerGender, CustomerStatus, CustomerType, CustomerVerify } from '@prisma/client'
 
 const customerType = stringEnumToArray(CustomerType)
+const customerGender = stringEnumToArray(CustomerGender)
+const customerStatus = stringEnumToArray(CustomerStatus)
+const customerVerify = stringEnumToArray(CustomerVerify)
 
 const nameSchema: ParamSchema = {
   isString: {
@@ -16,7 +19,7 @@ const nameSchema: ParamSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 6,
+      min: 4,
       max: 160
     },
     errorMessage: MSG.NAME_CUSTOMER_LENGTH
@@ -144,6 +147,16 @@ const noteSchema: ParamSchema = {
   }
 }
 
+const dateOfBirthSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: MSG.DATE_OF_BIRTH_ISO8601
+  }
+}
+
 export const createCustomerValidator = validate(
   checkSchema(
     {
@@ -151,7 +164,7 @@ export const createCustomerValidator = validate(
         ...nameSchema,
         custom: {
           options: async (value: string) => {
-            const customer = await prisma.customer.findFirst({
+            const customer = await prisma.customer.findUnique({
               where: {
                 name: value
               }
@@ -183,7 +196,7 @@ export const updateCustomerCompanyValidator = validate(
       id: {
         ...idSchema,
         custom: {
-          options: async (value: number, { req }) => {
+          options: async (value: number) => {
             if (typeof value !== 'number') {
               throw new Error(MSG.ID_MUST_BE_NUMBER)
             }
@@ -213,9 +226,56 @@ export const updateCustomerCompanyValidator = validate(
           }
         }
       },
+      consultantor_id: {
+        ...idSchema,
+        custom: {
+          options: async (value: number) => {
+            if (typeof value !== 'number') {
+              throw new Error(MSG.ID_MUST_BE_NUMBER)
+            }
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const customer = await prisma.customer.findUnique({
+                where: {
+                  id: value
+                }
+              })
+              if (customer === null) {
+                throw new ErrorsWithStatus({
+                  message: MSG.CUSTOMER_NOT_FOUND,
+                  status: HTTP_STATUS_CODE.NOT_FOUND
+                })
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        },
+        optional: true
+      },
       tax_code: taxCodeSchema,
       name: {
         ...nameSchema,
+        custom: {
+          options: async (value: string) => {
+            const customers = await prisma.customer.findMany({
+              where: {
+                name: {
+                  not: value
+                }
+              }
+            })
+            const isNameCustomer = customers.some((item) => item.name === value)
+            if (isNameCustomer) {
+              throw new ErrorsWithStatus({
+                message: MSG.NAME_CUSTOMER_ALREADY_EXISTS,
+                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
+              })
+            }
+            return true
+          }
+        },
         optional: true
       },
       website: {
@@ -238,12 +298,15 @@ export const updateCustomerCompanyValidator = validate(
         ...emailSchema,
         custom: {
           options: async (value: string) => {
-            const customer = await prisma.customer.findUnique({
+            const customers = await prisma.customer.findMany({
               where: {
-                email: value
+                email: {
+                  not: value
+                }
               }
             })
-            if (customer) {
+            const isEmailCustomer = customers.some((item) => item.email === value)
+            if (isEmailCustomer) {
               throw new ErrorsWithStatus({
                 message: MSG.EMAIL_ALREADY_EXISTS,
                 status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
@@ -258,6 +321,20 @@ export const updateCustomerCompanyValidator = validate(
         ...phoneSchema,
         optional: true
       },
+      status: {
+        isIn: {
+          options: [customerStatus],
+          errorMessage: MSG.CUSTOMER_STATUS_INVALID
+        },
+        optional: true
+      },
+      verify: {
+        isIn: {
+          options: [customerVerify],
+          errorMessage: MSG.CUSTOMER_VERIFY_INVALID
+        },
+        optional: true
+      },
       attachment: {
         ...attachmentSchema,
         optional: true
@@ -268,5 +345,195 @@ export const updateCustomerCompanyValidator = validate(
       }
     },
     ['body']
+  )
+)
+
+export const updateCustomerPersonalValidator = validate(
+  checkSchema(
+    {
+      id: {
+        ...idSchema,
+        custom: {
+          options: async (value: number, { req }) => {
+            if (typeof value !== 'number') {
+              throw new Error(MSG.ID_MUST_BE_NUMBER)
+            }
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const customer = await prisma.customer.findUnique({
+                where: {
+                  id: value
+                }
+              })
+              if (customer === null) {
+                throw new ErrorsWithStatus({
+                  message: MSG.CUSTOMER_NOT_FOUND,
+                  status: HTTP_STATUS_CODE.NOT_FOUND
+                })
+              }
+              if (customer.type !== CustomerType.Personal) {
+                throw new ErrorsWithStatus({
+                  message: MSG.IS_CUSTOMER_PERSONAL,
+                  status: HTTP_STATUS_CODE.FORBIDDEN
+                })
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        }
+      },
+      consultantor_id: {
+        ...idSchema,
+        custom: {
+          options: async (value: number) => {
+            if (typeof value !== 'number') {
+              throw new Error(MSG.ID_MUST_BE_NUMBER)
+            }
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const customer = await prisma.customer.findUnique({
+                where: {
+                  id: value
+                }
+              })
+              if (customer === null) {
+                throw new ErrorsWithStatus({
+                  message: MSG.CUSTOMER_NOT_FOUND,
+                  status: HTTP_STATUS_CODE.NOT_FOUND
+                })
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        },
+        optional: true
+      },
+      name: {
+        ...nameSchema,
+        custom: {
+          options: async (value: string) => {
+            const customers = await prisma.customer.findMany({
+              where: {
+                name: {
+                  not: value
+                }
+              }
+            })
+            const isNameCustomer = customers.some((item) => item.name === value)
+            if (isNameCustomer) {
+              throw new ErrorsWithStatus({
+                message: MSG.NAME_CUSTOMER_ALREADY_EXISTS,
+                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
+              })
+            }
+            return true
+          }
+        },
+        optional: true
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      email: {
+        ...emailSchema,
+        custom: {
+          options: async (value: string) => {
+            const customers = await prisma.customer.findMany({
+              where: {
+                email: {
+                  not: value
+                }
+              }
+            })
+            const isEmailCustomer = customers.some((item) => item.email === value)
+            if (isEmailCustomer) {
+              throw new ErrorsWithStatus({
+                message: MSG.EMAIL_ALREADY_EXISTS,
+                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
+              })
+            }
+            return true
+          }
+        },
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      },
+      gender: {
+        isIn: {
+          options: [customerGender],
+          errorMessage: MSG.CUSTOMER_GENDER_INVALID
+        },
+        optional: true
+      },
+      status: {
+        isIn: {
+          options: [customerStatus],
+          errorMessage: MSG.CUSTOMER_STATUS_INVALID
+        },
+        optional: true
+      },
+      verify: {
+        isIn: {
+          options: [customerVerify],
+          errorMessage: MSG.CUSTOMER_VERIFY_INVALID
+        },
+        optional: true
+      },
+      address_personal: {
+        ...addressSchema,
+        optional: true
+      },
+      attachment: {
+        ...attachmentSchema,
+        optional: true
+      },
+      note: {
+        ...noteSchema,
+        optional: true
+      }
+    },
+    ['body']
+  )
+)
+
+export const paginationValidator = validate(
+  checkSchema(
+    {
+      limit: {
+        isNumeric: true,
+        custom: {
+          options: (value) => {
+            const number = Number(value)
+            if (number < 1 || number > 100) {
+              throw new Error(MSG.LIMIT_LENGHT)
+            }
+            return true
+          }
+        },
+        optional: true
+      },
+      page: {
+        isNumeric: true,
+        custom: {
+          options: (value) => {
+            const number = Number(value)
+            if (number < 1) {
+              throw new Error(MSG.PAGE_INVALID)
+            }
+            return true
+          }
+        },
+        optional: true
+      }
+    },
+    ['query']
   )
 )

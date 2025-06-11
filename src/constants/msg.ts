@@ -24,7 +24,7 @@ const MSG = {
   FULLNAME_MUST_BE_STRING: 'Họ và tên phải là dạng chuỗi',
   NAME_CUSTOMER_MUST_BE_STRING: 'Tên dịch vụ phải là dạng chuỗi',
   FULLNAME_LENGTH: 'Họ và tên có độ dài từ 6 đến 160 ký tự',
-  NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 6 đến 160 ký tự',
+  NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 4 đến 160 ký tự',
   DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
   AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
   AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 255 ký tự',
@@ -58,7 +58,15 @@ const MSG = {
   ATTACHMENT_MUST_BE_STRING: 'File đính kèm phải là dạng chuỗi',
   NOTE_MAX_LENGTH: 'Ghi chú không được phép vượt quá 2000 ký tự',
   UPDATED_CUSTOMER_SUCCESS: 'Cập nhật thông tin khách hàng thành công',
-  IS_CUSTOMER_COMPANY: 'Khách hàng phải là khách hàng doanh nghiệp'
+  IS_CUSTOMER_COMPANY: 'Khách hàng phải là khách hàng doanh nghiệp',
+  IS_CUSTOMER_PERSONAL: 'Khách hàng phải là khách hàng cá nhân',
+  CUSTOMER_GENDER_INVALID: 'Giới tính khách hàng chưa phù hợp',
+  LIMIT_LENGHT: 'Giới hạn phân trang có giá trị phải lớn 1 và bé hơn 100',
+  PAGE_INVALID: 'Số trang phải có giá trị lớn hơn 1 hoặc bằng 1',
+  UPLOAD_FILE_SUCCESSFULLY: 'Upload file đính kèm thành công',
+  CUSTOMER_STATUS_INVALID: 'Trạng thái khách hàng phải là Active hoặc Deactivated',
+  CUSTOMER_VERIFY_INVALID: 'Xác thực khách hàng phải là Unverified hoặc Verified',
+  GET_LIST_CUSTOMER_SUCCESS: 'Lấy danh sách khách hàng thành công'
 } as const
 
 export default MSG

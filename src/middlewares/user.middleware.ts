@@ -483,3 +483,37 @@ export const getUserDetailValidator = validate(
     ['params']
   )
 )
+
+export const paginationValidator = validate(
+  checkSchema(
+    {
+      limit: {
+        isNumeric: true,
+        custom: {
+          options: (value) => {
+            const number = Number(value)
+            if (number < 1 || number > 100) {
+              throw new Error(MSG.LIMIT_LENGHT)
+            }
+            return true
+          }
+        },
+        optional: true
+      },
+      page: {
+        isNumeric: true,
+        custom: {
+          options: (value) => {
+            const number = Number(value)
+            if (number < 1) {
+              throw new Error(MSG.PAGE_INVALID)
+            }
+            return true
+          }
+        },
+        optional: true
+      }
+    },
+    ['query']
+  )
+)
