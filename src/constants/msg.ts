@@ -22,10 +22,13 @@ const MSG = {
   USER_NOT_FOUND: 'Không tìm thấy user',
   UPDATED_USER_SUCCESS: 'Cập nhật user thành công',
   FULLNAME_MUST_BE_STRING: 'Họ và tên phải là dạng chuỗi',
+  NAME_CUSTOMER_MUST_BE_STRING: 'Tên dịch vụ phải là dạng chuỗi',
   FULLNAME_LENGTH: 'Họ và tên có độ dài từ 6 đến 160 ký tự',
+  NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 6 đến 160 ký tự',
   DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
   AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
-  AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 1000 ký tự',
+  AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 255 ký tự',
+  ATTACHMENT_LENGTH: 'File đính kèm có độ dài từ 6 đến 255 ký tự',
   ADDRESS_MUST_BE_STRING: 'Địa chỉ phải là dạng chuỗi',
   ADDRESS_LENGTH: 'Địa chỉ có độ dài từ 6 đến 160 ký tự',
   PHONE_MUST_BE_STRING: 'Số điện thoại phải là dạng chuỗi',
@@ -41,7 +44,21 @@ const MSG = {
   GET_DETAIL_USER_SUCCESS: 'Lấy user thành công',
   REFRESH_TOKEN_SUCCESS: 'Refresh token thành công',
   USER_VERIFY_STATUS_INVALID: 'Verify status invalid',
-  GET_ME_SUCCESS: 'Lấy thông tin profile user thành công'
+  GET_ME_SUCCESS: 'Lấy thông tin profile user thành công',
+  CREATED_CUSTOMER_SUCCESS: 'Thêm mới khách hàng thành công',
+  CUSTOMER_TYPE_INVALID: 'Type khách hàng không hợp lệ',
+  NAME_CUSTOMER_ALREADY_EXISTS: 'Tên khách hàng đã tồn tại',
+  CUSTOMER_NOT_FOUND: 'Không tìm thấy khách hàng',
+  TAX_CODE_IS_REQUIRED: 'Mã số thuế là bắt buộc',
+  TAX_CODE_LENGTH: 'Mã số thuế cho phép tối thiểu 10 và tối đa 13 ký tự',
+  WEBSITE_MUST_BE_STRING: 'Website nhập vào phải là dạng chuỗi',
+  WEBSITE_LENGTH: 'Website cho phép tối thiểu 1 và tối đa 50 ký tự',
+  SURROGATE_MUST_BE_STRING: 'Người đại diện nhập vào phải là dạng chuỗi',
+  SURROGATE_MUST_LENGTH: 'Người đại diện nhập vào có độ dài từ 6 đến 160 ký tự',
+  ATTACHMENT_MUST_BE_STRING: 'File đính kèm phải là dạng chuỗi',
+  NOTE_MAX_LENGTH: 'Ghi chú không được phép vượt quá 2000 ký tự',
+  UPDATED_CUSTOMER_SUCCESS: 'Cập nhật thông tin khách hàng thành công',
+  IS_CUSTOMER_COMPANY: 'Khách hàng phải là khách hàng doanh nghiệp'
 } as const
 
 export default MSG

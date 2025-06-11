@@ -8,6 +8,7 @@ import userRouter from '@/routes/user.route'
 import { PREFIX_API } from '@/constants/path'
 import { hashPassword } from '@/utils/crypto'
 import serveRouter from '@/routes/serve.route'
+import customerRouter from '@/routes/customer.route'
 
 initFolder()
 
@@ -24,6 +25,7 @@ app.use(
 app.use(express.json())
 app.use('', serveRouter)
 app.use(PREFIX_API, userRouter)
+app.use(PREFIX_API, customerRouter)
 app.use(defaultErrorHandle)
 
 app.listen(port, () => {

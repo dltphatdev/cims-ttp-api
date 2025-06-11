@@ -141,7 +141,7 @@ const avatarSchema: ParamSchema = {
   isLength: {
     options: {
       min: 6,
-      max: 1000
+      max: 255
     },
     errorMessage: MSG.AVATAR_LENGTH
   }
