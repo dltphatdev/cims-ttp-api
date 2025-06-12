@@ -180,10 +180,7 @@ export const createCustomerValidator = validate(
               }
             })
             if (customer) {
-              throw new ErrorsWithStatus({
-                message: MSG.NAME_CUSTOMER_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.NAME_CUSTOMER_ALREADY_EXISTS)
             }
             return true
           }
@@ -278,10 +275,7 @@ export const updateCustomerCompanyValidator = validate(
             })
             const isNameCustomer = customers.some((item) => item.name === value)
             if (isNameCustomer) {
-              throw new ErrorsWithStatus({
-                message: MSG.NAME_CUSTOMER_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.NAME_CUSTOMER_ALREADY_EXISTS)
             }
             return true
           }
@@ -317,10 +311,7 @@ export const updateCustomerCompanyValidator = validate(
             })
             const isEmailCustomer = customers.some((item) => item.email === value)
             if (isEmailCustomer) {
-              throw new ErrorsWithStatus({
-                message: MSG.EMAIL_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.EMAIL_ALREADY_EXISTS)
             }
             return true
           }
@@ -439,10 +430,7 @@ export const updateCustomerPersonalValidator = validate(
             })
             const isNameCustomer = customers.some((item) => item.name === value)
             if (isNameCustomer) {
-              throw new ErrorsWithStatus({
-                message: MSG.NAME_CUSTOMER_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.NAME_CUSTOMER_ALREADY_EXISTS)
             }
             return true
           }
@@ -470,10 +458,7 @@ export const updateCustomerPersonalValidator = validate(
             })
             const isEmailCustomer = customers.some((item) => item.email === value)
             if (isEmailCustomer) {
-              throw new ErrorsWithStatus({
-                message: MSG.EMAIL_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.EMAIL_ALREADY_EXISTS)
             }
             return true
           }
