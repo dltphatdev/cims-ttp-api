@@ -146,6 +146,8 @@ class CustomerService {
           cccd: true,
           phone: true,
           contact_name: true,
+          address_company: true,
+          address_personal: true,
           created_at: true,
           creator: {
             select: {
