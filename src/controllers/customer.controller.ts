@@ -15,9 +15,9 @@ export const createCustomerController = async (
   req: Request<ParamsDictionary, any, CreateCustomerReqBody>,
   res: Response
 ) => {
-  const { name, type } = req.body
+  const payload = req.body
   const { user_id } = req.decode_authorization as TokenPayLoad
-  const result = await customerService.createService({ name, type, user_id })
+  const result = await customerService.createService({ payload, user_id })
   res.json(result)
   return
 }

@@ -2,19 +2,20 @@ import MSG from '@/constants/msg'
 import { LIMIT, PAGE } from '@/constants/pagination'
 import { prisma } from '@/index'
 import {
+  CreateCustomerReqBody,
   ListCustomerReqQuery,
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
-import { CustomerType } from '@prisma/client'
 
 class CustomerService {
-  async createService({ name, type, user_id }: { name: string; type: CustomerType; user_id: number }) {
+  async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
     await prisma.customer.create({
       data: {
-        name,
-        type,
-        creator_id: user_id
+        ...payload,
+        creator_id: user_id,
+        date_of_birth: new Date(payload?.date_of_birth as string),
+        assign_at: new Date(payload?.assign_at as string)
       }
     })
     return {
@@ -60,7 +61,11 @@ class CustomerService {
       where: {
         id: payload.id
       },
-      data: payload,
+      data: {
+        ...payload,
+        date_of_birth: new Date(payload?.date_of_birth as string),
+        assign_at: new Date(payload?.assign_at as string)
+      },
       select: {
         id: true,
         name: true,

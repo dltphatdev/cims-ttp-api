@@ -191,6 +191,95 @@ export const createCustomerValidator = validate(
           options: [customerType],
           errorMessage: MSG.CUSTOMER_TYPE_INVALID
         }
+      },
+      consultantor_id: {
+        ...idSchema,
+        optional: true
+      },
+      tax_code: {
+        ...taxCodeSchema,
+        optional: true
+      },
+      website: {
+        ...websiteSchema,
+        optional: true
+      },
+      surrogate: {
+        ...surrogateSchema,
+        optional: true
+      },
+      address_company: {
+        ...addressSchema,
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      },
+      email: {
+        ...emailSchema,
+        custom: {
+          options: async (value: string) => {
+            const customers = await prisma.customer.findMany({
+              where: {
+                email: {
+                  not: value
+                }
+              }
+            })
+            const isEmailCustomer = customers.some((item) => item.email === value)
+            if (isEmailCustomer) {
+              throw new Error(MSG.EMAIL_ALREADY_EXISTS)
+            }
+            return true
+          }
+        },
+        optional: true
+      },
+      contact_name: {
+        ...phoneSchema,
+        optional: true
+      },
+      status: {
+        isIn: {
+          options: [customerStatus],
+          errorMessage: MSG.CUSTOMER_STATUS_INVALID
+        },
+        optional: true
+      },
+      verify: {
+        isIn: {
+          options: [customerVerify],
+          errorMessage: MSG.CUSTOMER_VERIFY_INVALID
+        },
+        optional: true
+      },
+      attachment: {
+        ...attachmentSchema,
+        optional: true
+      },
+      note: {
+        ...noteSchema,
+        optional: true
+      },
+      assign_at: {
+        ...assignAtSchema,
+        optional: true
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      gender: {
+        isIn: {
+          options: [customerGender],
+          errorMessage: MSG.CUSTOMER_GENDER_INVALID
+        },
+        optional: true
+      },
+      address_personal: {
+        ...addressSchema,
+        optional: true
       }
     },
     ['body']

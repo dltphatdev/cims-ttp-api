@@ -24,7 +24,7 @@ const customerRouter = Router()
  * Method: POST
  * Path: /create
  * Request header: { Authorization: Bearer <access_token> }
- * Request body: { name: string; type: CustomerType }
+ * Request body: CreateCustomerReqBody
  * */
 customerRouter.post(
   `${PREFIX_CUSTOMER}/create`,
