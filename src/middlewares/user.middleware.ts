@@ -348,10 +348,7 @@ export const createUserValidator = validate(
           options: async (value: string) => {
             const user = await userService.isExistUser(value)
             if (user) {
-              throw new ErrorsWithStatus({
-                message: MSG.EMAIL_ALREADY_EXISTS,
-                status: HTTP_STATUS_CODE.UNPROCESSABLE_ENTITY
-              })
+              throw new Error(MSG.EMAIL_ALREADY_EXISTS)
             }
             return true
           }
