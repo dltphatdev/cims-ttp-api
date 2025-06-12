@@ -10,7 +10,7 @@ import {
 
 class CustomerService {
   async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
-    await prisma.customer.create({
+    const newCustomer = await prisma.customer.create({
       data: {
         ...payload,
         creator_id: user_id,
@@ -18,8 +18,10 @@ class CustomerService {
         assign_at: new Date(payload?.assign_at as string)
       }
     })
+    const id = newCustomer.id
     return {
-      message: MSG.CREATED_CUSTOMER_SUCCESS
+      message: MSG.CREATED_CUSTOMER_SUCCESS,
+      data: id
     }
   }
 

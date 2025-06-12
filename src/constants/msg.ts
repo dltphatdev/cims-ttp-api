@@ -55,7 +55,7 @@ const MSG = {
   WEBSITE_MUST_BE_STRING: 'Website nhập vào phải là dạng chuỗi',
   WEBSITE_LENGTH: 'Website cho phép tối thiểu 1 và tối đa 50 ký tự',
   SURROGATE_MUST_BE_STRING: 'Người đại diện nhập vào phải là dạng chuỗi',
-  SURROGATE_MUST_LENGTH: 'Người đại diện nhập vào có độ dài từ 6 đến 160 ký tự',
+  SURROGATE_MUST_LENGTH: 'Người đại diện nhập vào có độ dài từ 4 đến 160 ký tự',
   ATTACHMENT_MUST_BE_STRING: 'File đính kèm phải là dạng chuỗi',
   NOTE_MAX_LENGTH: 'Ghi chú không được phép vượt quá 2000 ký tự',
   UPDATED_CUSTOMER_SUCCESS: 'Cập nhật thông tin khách hàng thành công',

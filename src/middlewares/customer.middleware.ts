@@ -68,7 +68,7 @@ const surrogateSchema: ParamSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 6,
+      min: 4,
       max: 160
     },
     errorMessage: MSG.SURROGATE_MUST_LENGTH
