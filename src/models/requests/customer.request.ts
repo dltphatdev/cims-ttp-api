@@ -21,6 +21,7 @@ export interface UpdateCustomerCompanyReqBody {
   note?: string
   verify?: CustomerVerify
   status?: CustomerStatus
+  assign_at?: string
 }
 
 export interface UpdateCustomerPersonalReqBody {
@@ -36,6 +37,7 @@ export interface UpdateCustomerPersonalReqBody {
   address_personal?: string
   verify?: CustomerVerify
   status?: CustomerStatus
+  assign_at?: string
 }
 
 export interface Pagination extends Query {

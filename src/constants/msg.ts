@@ -26,6 +26,7 @@ const MSG = {
   FULLNAME_LENGTH: 'Họ và tên có độ dài từ 6 đến 160 ký tự',
   NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 4 đến 160 ký tự',
   DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
+  ASSIGN_AT_ISO8601: 'Assign at phải là ISO 8601',
   AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
   AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 255 ký tự',
   ATTACHMENT_LENGTH: 'File đính kèm có độ dài từ 6 đến 255 ký tự',

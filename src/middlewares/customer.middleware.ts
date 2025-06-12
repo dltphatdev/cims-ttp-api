@@ -157,6 +157,16 @@ const dateOfBirthSchema: ParamSchema = {
   }
 }
 
+const assignAtSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: MSG.ASSIGN_AT_ISO8601
+  }
+}
+
 export const createCustomerValidator = validate(
   checkSchema(
     {
@@ -342,6 +352,10 @@ export const updateCustomerCompanyValidator = validate(
       note: {
         ...noteSchema,
         optional: true
+      },
+      assign_at: {
+        ...assignAtSchema,
+        optional: true
       }
     },
     ['body']
@@ -437,6 +451,10 @@ export const updateCustomerPersonalValidator = validate(
       },
       date_of_birth: {
         ...dateOfBirthSchema,
+        optional: true
+      },
+      assign_at: {
+        ...assignAtSchema,
         optional: true
       },
       email: {

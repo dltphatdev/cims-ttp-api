@@ -60,7 +60,8 @@ customerRouter.patch(
     'note',
     'status',
     'verify',
-    'consultantor_id'
+    'consultantor_id',
+    'assign_at'
   ]),
   wrapRequestHandler(updateCustomerCompanyController)
 )
@@ -89,7 +90,8 @@ customerRouter.patch(
     'address_personal',
     'status',
     'verify',
-    'consultantor_id'
+    'consultantor_id',
+    'assign_at'
   ]),
   wrapRequestHandler(updateCustomerPersonalController)
 )
