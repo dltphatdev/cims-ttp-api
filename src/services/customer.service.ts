@@ -28,7 +28,7 @@ class CustomerService {
     const id = newCustomer.id
     return {
       message: MSG.CREATED_CUSTOMER_SUCCESS,
-      data: id
+      id
     }
   }
 
