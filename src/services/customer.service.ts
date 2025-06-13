@@ -10,13 +10,20 @@ import {
 
 class CustomerService {
   async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
-    const newCustomer = await prisma.customer.create({
-      data: {
-        ...payload,
-        creator_id: user_id,
-        date_of_birth: new Date(payload?.date_of_birth as string),
-        assign_at: new Date(payload?.assign_at as string)
+    const _payload = {
+      ...payload,
+      creator_id: user_id,
+      date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
+      assign_at: payload?.assign_at ? new Date(payload.assign_at) : null,
+      consultantor_id: payload.consultantor_id ? payload.consultantor_id : null
+    }
+    for (const key in _payload) {
+      if (_payload[key as keyof typeof _payload] === undefined || _payload[key as keyof typeof _payload] === '') {
+        delete _payload[key as keyof typeof _payload]
       }
+    }
+    const newCustomer = await prisma.customer.create({
+      data: _payload
     })
     const id = newCustomer.id
     return {
