@@ -2,10 +2,11 @@ import fs from 'fs'
 import { Request } from 'express'
 import path from 'path'
 import sharp from 'sharp'
-import { getNameFromFullname, uploadFile, uploadImage } from '@/utils/file'
+import { getNameFromFullname, uploadFile, uploadFiles, uploadImage } from '@/utils/file'
 import { UPLOAD_IMAGE_DIR } from '@/constants/dir'
 import { CONFIG_ENV } from '@/constants/config'
 import { MediaType } from '@/constants/enum'
+import { prisma } from '@/index'
 
 class MediaService {
   async handleUploadFile(req: Request) {
@@ -17,6 +18,32 @@ class MediaService {
       type: MediaType.File
     }
   }
+
+  async handleUploadFiles(req: Request, customerId: number) {
+    const files = await uploadFiles(req)
+    const result: {
+      url: string
+      filename: string
+      type: MediaType.File
+    }[] = await Promise.all(
+      files.map(async (file) => {
+        const fileName = file.newFilename
+        await prisma.gallery.create({
+          data: {
+            customer_id: customerId,
+            filename: fileName
+          }
+        })
+        return {
+          url: CONFIG_ENV.SERVER_URL,
+          filename: fileName,
+          type: MediaType.File
+        }
+      })
+    )
+    return result
+  }
+
   async handleUploadImage(req: Request) {
     const file = await uploadImage(req)
     const fileName = getNameFromFullname(file.newFilename)

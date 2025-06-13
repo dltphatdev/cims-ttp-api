@@ -6,7 +6,8 @@ import {
   getListCustomerController,
   updateCustomerCompanyController,
   updateCustomerPersonalController,
-  uploadFileCustomerController
+  uploadFileCustomerController,
+  uploadFilesCustomerController
 } from '@/controllers/customer.controller'
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
 import {
@@ -108,6 +109,20 @@ customerRouter.post(
   accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(uploadFileCustomerController)
+)
+
+/**
+ * Description: Upload multiple file attachment
+ * Path: /upload-files
+ * Method: POST
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request form data: { files: string }
+ * */
+customerRouter.post(
+  `${PREFIX_CUSTOMER}/upload-files`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(uploadFilesCustomerController)
 )
 
 /**

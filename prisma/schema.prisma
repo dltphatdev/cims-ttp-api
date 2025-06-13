@@ -86,7 +86,7 @@ model Customer {
   address_company  String?         @db.VarChar(255)
   address_personal String?         @db.VarChar(255)
   note             String?         @db.Text
-  attachment       String?         @db.VarChar(255)
+  attachment       String?         @db.VarChar(255) // optional one upload file attachment
   tax_code         String?         @db.VarChar(255)
   cccd             String?         @db.VarChar(255)
   website          String?         @db.VarChar(255)
@@ -102,4 +102,16 @@ model Customer {
   updated_at       DateTime?
   creator          User            @relation("CreatedCustomers", fields: [creator_id], references: [id], onDelete: Cascade)
   consultantor     User?           @relation("ConsultantorCustomers", fields: [consultantor_id], references: [id])
+
+  attachments Gallery[] @relation("CustomersAttachment") // 1 khach hang co the co nhieu file attachment
+}
+
+model Gallery {
+  id          Int       @id @default(autoincrement())
+  customer_id Int
+  filename    String    @unique @db.VarChar(255)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+
+  customer Customer @relation("CustomersAttachment", fields: [customer_id], references: [id], onDelete: Cascade)
 }

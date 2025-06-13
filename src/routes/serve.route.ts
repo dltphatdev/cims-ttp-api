@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { serveFileController, serveImageController } from '@/controllers/serve.controller'
+import { serveFileController, serveFilesController, serveImageController } from '@/controllers/serve.controller'
 
 const serveRouter = Router()
 
@@ -18,5 +18,13 @@ serveRouter.get('/image/:name', serveImageController)
  * Request param: { name: string }
  * */
 serveRouter.get('/file/:name', serveFileController)
+
+/**
+ * Description: Serve multiple file route
+ * Path: /files/:name
+ * Method: GET
+ * Request param: { name: string }
+ * */
+serveRouter.get('/files/:name', serveFilesController)
 
 export default serveRouter

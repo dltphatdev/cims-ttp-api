@@ -23,8 +23,8 @@ const MSG = {
   UPDATED_USER_SUCCESS: 'Cập nhật user thành công',
   FULLNAME_MUST_BE_STRING: 'Họ và tên phải là dạng chuỗi',
   NAME_CUSTOMER_MUST_BE_STRING: 'Tên dịch vụ phải là dạng chuỗi',
-  FULLNAME_LENGTH: 'Họ và tên có độ dài từ 6 đến 160 ký tự',
-  NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 4 đến 160 ký tự',
+  FULLNAME_LENGTH: 'Họ và tên có độ dài từ 4 đến 160 ký tự',
+  NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 3 đến 160 ký tự',
   DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
   ASSIGN_AT_ISO8601: 'Assign at phải là ISO 8601',
   AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
@@ -67,7 +67,9 @@ const MSG = {
   UPLOAD_FILE_SUCCESSFULLY: 'Upload file đính kèm thành công',
   CUSTOMER_STATUS_INVALID: 'Trạng thái khách hàng phải là Active hoặc Deactivated',
   CUSTOMER_VERIFY_INVALID: 'Xác thực khách hàng phải là Unverified hoặc Verified',
-  GET_LIST_CUSTOMER_SUCCESS: 'Lấy danh sách khách hàng thành công'
+  GET_LIST_CUSTOMER_SUCCESS: 'Lấy danh sách khách hàng thành công',
+  CCCD_IS_REQUIRED: 'Căn cước công dân là bắt buộc',
+  CCCD_LENGTH: 'Độ dài căn cước công dân là 12 chuỗi ký tự'
 } as const
 
 export default MSG

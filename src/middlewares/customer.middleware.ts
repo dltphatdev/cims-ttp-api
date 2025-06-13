@@ -19,7 +19,7 @@ const nameSchema: ParamSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 4,
+      min: 3,
       max: 160
     },
     errorMessage: MSG.NAME_CUSTOMER_LENGTH
@@ -43,6 +43,20 @@ const taxCodeSchema: ParamSchema = {
       max: 13
     },
     errorMessage: MSG.TAX_CODE_LENGTH
+  }
+}
+
+const cccdSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.CCCD_IS_REQUIRED
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 12,
+      max: 12
+    },
+    errorMessage: MSG.CCCD_LENGTH
   }
 }
 
@@ -197,6 +211,10 @@ export const createCustomerValidator = validate(
         optional: true
       },
       tax_code: {
+        ...taxCodeSchema,
+        optional: true
+      },
+      cccd: {
         ...taxCodeSchema,
         optional: true
       },
@@ -552,6 +570,10 @@ export const updateCustomerPersonalValidator = validate(
             return true
           }
         },
+        optional: true
+      },
+      cccd: {
+        ...taxCodeSchema,
         optional: true
       },
       phone: {

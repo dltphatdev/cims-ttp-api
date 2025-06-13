@@ -116,7 +116,7 @@ const fullnameSchema: ParamSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 6,
+      min: 3,
       max: 160
     },
     errorMessage: MSG.FULLNAME_LENGTH

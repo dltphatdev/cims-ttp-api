@@ -56,6 +56,19 @@ export const uploadFileCustomerController = async (req: Request, res: Response) 
   return
 }
 
+export const uploadFilesCustomerController = async (
+  req: Request<ParamsDictionary, any, { id: number }>,
+  res: Response
+) => {
+  const { id } = req.body
+  const result = await mediaService.handleUploadFiles(req, id)
+  res.json({
+    message: MSG.UPLOAD_FILE_SUCCESSFULLY,
+    data: result
+  })
+  return
+}
+
 export const getListCustomerController = async (
   req: Request<ParamsDictionary, any, any, ListCustomerReqQuery>,
   res: Response

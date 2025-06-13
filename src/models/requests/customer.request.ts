@@ -6,6 +6,7 @@ export interface CreateCustomerReqBody {
   type: CustomerType
   consultantor_id?: number
   tax_code?: string
+  cccd?: string
   website?: string
   surrogate?: string
   address_company?: string
@@ -25,6 +26,7 @@ export interface CreateCustomerReqBody {
 export interface UpdateCustomerCompanyReqBody {
   id: number
   tax_code: string
+  cccd?: string
   consultantor_id?: number
   name?: string
   website?: string
@@ -44,6 +46,7 @@ export interface UpdateCustomerPersonalReqBody {
   id: number
   consultantor_id?: number
   name?: string
+  cccd?: string
   date_of_birth?: string
   email?: string
   phone?: string

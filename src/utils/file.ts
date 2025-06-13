@@ -3,6 +3,7 @@ import { Request } from 'express'
 import formidable, { File } from 'formidable'
 import {
   UPLOAD_FILE_DIR,
+  UPLOAD_FILES_DIR,
   UPLOAD_IMAGE_DIR,
   UPLOAD_IMAGE_TEMP_DIR,
   UPLOAD_IMAGES_DIR,
@@ -26,7 +27,8 @@ export const initFolder = () => {
     UPLOAD_IMAGES_DIR,
     UPLOAD_IMAGE_TEMP_DIR,
     UPLOAD_IMAGES_TEMP_DIR,
-    UPLOAD_FILE_DIR
+    UPLOAD_FILE_DIR,
+    UPLOAD_FILES_DIR
   ]
   directTemps.forEach((directTemp) => {
     if (!fs.existsSync(directTemp)) {
@@ -71,6 +73,46 @@ export const uploadFile = async (req: Request) => {
         return reject(new Error('File not empty'))
       }
       resolve((files.file as File[])[0])
+    })
+  })
+}
+
+export const uploadFiles = async (req: Request) => {
+  const formidable = (await import('formidable')).default
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+  ]
+  const uploadDir = UPLOAD_FILES_DIR
+  const form = formidable({
+    uploadDir,
+    maxFiles: 5,
+    maxFileSize: 15 * 1024 * 1024, // 15MB moi file
+    maxTotalFileSize: 15 * 1024 * 1024 * 5,
+    keepExtensions: true,
+    filter: function ({ name, originalFilename, mimetype }) {
+      const valid = name === 'file' && allowedTypes.some((type) => mimetype?.startsWith(type) || mimetype === type)
+      if (!valid) {
+        form.emit('error' as any, new Error('File type is not valid') as any)
+      }
+      return valid
+    }
+  })
+  return new Promise<File[]>((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        return reject(err)
+      }
+      // eslint-disable-next-line no-extra-boolean-cast
+      if (!Boolean(files.files)) {
+        return reject(new Error('File not empty'))
+      }
+      resolve(files.files as File[])
     })
   })
 }
