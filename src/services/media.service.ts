@@ -6,7 +6,6 @@ import { getNameFromFullname, uploadFile, uploadFiles, uploadImage } from '@/uti
 import { UPLOAD_IMAGE_DIR } from '@/constants/dir'
 import { CONFIG_ENV } from '@/constants/config'
 import { MediaType } from '@/constants/enum'
-import { prisma } from '@/index'
 
 class MediaService {
   async handleUploadFile(req: Request) {
@@ -28,12 +27,6 @@ class MediaService {
     }[] = await Promise.all(
       files.map(async (file) => {
         const fileName = file.newFilename
-        await prisma.gallery.create({
-          data: {
-            customer_id: customerId,
-            filename: fileName
-          }
-        })
         return {
           url: CONFIG_ENV.SERVER_URL,
           filename: fileName,
