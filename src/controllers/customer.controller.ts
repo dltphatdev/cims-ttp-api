@@ -1,6 +1,7 @@
 import MSG from '@/constants/msg'
 import {
   CreateCustomerReqBody,
+  GetCustomerDetailReqParams,
   ListCustomerReqQuery,
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
@@ -84,6 +85,16 @@ export const getListCustomerController = async (
       limit,
       totalPages
     }
+  })
+  return
+}
+
+export const getCustomerDetailController = async (req: Request<GetCustomerDetailReqParams>, res: Response) => {
+  const id = Number(req.params?.id)
+  const user = await customerService.getCustomerDetail(id)
+  res.json({
+    message: MSG.GET_CUSTOMER_SUCCESS,
+    data: user
   })
   return
 }

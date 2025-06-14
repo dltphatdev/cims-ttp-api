@@ -87,7 +87,7 @@ const idParamsSchema: ParamSchema = {
     errorMessage: MSG.ID_IS_REQUIRED
   },
   custom: {
-    options: async (value: string, { req }) => {
+    options: async (value: string) => {
       // eslint-disable-next-line no-useless-catch
       try {
         const user = await prisma.user.findUnique({

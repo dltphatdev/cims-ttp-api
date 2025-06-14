@@ -69,7 +69,11 @@ const MSG = {
   CUSTOMER_VERIFY_INVALID: 'Xác thực khách hàng phải là Unverified hoặc Verified',
   GET_LIST_CUSTOMER_SUCCESS: 'Lấy danh sách khách hàng thành công',
   CCCD_IS_REQUIRED: 'Căn cước công dân là bắt buộc',
-  CCCD_LENGTH: 'Độ dài căn cước công dân là 12 chuỗi ký tự'
+  CCCD_LENGTH: 'Độ dài căn cước công dân là 12 chuỗi ký tự',
+  ATTACHMENTS_IS_REQUIRED: 'Attachments là bắt buộc',
+  ATTACHMENTS_MUST_BE_ARRAY: 'Attachments phải là mảng',
+  ATTACHMENT_ITEM_MUST_BE_ARRAY_STRING: 'Attachments item phải là dạng chuỗi',
+  GET_CUSTOMER_SUCCESS: 'Lấy thông tin khách hàng thành công'
 } as const
 
 export default MSG

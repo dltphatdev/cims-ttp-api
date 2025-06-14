@@ -3,6 +3,7 @@ import { PREFIX_CUSTOMER } from '@/constants/path'
 import { wrapRequestHandler } from '@/utils/handler'
 import {
   createCustomerController,
+  getCustomerDetailController,
   getListCustomerController,
   updateCustomerCompanyController,
   updateCustomerPersonalController,
@@ -12,6 +13,7 @@ import {
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
 import {
   createCustomerValidator,
+  getCustomerDetailValidator,
   paginationValidator,
   updateCustomerCompanyValidator,
   updateCustomerPersonalValidator
@@ -138,6 +140,21 @@ customerRouter.get(
   verifiedUserValidator,
   paginationValidator,
   wrapRequestHandler(getListCustomerController)
+)
+
+/**
+ * Description: get customer detail
+ * Path: /detail/:id
+ * Method: GET
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request params: id: string
+ *  * */
+customerRouter.get(
+  `${PREFIX_CUSTOMER}/detail/:id`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  getCustomerDetailValidator,
+  wrapRequestHandler(getCustomerDetailController)
 )
 
 export default customerRouter

@@ -12,6 +12,33 @@ const customerGender = stringEnumToArray(CustomerGender)
 const customerStatus = stringEnumToArray(CustomerStatus)
 const customerVerify = stringEnumToArray(CustomerVerify)
 
+const idParamsSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.ID_IS_REQUIRED
+  },
+  custom: {
+    options: async (value: string) => {
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const customer = await prisma.customer.findUnique({
+          where: {
+            id: Number(value)
+          }
+        })
+        if (customer === null) {
+          throw new ErrorsWithStatus({
+            message: MSG.CUSTOMER_NOT_FOUND,
+            status: HTTP_STATUS_CODE.NOT_FOUND
+          })
+        }
+        return true
+      } catch (error) {
+        throw error
+      }
+    }
+  }
+}
+
 const nameSchema: ParamSchema = {
   isString: {
     errorMessage: MSG.NAME_CUSTOMER_MUST_BE_STRING
@@ -181,6 +208,23 @@ const assignAtSchema: ParamSchema = {
   }
 }
 
+const attachmentsSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.ATTACHMENTS_IS_REQUIRED
+  },
+  isArray: {
+    errorMessage: MSG.ATTACHMENTS_MUST_BE_ARRAY
+  },
+  custom: {
+    options: (value: string[]) => {
+      if (value.length > 0 && !value.every((item) => typeof item === 'string')) {
+        throw new Error(MSG.ATTACHMENT_ITEM_MUST_BE_ARRAY_STRING)
+      }
+      return true
+    }
+  }
+}
+
 export const createCustomerValidator = validate(
   checkSchema(
     {
@@ -297,6 +341,10 @@ export const createCustomerValidator = validate(
       },
       address_personal: {
         ...addressSchema,
+        optional: true
+      },
+      attachments: {
+        ...attachmentsSchema,
         optional: true
       }
     },
@@ -649,5 +697,14 @@ export const paginationValidator = validate(
       }
     },
     ['query']
+  )
+)
+
+export const getCustomerDetailValidator = validate(
+  checkSchema(
+    {
+      id: idParamsSchema
+    },
+    ['params']
   )
 )

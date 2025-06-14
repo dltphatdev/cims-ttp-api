@@ -7,9 +7,11 @@ import {
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
+import { omit } from 'lodash'
 
 class CustomerService {
   async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
+    const attachments = payload.attachments
     const _payload = {
       ...payload,
       creator_id: user_id,
@@ -23,9 +25,20 @@ class CustomerService {
       }
     }
     const newCustomer = await prisma.customer.create({
-      data: _payload
+      data: omit(_payload, ['attachments'])
     })
     const id = newCustomer.id
+    if (attachments) {
+      attachments.forEach(
+        async (attachment) =>
+          await prisma.gallery.createMany({
+            data: {
+              customer_id: id,
+              filename: attachment
+            }
+          })
+      )
+    }
     return {
       message: MSG.CREATED_CUSTOMER_SUCCESS,
       id
@@ -183,6 +196,15 @@ class CustomerService {
       page,
       limit
     }
+  }
+
+  async getCustomerDetail(id: number) {
+    const customer = await prisma.customer.findUnique({
+      where: {
+        id
+      }
+    })
+    return customer
   }
 }
 

@@ -1,6 +1,9 @@
 import { CustomerGender, CustomerStatus, CustomerType, CustomerVerify } from '@prisma/client'
-import { Query } from 'express-serve-static-core'
+import { Query, ParamsDictionary } from 'express-serve-static-core'
 
+export interface GetCustomerDetailReqParams extends ParamsDictionary {
+  id: string
+}
 export interface CreateCustomerReqBody {
   name: string
   type: CustomerType
@@ -21,6 +24,7 @@ export interface CreateCustomerReqBody {
   assign_at?: string
   date_of_birth?: string
   gender?: CustomerGender
+  attachments?: string[]
 }
 
 export interface UpdateCustomerCompanyReqBody {
