@@ -31,7 +31,7 @@ class CustomerService {
     if (attachments) {
       attachments.forEach(
         async (attachment) =>
-          await prisma.gallery.createMany({
+          await prisma.gallery.create({
             data: {
               customer_id: id,
               filename: attachment

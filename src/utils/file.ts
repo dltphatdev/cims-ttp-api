@@ -96,7 +96,8 @@ export const uploadFiles = async (req: Request) => {
     maxTotalFileSize: 15 * 1024 * 1024 * 5,
     keepExtensions: true,
     filter: function ({ name, originalFilename, mimetype }) {
-      const valid = name === 'file' && allowedTypes.some((type) => mimetype?.startsWith(type) || mimetype === type)
+      const valid =
+        name === 'attachments' && allowedTypes.some((type) => mimetype?.startsWith(type) || mimetype === type)
       if (!valid) {
         form.emit('error' as any, new Error('File type is not valid') as any)
       }
@@ -109,10 +110,10 @@ export const uploadFiles = async (req: Request) => {
         return reject(err)
       }
       // eslint-disable-next-line no-extra-boolean-cast
-      if (!Boolean(files.files)) {
+      if (!Boolean(files.attachments)) {
         return reject(new Error('File not empty'))
       }
-      resolve(files.files as File[])
+      resolve(files.attachments as File[])
     })
   })
 }

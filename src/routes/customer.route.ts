@@ -103,7 +103,7 @@ customerRouter.patch(
  * Path: /upload-files
  * Method: POST
  * Request header: { Authorization: Bearer <access_token> }
- * Request form data: { files: string }
+ * Request form data: { attachments: string }
  * */
 customerRouter.post(
   `${PREFIX_CUSTOMER}/upload-files`,
