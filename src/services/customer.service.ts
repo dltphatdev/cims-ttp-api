@@ -169,7 +169,8 @@ class CustomerService {
           },
           consultantor: {
             select: {
-              fullname: true
+              fullname: true,
+              id: true
             }
           },
           attachments: {
@@ -214,7 +215,8 @@ class CustomerService {
         },
         consultantor: {
           select: {
-            fullname: true
+            fullname: true,
+            id: true
           }
         },
         attachments: {

@@ -365,7 +365,7 @@ export const updateCustomerCompanyValidator = validate(
                   id: value
                 }
               })
-              if (customer === null) {
+              if (!customer) {
                 throw new ErrorsWithStatus({
                   message: MSG.CUSTOMER_NOT_FOUND,
                   status: HTTP_STATUS_CODE.NOT_FOUND
@@ -393,14 +393,14 @@ export const updateCustomerCompanyValidator = validate(
             }
             // eslint-disable-next-line no-useless-catch
             try {
-              const customer = await prisma.customer.findUnique({
+              const user = await prisma.user.findUnique({
                 where: {
                   id: value
                 }
               })
-              if (customer === null) {
+              if (user === null) {
                 throw new ErrorsWithStatus({
-                  message: MSG.CUSTOMER_NOT_FOUND,
+                  message: MSG.USER_NOT_FOUND,
                   status: HTTP_STATUS_CODE.NOT_FOUND
                 })
               }
@@ -528,7 +528,7 @@ export const updateCustomerPersonalValidator = validate(
                   id: value
                 }
               })
-              if (customer === null) {
+              if (!customer) {
                 throw new ErrorsWithStatus({
                   message: MSG.CUSTOMER_NOT_FOUND,
                   status: HTTP_STATUS_CODE.NOT_FOUND
@@ -556,14 +556,14 @@ export const updateCustomerPersonalValidator = validate(
             }
             // eslint-disable-next-line no-useless-catch
             try {
-              const customer = await prisma.customer.findUnique({
+              const user = await prisma.user.findUnique({
                 where: {
                   id: value
                 }
               })
-              if (customer === null) {
+              if (user === null) {
                 throw new ErrorsWithStatus({
-                  message: MSG.CUSTOMER_NOT_FOUND,
+                  message: MSG.USER_NOT_FOUND,
                   status: HTTP_STATUS_CODE.NOT_FOUND
                 })
               }
