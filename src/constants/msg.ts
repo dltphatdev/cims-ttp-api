@@ -73,7 +73,8 @@ const MSG = {
   ATTACHMENTS_IS_REQUIRED: 'Attachments là bắt buộc',
   ATTACHMENTS_MUST_BE_ARRAY: 'Attachments phải là mảng',
   ATTACHMENT_ITEM_MUST_BE_ARRAY_STRING: 'Attachments item phải là dạng chuỗi',
-  GET_CUSTOMER_SUCCESS: 'Lấy thông tin khách hàng thành công'
+  GET_CUSTOMER_SUCCESS: 'Lấy thông tin khách hàng thành công',
+  CUSTOMER_IS_VERIFIED: 'Khách hàng đã được xác thực trước đó'
 } as const
 
 export default MSG

@@ -78,8 +78,8 @@ class CustomerService {
       },
       data: {
         ...omit(payload, ['attachments']),
-        date_of_birth: new Date(payload?.date_of_birth as string),
-        assign_at: new Date(payload?.assign_at as string),
+        date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
+        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null,
         updated_at: new Date()
       }
     })
@@ -201,6 +201,7 @@ class CustomerService {
         type: true,
         status: true,
         verify: true,
+        gender: true,
         tax_code: true,
         cccd: true,
         phone: true,
@@ -208,6 +209,7 @@ class CustomerService {
         address_company: true,
         address_personal: true,
         created_at: true,
+        date_of_birth: true,
         creator: {
           select: {
             fullname: true
