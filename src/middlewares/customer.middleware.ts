@@ -316,10 +316,6 @@ export const createCustomerValidator = validate(
         },
         optional: true
       },
-      attachment: {
-        ...attachmentSchema,
-        optional: true
-      },
       note: {
         ...noteSchema,
         optional: true
@@ -416,7 +412,14 @@ export const updateCustomerCompanyValidator = validate(
         },
         optional: true
       },
-      tax_code: taxCodeSchema,
+      attachments: {
+        ...attachmentsSchema,
+        optional: true
+      },
+      tax_code: {
+        ...taxCodeSchema,
+        optional: true
+      },
       name: {
         ...nameSchema,
         custom: {
@@ -489,10 +492,6 @@ export const updateCustomerCompanyValidator = validate(
           options: [customerVerify],
           errorMessage: MSG.CUSTOMER_VERIFY_INVALID
         },
-        optional: true
-      },
-      attachment: {
-        ...attachmentSchema,
         optional: true
       },
       note: {
@@ -657,8 +656,8 @@ export const updateCustomerPersonalValidator = validate(
         ...addressSchema,
         optional: true
       },
-      attachment: {
-        ...attachmentSchema,
+      attachments: {
+        ...attachmentsSchema,
         optional: true
       },
       note: {

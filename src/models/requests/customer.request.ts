@@ -19,7 +19,6 @@ export interface CreateCustomerReqBody {
   contact_name?: string
   status?: CustomerStatus
   verify?: CustomerVerify
-  attachment?: string
   note?: string
   assign_at?: string
   date_of_birth?: string
@@ -29,7 +28,7 @@ export interface CreateCustomerReqBody {
 
 export interface UpdateCustomerCompanyReqBody {
   id: number
-  tax_code: string
+  tax_code?: string
   cccd?: string
   consultantor_id?: number
   name?: string
@@ -39,7 +38,7 @@ export interface UpdateCustomerCompanyReqBody {
   phone?: string
   email?: string
   contact_name?: string
-  attachment?: string
+  attachments?: string[]
   note?: string
   verify?: CustomerVerify
   status?: CustomerStatus
@@ -55,12 +54,12 @@ export interface UpdateCustomerPersonalReqBody {
   email?: string
   phone?: string
   gender?: CustomerGender
-  attachment?: string
   note?: string
   address_personal?: string
   verify?: CustomerVerify
   status?: CustomerStatus
   assign_at?: string
+  attachments?: string[]
 }
 
 export interface Pagination extends Query {

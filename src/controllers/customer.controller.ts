@@ -29,10 +29,7 @@ export const updateCustomerCompanyController = async (
 ) => {
   const payload = req.body
   const result = await customerService.updateCustomerCompany(payload)
-  res.json({
-    message: MSG.UPDATED_CUSTOMER_SUCCESS,
-    data: result
-  })
+  res.json(result)
   return
 }
 
@@ -42,10 +39,7 @@ export const updateCustomerPersonalController = async (
 ) => {
   const payload = req.body
   const result = await customerService.updateCustomerPersonal(payload)
-  res.json({
-    message: MSG.UPDATED_CUSTOMER_SUCCESS,
-    data: result
-  })
+  res.json(result)
 }
 
 export const uploadFilesCustomerController = async (req: Request, res: Response) => {

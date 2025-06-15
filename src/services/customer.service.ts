@@ -46,71 +46,57 @@ class CustomerService {
   }
 
   async updateCustomerCompany(payload: UpdateCustomerCompanyReqBody) {
-    const customer = await prisma.customer.update({
-      where: {
-        id: payload.id
-      },
-      data: payload,
-      select: {
-        id: true,
-        tax_code: true,
-        name: true,
-        website: true,
-        surrogate: true,
-        address_company: true,
-        phone: true,
-        email: true,
-        contact_name: true,
-        attachment: true,
-        note: true,
-        creator: {
-          select: {
-            fullname: true
-          }
-        },
-        consultantor: {
-          select: {
-            fullname: true
-          }
-        }
-      }
-    })
-    return customer
-  }
-
-  async updateCustomerPersonal(payload: UpdateCustomerPersonalReqBody) {
-    const customer = await prisma.customer.update({
+    await prisma.customer.update({
       where: {
         id: payload.id
       },
       data: {
-        ...payload,
-        date_of_birth: new Date(payload?.date_of_birth as string),
-        assign_at: new Date(payload?.assign_at as string)
-      },
-      select: {
-        id: true,
-        name: true,
-        date_of_birth: true,
-        email: true,
-        phone: true,
-        gender: true,
-        attachment: true,
-        note: true,
-        address_personal: true,
-        creator: {
-          select: {
-            fullname: true
-          }
-        },
-        consultantor: {
-          select: {
-            fullname: true
-          }
-        }
+        ...omit(payload, ['attachments']),
+        updated_at: new Date()
       }
     })
-    return customer
+    if (payload.attachments) {
+      payload.attachments.forEach(
+        async (attachment) =>
+          await prisma.gallery.create({
+            data: {
+              customer_id: payload.id,
+              filename: attachment
+            }
+          })
+      )
+    }
+    return {
+      message: MSG.UPDATED_CUSTOMER_SUCCESS
+    }
+  }
+
+  async updateCustomerPersonal(payload: UpdateCustomerPersonalReqBody) {
+    await prisma.customer.update({
+      where: {
+        id: payload.id
+      },
+      data: {
+        ...omit(payload, ['attachments']),
+        date_of_birth: new Date(payload?.date_of_birth as string),
+        assign_at: new Date(payload?.assign_at as string),
+        updated_at: new Date()
+      }
+    })
+    if (payload.attachments) {
+      payload.attachments.forEach(
+        async (attachment) =>
+          await prisma.gallery.create({
+            data: {
+              customer_id: payload.id,
+              filename: attachment
+            }
+          })
+      )
+    }
+    return {
+      message: MSG.UPDATED_CUSTOMER_SUCCESS
+    }
   }
 
   async serviceList(payload: ListCustomerReqQuery) {
@@ -185,6 +171,11 @@ class CustomerService {
             select: {
               fullname: true
             }
+          },
+          attachments: {
+            select: {
+              filename: true
+            }
           }
         }
       }),
@@ -202,6 +193,35 @@ class CustomerService {
     const customer = await prisma.customer.findUnique({
       where: {
         id
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        status: true,
+        verify: true,
+        tax_code: true,
+        cccd: true,
+        phone: true,
+        contact_name: true,
+        address_company: true,
+        address_personal: true,
+        created_at: true,
+        creator: {
+          select: {
+            fullname: true
+          }
+        },
+        consultantor: {
+          select: {
+            fullname: true
+          }
+        },
+        attachments: {
+          select: {
+            filename: true
+          }
+        }
       }
     })
     return customer

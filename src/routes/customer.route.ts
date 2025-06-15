@@ -58,12 +58,13 @@ customerRouter.patch(
     'phone',
     'email',
     'contact_name',
-    'attachment',
+    'attachments',
     'note',
     'status',
     'verify',
     'consultantor_id',
-    'assign_at'
+    'assign_at',
+    'cccd'
   ]),
   wrapRequestHandler(updateCustomerCompanyController)
 )
@@ -87,13 +88,14 @@ customerRouter.patch(
     'email',
     'phone',
     'gender',
-    'attachment',
+    'attachments',
     'note',
     'address_personal',
     'status',
     'verify',
     'consultantor_id',
-    'assign_at'
+    'assign_at',
+    'cccd'
   ]),
   wrapRequestHandler(updateCustomerPersonalController)
 )
