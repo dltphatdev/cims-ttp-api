@@ -7,7 +7,6 @@ import {
   getListCustomerController,
   updateCustomerCompanyController,
   updateCustomerPersonalController,
-  uploadFileCustomerController,
   uploadFilesCustomerController
 } from '@/controllers/customer.controller'
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
@@ -97,20 +96,6 @@ customerRouter.patch(
     'assign_at'
   ]),
   wrapRequestHandler(updateCustomerPersonalController)
-)
-
-/**
- * Description: Upload file attachment
- * Path: /upload-file
- * Method: POST
- * Request header: { Authorization: Bearer <access_token> }
- * Request form data: { file: string }
- * */
-customerRouter.post(
-  `${PREFIX_CUSTOMER}/upload-file`,
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(uploadFileCustomerController)
 )
 
 /**

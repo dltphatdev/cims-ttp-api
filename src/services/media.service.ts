@@ -18,7 +18,7 @@ class MediaService {
     }
   }
 
-  async handleUploadFiles(req: Request, customerId: number) {
+  async handleUploadFiles(req: Request) {
     const files = await uploadFiles(req)
     const result: {
       url: string

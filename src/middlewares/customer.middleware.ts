@@ -259,7 +259,7 @@ export const createCustomerValidator = validate(
         optional: true
       },
       cccd: {
-        ...taxCodeSchema,
+        ...cccdSchema,
         optional: true
       },
       website: {
@@ -502,6 +502,10 @@ export const updateCustomerCompanyValidator = validate(
       assign_at: {
         ...assignAtSchema,
         optional: true
+      },
+      cccd: {
+        ...cccdSchema,
+        optional: true
       }
     },
     ['body']
@@ -621,7 +625,7 @@ export const updateCustomerPersonalValidator = validate(
         optional: true
       },
       cccd: {
-        ...taxCodeSchema,
+        ...cccdSchema,
         optional: true
       },
       phone: {

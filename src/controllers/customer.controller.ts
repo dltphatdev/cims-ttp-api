@@ -48,21 +48,8 @@ export const updateCustomerPersonalController = async (
   })
 }
 
-export const uploadFileCustomerController = async (req: Request, res: Response) => {
-  const result = await mediaService.handleUploadFile(req)
-  res.json({
-    message: MSG.UPLOAD_FILE_SUCCESSFULLY,
-    data: result
-  })
-  return
-}
-
-export const uploadFilesCustomerController = async (
-  req: Request<ParamsDictionary, any, { id: number }>,
-  res: Response
-) => {
-  const { id } = req.body
-  const result = await mediaService.handleUploadFiles(req, id)
+export const uploadFilesCustomerController = async (req: Request, res: Response) => {
+  const result = await mediaService.handleUploadFiles(req)
   res.json({
     message: MSG.UPLOAD_FILE_SUCCESSFULLY,
     data: result
