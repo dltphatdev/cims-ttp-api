@@ -44,6 +44,22 @@ enum CustomerVerify {
   Verified
 }
 
+enum PerformanceStatus {
+  New
+  Approved
+  Cancelled
+}
+
+enum TypeRevenue {
+  OneTime
+  EveryMonth
+}
+
+enum RevenueDirection {
+  In // Doanh thu đầu vào
+  Out // Chi phí, doanh thu đầu ra
+}
+
 model User {
   id                    Int              @id @default(autoincrement())
   email                 String           @unique
@@ -61,6 +77,7 @@ model User {
   role                  UserRole         @default(None)
   creatorCustomers      Customer[]       @relation("CreatedCustomers") // Một user có thể có nhiều customer
   consultantorCustomers Customer[]       @relation("ConsultantorCustomers") // Một user có thể tư vấn nhiều customer
+  creatorPerformance    Performance[]    @relation("CreatedPerformance") // Một user có thể có nhiều hiệu quả công việc
 
   @@index([email, password])
 }
@@ -77,31 +94,32 @@ model RefreshToken {
 }
 
 model Customer {
-  id               Int             @id @default(autoincrement())
-  name             String          @unique @db.VarChar(255)
-  type             CustomerType    @default(Company)
-  gender           CustomerGender?
-  email            String?         @unique @db.VarChar(255)
-  phone            String?         @db.VarChar(255)
-  address_company  String?         @db.VarChar(255)
-  address_personal String?         @db.VarChar(255)
-  note             String?         @db.Text
-  attachment       String?         @db.VarChar(255) // optional one upload file attachment
-  tax_code         String?         @db.VarChar(255)
-  cccd             String?         @db.VarChar(255)
-  website          String?         @db.VarChar(255)
-  surrogate        String?         @db.VarChar(255)
-  contact_name     String?         @db.VarChar(255)
-  date_of_birth    DateTime?
-  status           CustomerStatus  @default(Deactivated)
-  verify           CustomerVerify  @default(Unverified)
-  assign_at        DateTime?
-  creator_id       Int // Người tạo ra khách hàng
-  consultantor_id  Int? // Chỉ 1 user được gán làm người tư vấn
-  created_at       DateTime        @default(now())
-  updated_at       DateTime?
-  creator          User            @relation("CreatedCustomers", fields: [creator_id], references: [id], onDelete: Cascade)
-  consultantor     User?           @relation("ConsultantorCustomers", fields: [consultantor_id], references: [id])
+  id                   Int             @id @default(autoincrement())
+  name                 String          @unique @db.VarChar(255)
+  type                 CustomerType    @default(Company)
+  gender               CustomerGender?
+  email                String?         @unique @db.VarChar(255)
+  phone                String?         @db.VarChar(255)
+  address_company      String?         @db.VarChar(255)
+  address_personal     String?         @db.VarChar(255)
+  note                 String?         @db.Text
+  attachment           String?         @db.VarChar(255) // optional one upload file attachment
+  tax_code             String?         @db.VarChar(255)
+  cccd                 String?         @db.VarChar(255)
+  website              String?         @db.VarChar(255)
+  surrogate            String?         @db.VarChar(255)
+  contact_name         String?         @db.VarChar(255)
+  date_of_birth        DateTime?
+  status               CustomerStatus  @default(Deactivated)
+  verify               CustomerVerify  @default(Unverified)
+  assign_at            DateTime?
+  creator_id           Int // Người tạo ra khách hàng
+  consultantor_id      Int? // Chỉ 1 user được gán làm người tư vấn
+  created_at           DateTime        @default(now())
+  updated_at           DateTime?
+  creator              User            @relation("CreatedCustomers", fields: [creator_id], references: [id], onDelete: Cascade)
+  consultantor         User?           @relation("ConsultantorCustomers", fields: [consultantor_id], references: [id])
+  customersPerformance Performance[]   @relation("CustomersPerformance")
 
   attachments Gallery[] @relation("CustomersAttachment") // 1 khach hang co the co nhieu file attachment
 }
@@ -112,4 +130,41 @@ model Gallery {
   filename    String   @unique @db.VarChar(255)
   created_at  DateTime @default(now())
   customer    Customer @relation("CustomersAttachment", fields: [customer_id], references: [id], onDelete: Cascade)
+}
+
+model Performance {
+  id                 Int               @id @default(autoincrement())
+  name               String            @unique @db.VarChar(255)
+  status             PerformanceStatus @default(New)
+  creator_id         Int // Người tạo ra hiệu quả công việc
+  customer_id        Int // Khách hàng đang tư vấn
+  note               String?           @db.Text
+  assign_at          DateTime? // Xem thời điểm mà khách hàng được add tag
+  operating_cost     Float             @default(0) // Chi phí vận hành (%)
+  customer_care_cost Float             @default(0) // Chi phí CSKH (%)
+  commission_cost    Float             @default(0) // Chi phí hoa hồng (%)
+  diplomatic_cost    Float             @default(0) // Chi phí ngoại giao (%)
+  reserve_cost       Float             @default(0) // Chi phí dự phòng (%)
+  customer_cost      Float             @default(0) // Chi phí khách hàng (%)
+  created_at         DateTime          @default(now())
+  updated_at         DateTime?
+
+  creator  User      @relation("CreatedPerformance", fields: [creator_id], references: [id], onDelete: Cascade)
+  customer Customer? @relation("CustomersPerformance", fields: [customer_id], references: [id])
+  revenues Revenue[] @relation("RevenuesPerformance") // 1 Hiệu quả làm có thể có nhiều doanh thu khác nhau 
+}
+
+model Revenue {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique @db.VarChar(255) // Hạng mục
+  description    String?          @db.Text // Diễn giải
+  unit_caculate  String? // Đơn vị tính dạng string 
+  type           TypeRevenue      @default(OneTime) // Loại 
+  performance_id Int // Foreign key
+  price          Decimal          @db.Decimal(15, 2) // Đơn giá
+  quantity       Int              @default(1)
+  direction      RevenueDirection @default(In) // Xác định đây là danh thu gì
+  performance    Performance      @relation("RevenuesPerformance", fields: [performance_id], references: [id])
+  created_at     DateTime         @default(now())
+  updated_at     DateTime?
 }
