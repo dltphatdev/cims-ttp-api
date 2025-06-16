@@ -354,7 +354,38 @@ export const createUserValidator = validate(
           }
         }
       },
-      password: passwordSchema
+      password: passwordSchema,
+      fullname: {
+        ...fullnameSchema,
+        optional: true
+      },
+      address: {
+        ...addressSchema,
+        optional: true
+      },
+      avatar: {
+        ...avatarSchema,
+        optional: true
+      },
+      code: {
+        ...codeSchema,
+        optional: true
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      role: {
+        isIn: {
+          options: [userRole],
+          errorMessage: MSG.ROLE_INVALID
+        },
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      }
     },
     ['body']
   )

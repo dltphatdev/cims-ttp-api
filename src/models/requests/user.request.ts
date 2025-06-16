@@ -37,6 +37,13 @@ export interface UserLogoutReqBody {
 export interface CreateUserReqBody {
   email: string
   password: string
+  fullname?: string
+  avatar?: string
+  address?: string
+  phone?: string
+  code?: string
+  date_of_birth?: string
+  role?: UserRole
 }
 
 export interface UpdateProfileReqBody {
