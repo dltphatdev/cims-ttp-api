@@ -107,6 +107,17 @@ model Customer {
   updated_at       DateTime?
   creator          User            @relation("CreatedCustomers", fields: [creator_id], references: [id], onDelete: Cascade)
   consultantor     User?           @relation("ConsultantorCustomers", fields: [consultantor_id], references: [id])
+  attachments Gallery[] @relation("CustomersAttachment")
 }
 
+```
+
+```prisma
+model Gallery {
+  id          Int      @id @default(autoincrement())
+  customer_id Int
+  filename    String   @unique @db.VarChar(255)
+  created_at  DateTime @default(now())
+  customer    Customer @relation("CustomersAttachment", fields: [customer_id], references: [id], onDelete: Cascade)
+}
 ```
