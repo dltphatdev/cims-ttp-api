@@ -117,11 +117,13 @@ class UserService {
     }
   }
 
-  async createUser({ email, password }: CreateUserReqBody) {
+  async createUser(payload: CreateUserReqBody) {
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
     await prisma.user.create({
       data: {
-        email,
-        password: hashPassword(password)
+        ..._payload,
+        verify: UserVerifyStatus.Verified,
+        password: hashPassword(_payload.password)
       }
     })
     return {
@@ -146,7 +148,8 @@ class UserService {
       },
       data: {
         ..._payload,
-        password: hashPassword(_payload.password as string)
+        password: hashPassword(_payload.password as string),
+        updated_at: new Date()
       },
       select: {
         id: true,
@@ -365,6 +368,20 @@ class UserService {
       }
     })
     return user
+  }
+
+  async resetPassword({ id, password }: { id: number; password: string }) {
+    await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        password: hashPassword(password)
+      }
+    })
+    return {
+      message: MSG.RESET_PASSWORD_SUCCESS
+    }
   }
 }
 

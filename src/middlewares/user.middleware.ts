@@ -321,6 +321,16 @@ export const verifiedUserValidator = (req: Request, res: Response, next: NextFun
   next()
 }
 
+export const resetPasswordValidator = validate(
+  checkSchema(
+    {
+      id: idSchema,
+      password: passwordSchema
+    },
+    ['body']
+  )
+)
+
 export const userRoleValidator = async (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.decode_authorization as TokenPayLoad
   const user = await prisma.user.findUnique({

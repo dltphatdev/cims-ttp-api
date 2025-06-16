@@ -209,6 +209,7 @@ class CustomerService {
         address_company: true,
         address_personal: true,
         created_at: true,
+        updated_at: true,
         date_of_birth: true,
         creator: {
           select: {

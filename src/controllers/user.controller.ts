@@ -4,6 +4,7 @@ import {
   CreateUserReqBody,
   GetUserDetailReqParams,
   RefreshTokenReqBody,
+  ResetPasswordReqBody,
   TokenPayLoad,
   UpdateProfileReqBody,
   UpdateUserReqBody,
@@ -35,8 +36,8 @@ export const logoutController = async (req: Request<ParamsDictionary, any, UserL
 }
 
 export const createUserController = async (req: Request<ParamsDictionary, any, CreateUserReqBody>, res: Response) => {
-  const { email, password } = req.body
-  const result = await userService.createUser({ email, password })
+  const payload = req.body
+  const result = await userService.createUser(payload)
   res.json(result)
   return
 }
@@ -130,5 +131,15 @@ export const getMeController = async (req: Request, res: Response) => {
     message: MSG.GET_ME_SUCCESS,
     data: user
   })
+  return
+}
+
+export const resetPasswordController = async (
+  req: Request<ParamsDictionary, any, ResetPasswordReqBody>,
+  res: Response
+) => {
+  const { id, password } = req.body
+  const result = await userService.resetPassword({ id, password })
+  res.json(result)
   return
 }

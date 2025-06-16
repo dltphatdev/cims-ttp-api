@@ -9,6 +9,7 @@ import {
   loginController,
   logoutController,
   refreshTokenController,
+  resetPasswordController,
   updateProfileController,
   updateUserController,
   uploadAvatarController
@@ -25,7 +26,8 @@ import {
   changePasswordValidator,
   updateProfileValidator,
   getUserDetailValidator,
-  paginationValidator
+  paginationValidator,
+  resetPasswordValidator
 } from '@/middlewares/user.middleware'
 import { UpdateProfileReqBody, UpdateUserReqBody } from '@/models/requests/user.request'
 import { wrapRequestHandler } from '@/utils/handler'
@@ -182,5 +184,20 @@ userRouter.post(`${PREFIX_USER}/refresh-token`, refreshTokenValidator, wrapReque
  * Request header: { Authorization: Bearer <access_token> }
  * */
 userRouter.get(`${PREFIX_USER}/me`, accessTokenValidator, wrapRequestHandler(getMeController))
+
+/**
+ * Description: Reset password
+ * Method: PATCH
+ * Path: /reset-password
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request body: { id: number; password: string }
+ * */
+userRouter.patch(
+  `${PREFIX_USER}/reset-password`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  resetPasswordValidator,
+  wrapRequestHandler(resetPasswordController)
+)
 
 export default userRouter

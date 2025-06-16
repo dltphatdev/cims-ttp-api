@@ -57,7 +57,7 @@ model User {
   refreshTokens         RefreshToken[]
   date_of_birth         DateTime?
   created_at            DateTime         @default(now())
-  updated_at            DateTime         @updatedAt
+  updated_at            DateTime?
   role                  UserRole         @default(None)
   creatorCustomers      Customer[]       @relation("CreatedCustomers") // Một user có thể có nhiều customer
   consultantorCustomers Customer[]       @relation("ConsultantorCustomers") // Một user có thể tư vấn nhiều customer

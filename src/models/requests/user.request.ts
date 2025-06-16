@@ -34,6 +34,11 @@ export interface UserLogoutReqBody {
   refresh_token: string
 }
 
+export interface ResetPasswordReqBody {
+  id: number
+  password: string
+}
+
 export interface CreateUserReqBody {
   email: string
   password: string
