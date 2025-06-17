@@ -6,6 +6,8 @@ import {
   ListPerformanceReqQuery,
   UpdatePerformanceReqBody
 } from '@/models/requests/performance.request'
+import { RevenueReqQuery } from '@/models/requests/revenue.request'
+import { RevenueDirection } from '@prisma/client'
 
 class PerformanceService {
   async createPerformance(payload: CreatePerformanceReqBody) {
@@ -20,55 +22,103 @@ class PerformanceService {
     }
   }
 
-  async getPerformance(id: string) {
-    const performance = await prisma.performance.findUnique({
-      where: {
-        id: Number(id)
-      },
-      select: {
-        id: true,
-        name: true,
-        customer_id: true,
-        creator_id: true,
-        note: true,
-        status: true,
-        operating_cost: true,
-        customer_care_cost: true,
-        commission_cost: true,
-        diplomatic_cost: true,
-        reserve_cost: true,
-        customer_cost: true,
-        created_at: true,
-        updated_at: true,
-        creator: {
-          select: {
-            fullname: true
-          }
+  async getPerformance({ id, payload }: { id: string; payload: RevenueReqQuery }) {
+    const inputPage = Number(payload?.input_page) || PAGE
+    const outputPage = Number(payload?.output_page) || PAGE
+    const inputLimit = Number(payload?.input_limit) || LIMIT
+    const outputLimit = Number(payload?.output_limit) || LIMIT
+
+    const [performance, revenueInput, revenueOutput, totalRevenueInput, totalRevenueOutput] = await Promise.all([
+      prisma.performance.findUnique({
+        where: {
+          id: Number(id)
         },
-        customer: {
-          select: {
-            name: true,
-            id: true
-          }
-        },
-        revenues: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            unit_caculate: true,
-            type: true,
-            performance_id: true,
-            price: true,
-            quantity: true,
-            direction: true,
-            created_at: true,
-            updated_at: true
+        select: {
+          id: true,
+          name: true,
+          customer_id: true,
+          creator_id: true,
+          note: true,
+          status: true,
+          operating_cost: true,
+          customer_care_cost: true,
+          commission_cost: true,
+          diplomatic_cost: true,
+          reserve_cost: true,
+          customer_cost: true,
+          created_at: true,
+          updated_at: true,
+          creator: {
+            select: {
+              fullname: true
+            }
+          },
+          customer: {
+            select: {
+              name: true,
+              id: true
+            }
+          },
+          revenues: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              unit_caculate: true,
+              type: true,
+              performance_id: true,
+              price: true,
+              quantity: true,
+              direction: true,
+              created_at: true,
+              updated_at: true
+            }
           }
         }
-      }
-    })
-    return performance
+      }),
+      prisma.revenue.findMany({
+        where: {
+          direction: RevenueDirection.In
+        },
+        skip: inputLimit * (inputPage - 1),
+        take: inputLimit,
+        orderBy: {
+          created_at: 'asc'
+        }
+      }),
+      prisma.revenue.findMany({
+        where: {
+          direction: RevenueDirection.Out
+        },
+        skip: outputLimit * (outputPage - 1),
+        take: outputLimit,
+        orderBy: {
+          created_at: 'asc'
+        }
+      }),
+      prisma.revenue.count({
+        where: {
+          direction: RevenueDirection.In
+        }
+      }),
+      prisma.revenue.count({
+        where: {
+          direction: RevenueDirection.Out
+        }
+      })
+    ])
+
+    return {
+      performance,
+      revenueInput,
+      revenueOutput,
+      totalRevenueInput,
+      totalRevenueOutput,
+      inputPage,
+      outputPage,
+      inputLimit,
+      outputLimit
+    }
   }
 
   async performanceList(payload: ListPerformanceReqQuery) {

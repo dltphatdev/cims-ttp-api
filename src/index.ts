@@ -10,6 +10,7 @@ import { hashPassword } from '@/utils/crypto'
 import serveRouter from '@/routes/serve.route'
 import customerRouter from '@/routes/customer.route'
 import performanceRouter from '@/routes/performance.route'
+import revenueRouter from '@/routes/revenue.route'
 
 initFolder()
 
@@ -28,6 +29,7 @@ app.use('', serveRouter)
 app.use(PREFIX_API, userRouter)
 app.use(PREFIX_API, customerRouter)
 app.use(PREFIX_API, performanceRouter)
+app.use(PREFIX_API, revenueRouter)
 app.use(defaultErrorHandle)
 
 app.listen(port, () => {

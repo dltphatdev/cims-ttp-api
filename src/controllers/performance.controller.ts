@@ -5,8 +5,9 @@ import {
   ListPerformanceReqQuery,
   UpdatePerformanceReqBody
 } from '@/models/requests/performance.request'
+import { RevenueReqQuery } from '@/models/requests/revenue.request'
 import performanceService from '@/services/performance.service'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 
 export const createPerformanceController = async (
@@ -29,12 +30,36 @@ export const updatePerformanceController = async (
   return
 }
 
-export const getPerformanceController = async (req: Request<GetPerformanceReqParams>, res: Response) => {
+export const getPerformanceController = async (
+  req: Request<GetPerformanceReqParams, any, any, RevenueReqQuery>,
+  res: Response
+) => {
   const { id } = req.params
-  const performance = await performanceService.getPerformance(id)
+  const reqQuery = req.query
+  const {
+    performance,
+    revenueInput,
+    revenueOutput,
+    totalRevenueInput,
+    totalRevenueOutput,
+    inputPage,
+    outputPage,
+    inputLimit,
+    outputLimit
+  } = await performanceService.getPerformance({ id, payload: reqQuery })
   res.json({
     message: MSG.GET_PERFORMANCE_SUCCESS,
-    data: performance
+    data: {
+      performance,
+      revenueInput,
+      revenueOutput,
+      totalRevenueInput,
+      totalRevenueOutput,
+      inputPage,
+      outputPage,
+      inputLimit,
+      outputLimit
+    }
   })
   return
 }

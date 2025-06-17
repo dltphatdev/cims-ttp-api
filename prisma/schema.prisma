@@ -158,7 +158,7 @@ model Revenue {
   id             Int              @id @default(autoincrement())
   name           String           @unique @db.VarChar(255) // Hạng mục
   description    String?          @db.Text // Diễn giải
-  unit_caculate  String? // Đơn vị tính dạng string 
+  unit_caculate  String?          @db.VarChar(255) // Đơn vị tính dạng string 
   type           TypeRevenue      @default(OneTime) // Loại 
   performance_id Int // Foreign key
   price          Decimal          @db.Decimal(15, 2) // Đơn giá

@@ -98,7 +98,27 @@ const MSG = {
   PERFORMANCE_NOT_FOUND: 'Không tìm thấy hiệu quả công việc',
   GET_PERFORMANCE_SUCCESS: 'Lấy thông tin hiệu quả công việc thành công',
   GET_LIST_PERFORMANCE_SUCCESS: 'Lấy danh sách hiệu quả công việc thành công',
-  UPDATE_PERFORMANCE_SUCCESS: 'Cập nhật hiệu quả công việc thành công'
+  UPDATE_PERFORMANCE_SUCCESS: 'Cập nhật hiệu quả công việc thành công',
+  NAME_REVENUE_MUST_BE_STRING: 'Tên hạng mục phải là dạng chuỗi',
+  NAME_REVENUE_LENGTH: 'Tên hạng mục có độ dài từ 3 đến 160 ký tự',
+  DESCRIPTION_REVENUE_MUST_BE_STRING: 'Diễn giải phải là dạng chuỗi',
+  DESCRIPTION_REVENUE_MAX_LENGTH: 'Diễn giải cho phép nhập tối đa 2000 ký tự',
+  NAME_REVENUE_IS_REQUIRED: 'Tên hạng mục là bắt buộc',
+  DESCRIPTION_REVENUE_IS_REQUIRED: 'Diễn giải là bắt buộc',
+  UNIT_CACULATE_REVENUE_IS_REQUIRED: 'Đơn vị tính là bắt buộc',
+  UNIT_CACULATE_REVENUE_MUST_BE_STRING: 'Đơn vị tính phải là dạng chuỗi',
+  UNIT_CACULATE_REVENUE_MAX_LENGTH: 'Đơn vị tính chỉ cho phép nhập tối đa 255 ký tự',
+  TYPE_REVENUE_INVALID: 'Loại chi phí chưa đúng định dạng',
+  PRICE_REVENUE_MUST_BE_INT: 'Đơn giá nhập vào phải là số nguyên',
+  PRICE_REVENUE_GREATER_THAN_1: 'Đơn giá nhập vào phải luôn là số nguyên dương',
+  QUANTITY_MUST_BE_INT: 'Số lượng nhập vào phải là số nguyên',
+  QUANTITY_GREATER_THAN_1: 'Số lượng nhập vào phải luôn là số nguyên dương',
+  DIRECTION_REVENUE_INVALID: 'Loại chi phí không hợp lệ',
+  ID_REVENUE_IS_REQUIRED: 'Id chi phí là bắt buộc',
+  REVENUE_NOT_FOUND: 'Không tìm thấy chi phí',
+  CREATE_REVENUE_SUCCESS: 'Thêm chi phí thành công',
+  UPDATE_REVENUE_SUCCESS: 'Cập nhật chi phí thành công',
+  GET_REVENUE_SUCCESS: 'Lấy thông tin chi tiết chi phí thành công'
 } as const
 
 export default MSG

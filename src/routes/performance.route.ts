@@ -13,6 +13,7 @@ import {
   paginationValidator,
   updatePerformanceValidator
 } from '@/middlewares/performance.middleware'
+import { inputPaginationValidator, outputPaginationValidator } from '@/middlewares/revenue.middleware'
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
 import { UpdatePerformanceReqBody } from '@/models/requests/performance.request'
 import { wrapRequestHandler } from '@/utils/handler'
@@ -57,12 +58,15 @@ performanceRouter.get(
  * Method: GET
  * Request header: { Authorization: Bearer <access_token> }
  * Request params: { id: string }
+ * Request query: { input_page?: string; output_page?: string; input_limit?: string; output_limit?: string }
  * */
 performanceRouter.get(
   `${PREFIX_PERFORMANCE}/detail/:id`,
   accessTokenValidator,
   verifiedUserValidator,
   getPerformanceValidator,
+  inputPaginationValidator,
+  outputPaginationValidator,
   wrapRequestHandler(getPerformanceController)
 )
 
