@@ -1,6 +1,6 @@
 import { Request } from 'express'
-import { User } from '../generated/prisma'
 import { TokenPayLoad } from '@/models/requests/user.request'
+import { User } from '@prisma/client'
 
 declare module 'express' {
   interface Request {

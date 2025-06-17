@@ -13,6 +13,7 @@ import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.
 import {
   createCustomerValidator,
   getCustomerDetailValidator,
+  getListCustomerValidator,
   paginationValidator,
   updateCustomerCompanyValidator,
   updateCustomerPersonalValidator
@@ -126,6 +127,7 @@ customerRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   paginationValidator,
+  getListCustomerValidator,
   wrapRequestHandler(getListCustomerController)
 )
 
@@ -134,7 +136,7 @@ customerRouter.get(
  * Path: /detail/:id
  * Method: GET
  * Request header: { Authorization: Bearer <access_token> }
- * Request params: id: string
+ * Request params: {id: string}
  *  * */
 customerRouter.get(
   `${PREFIX_CUSTOMER}/detail/:id`,

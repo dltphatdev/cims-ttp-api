@@ -75,7 +75,30 @@ const MSG = {
   ATTACHMENT_ITEM_MUST_BE_ARRAY_STRING: 'Attachments item phải là dạng chuỗi',
   GET_CUSTOMER_SUCCESS: 'Lấy thông tin khách hàng thành công',
   CUSTOMER_IS_VERIFIED: 'Khách hàng đã được xác thực trước đó',
-  RESET_PASSWORD_SUCCESS: 'Làm mới mật khẩu thành công'
+  RESET_PASSWORD_SUCCESS: 'Làm mới mật khẩu thành công',
+  NAME_PERFORMANCE_MUST_BE_STRING: 'Tiêu đề hiệu quả công việc phải là dạng chuỗi',
+  NAME_PERFORMANCE_LENGTH: 'Tiêu đề hiệu quả công việc có độ dài từ 3 đến 160 ký tự',
+  CREATOR_ID_IS_REQUIRED: 'creator_id là bắt buộc',
+  CUSTOMER_ID_IS_REQUIRED: 'customer_id là bắt buộc',
+  PERFORMANCE_STATUS_INVALID: 'Trạng thái hiệu quả công việc không hợp lệ',
+  OPERATING_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí vận hành phải là số từ 0 đến 100',
+  OPERATING_COST_IS_REQUIRED: 'Chi phí vận hành là bắt buộc',
+  CUSTOMER_CARE_COST_IS_REQUIRED: 'Chi phí CSKH là bắt buộc',
+  CUSTOMER_CARE_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí CSKH phải là số từ 0 đến 100',
+  COMMISSION_COST_IS_REQUIRED: 'Chi phí hoa hồng là bắt buộc',
+  COMMISSION_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí hoa hồng phải là số từ 0 đến 100',
+  DIPLOMATIC_COST_IS_REQUIRED: 'Chi phí ngoại giao là bắt buộc',
+  DIPLOMATIC_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí ngoại giao phải là số từ 0 đến 100',
+  RESERVE_COST_IS_REQUIRED: 'Chi phí dự phòng là bắt buộc',
+  RESERVE_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí dự phòng phải là số từ 0 đến 100',
+  CUSTOMER_COST_IS_REQUIRED: 'Chi phí khách hàng là bắt buộc',
+  CUSTOMER_COST_MUST_BE_NUMBER_FROM_0_TO_100: 'Chi phí khách hàng phải là số từ 0 đến 100',
+  CREATE_PERFORMANCE_SUCCESS: 'Thêm mới hiệu quả công việc thành công',
+  ID_PERFORMANCE_IS_REQUIRED: 'Id hiệu quả công việc là bắt buộc',
+  PERFORMANCE_NOT_FOUND: 'Không tìm thấy hiệu quả công việc',
+  GET_PERFORMANCE_SUCCESS: 'Lấy thông tin hiệu quả công việc thành công',
+  GET_LIST_PERFORMANCE_SUCCESS: 'Lấy danh sách hiệu quả công việc thành công',
+  UPDATE_PERFORMANCE_SUCCESS: 'Cập nhật hiệu quả công việc thành công'
 } as const
 
 export default MSG

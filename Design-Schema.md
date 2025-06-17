@@ -36,6 +36,22 @@ enum CustomerVerify {
   Unverified
   Verified
 }
+
+enum PerformanceStatus {
+  New
+  Approved
+  Cancelled
+}
+
+enum TypeRevenue {
+  OneTime
+  EveryMonth
+}
+
+enum RevenueDirection {
+  In // Doanh thu đầu vào
+  Out // Chi phí, doanh thu đầu ra
+}
 ```
 
 ## Schema User
@@ -119,5 +135,46 @@ model Gallery {
   filename    String   @unique @db.VarChar(255)
   created_at  DateTime @default(now())
   customer    Customer @relation("CustomersAttachment", fields: [customer_id], references: [id], onDelete: Cascade)
+}
+```
+
+```prisma
+model Performance {
+  id                 Int               @id @default(autoincrement())
+  name               String            @unique @db.VarChar(255)
+  status             PerformanceStatus @default(New)
+  creator_id         Int // Người tạo ra hiệu quả công việc
+  customer_id        Int // Khách hàng đang tư vấn
+  note               String?           @db.Text
+  assign_at          DateTime? // Xem thời điểm mà khách hàng được add tag
+  operating_cost     Float             @default(0) // Chi phí vận hành (%)
+  customer_care_cost Float             @default(0) // Chi phí CSKH (%)
+  commission_cost    Float             @default(0) // Chi phí hoa hồng (%)
+  diplomatic_cost    Float             @default(0) // Chi phí ngoại giao (%)
+  reserve_cost       Float             @default(0) // Chi phí dự phòng (%)
+  customer_cost      Float             @default(0) // Chi phí khách hàng (%)
+  created_at         DateTime          @default(now())
+  updated_at         DateTime?
+
+  creator  User      @relation("CreatedPerformance", fields: [creator_id], references: [id], onDelete: Cascade)
+  customer Customer? @relation("CustomersPerformance", fields: [customer_id], references: [id])
+  revenues Revenue[] @relation("RevenuesPerformance") // 1 Hiệu quả làm có thể có nhiều doanh thu khác nhau
+}
+```
+
+```prisma
+model Revenue {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique @db.VarChar(255) // Hạng mục
+  description    String?          @db.Text // Diễn giải
+  unit_caculate  String? // Đơn vị tính dạng string
+  type           TypeRevenue      @default(OneTime) // Loại
+  performance_id Int // Foreign key
+  price          Decimal          @db.Decimal(15, 2) // Đơn giá
+  quantity       Int              @default(1)
+  direction      RevenueDirection @default(In) // Xác định đây là danh thu gì
+  performance    Performance      @relation("RevenuesPerformance", fields: [performance_id], references: [id])
+  created_at     DateTime         @default(now())
+  updated_at     DateTime?
 }
 ```
