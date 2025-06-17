@@ -28,6 +28,7 @@ const performanceRouter = Router()
  * Request header: { Authorization: Bearer <access_token> }
  * Request body: CreatePerformanceReqBody
  * */
+
 performanceRouter.post(
   `${PREFIX_PERFORMANCE}/create`,
   accessTokenValidator,

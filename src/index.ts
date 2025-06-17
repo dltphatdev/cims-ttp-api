@@ -6,7 +6,6 @@ import { defaultErrorHandle } from '@/middlewares/errors.middleware'
 import { PrismaClient } from '@prisma/client'
 import userRouter from '@/routes/user.route'
 import { PREFIX_API } from '@/constants/path'
-import { hashPassword } from '@/utils/crypto'
 import serveRouter from '@/routes/serve.route'
 import customerRouter from '@/routes/customer.route'
 import performanceRouter from '@/routes/performance.route'
@@ -28,10 +27,9 @@ app.use(express.json())
 app.use('', serveRouter)
 app.use(PREFIX_API, userRouter)
 app.use(PREFIX_API, customerRouter)
-app.use(PREFIX_API, performanceRouter)
 app.use(PREFIX_API, revenueRouter)
+app.use(PREFIX_API, performanceRouter)
 app.use(defaultErrorHandle)
-
 app.listen(port, () => {
   console.log(`Server API running on ${CONFIG_ENV.STATUS} with port ${port}`)
 })

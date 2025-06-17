@@ -114,6 +114,7 @@ const MSG = {
   QUANTITY_MUST_BE_INT: 'Số lượng nhập vào phải là số nguyên',
   QUANTITY_GREATER_THAN_1: 'Số lượng nhập vào phải luôn là số nguyên dương',
   DIRECTION_REVENUE_INVALID: 'Loại chi phí không hợp lệ',
+  DIRECTION_REVENUE_IS_REQUIRED: 'Loại chi phí là bắt buộc',
   ID_REVENUE_IS_REQUIRED: 'Id chi phí là bắt buộc',
   REVENUE_NOT_FOUND: 'Không tìm thấy chi phí',
   CREATE_REVENUE_SUCCESS: 'Thêm chi phí thành công',

@@ -9,6 +9,9 @@ const typeRevenue = stringEnumToArray(TypeRevenue)
 const revenueDirection = stringEnumToArray(RevenueDirection)
 
 const revenueDirectionSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.DIRECTION_REVENUE_IS_REQUIRED
+  },
   isIn: {
     options: [revenueDirection],
     errorMessage: MSG.DIRECTION_REVENUE_INVALID
@@ -207,7 +210,29 @@ export const updateRevenueValidator = validate(
 export const getRevenueDetailValidator = validate(
   checkSchema(
     {
-      id: idRevenueSchema
+      id: {
+        notEmpty: {
+          errorMessage: MSG.ID_REVENUE_IS_REQUIRED
+        },
+        custom: {
+          options: async (value: string) => {
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const revenue = await prisma.revenue.findUnique({
+                where: {
+                  id: Number(value)
+                }
+              })
+              if (revenue === null) {
+                throw new Error(MSG.REVENUE_NOT_FOUND)
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        }
+      }
     },
     ['params']
   )

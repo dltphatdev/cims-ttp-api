@@ -114,10 +114,10 @@ class PerformanceService {
       revenueOutput,
       totalRevenueInput,
       totalRevenueOutput,
-      inputPage,
-      outputPage,
-      inputLimit,
-      outputLimit
+      inputPage: inputPage,
+      outputPage: outputPage,
+      inputLimit: inputLimit,
+      outputLimit: outputLimit
     }
   }
 
