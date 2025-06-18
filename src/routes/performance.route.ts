@@ -8,7 +8,6 @@ import {
 import { filterMiddleware } from '@/middlewares/common.middleware'
 import {
   createPerformanceValidator,
-  getListPerformanceValidator,
   getPerformanceValidator,
   paginationValidator,
   updatePerformanceValidator
@@ -49,7 +48,6 @@ performanceRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   paginationValidator,
-  getListPerformanceValidator,
   wrapRequestHandler(getListPerformanceController)
 )
 

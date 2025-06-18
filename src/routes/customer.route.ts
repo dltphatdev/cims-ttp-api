@@ -13,7 +13,6 @@ import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.
 import {
   createCustomerValidator,
   getCustomerDetailValidator,
-  getListCustomerValidator,
   paginationValidator,
   updateCustomerCompanyValidator,
   updateCustomerPersonalValidator
@@ -127,7 +126,6 @@ customerRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   paginationValidator,
-  getListCustomerValidator,
   wrapRequestHandler(getListCustomerController)
 )
 

@@ -156,7 +156,7 @@ model Performance {
 
 model Revenue {
   id             Int              @id @default(autoincrement())
-  name           String           @unique @db.VarChar(255) // Hạng mục
+  name           String           @db.VarChar(255) // Hạng mục
   description    String?          @db.Text // Diễn giải
   unit_caculate  String?          @db.VarChar(255) // Đơn vị tính dạng string 
   type           TypeRevenue      @default(OneTime) // Loại 

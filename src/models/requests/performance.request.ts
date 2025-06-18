@@ -13,15 +13,8 @@ export interface ListPerformanceReqQuery extends Pagination {
 export interface CreatePerformanceReqBody {
   name: string
   customer_id: number
-  creator_id: number
   note?: string
   status: PerformanceStatus
-  operating_cost: number
-  customer_care_cost: number
-  commission_cost: number
-  diplomatic_cost: number
-  reserve_cost: number
-  customer_cost: number
   assign_at: string
 }
 

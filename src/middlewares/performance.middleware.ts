@@ -166,30 +166,6 @@ export const createPerformanceValidator = validate(
   checkSchema(
     {
       name: nameSchema,
-      creator_id: {
-        ...creatorIdSchema,
-        custom: {
-          options: async (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(MSG.ID_MUST_BE_NUMBER)
-            }
-            // eslint-disable-next-line no-useless-catch
-            try {
-              const user = await prisma.user.findUnique({
-                where: {
-                  id: value
-                }
-              })
-              if (!user) {
-                throw new Error(MSG.USER_NOT_FOUND)
-              }
-              return true
-            } catch (error) {
-              throw error
-            }
-          }
-        }
-      },
       customer_id: {
         ...customerId,
         custom: {
@@ -218,13 +194,7 @@ export const createPerformanceValidator = validate(
         optional: true
       },
       status: statusSchema,
-      assign_at: assignAtSchema,
-      operating_cost: operatingCostSchema,
-      customer_care_cost: customerCareCostSchema,
-      commission_cost: commissionCostSchema,
-      diplomatic_cost: diplomaticCostSchema,
-      reserve_cost: reserveCostSchema,
-      customer_cost: customerCostSchema
+      assign_at: assignAtSchema
     },
     ['body']
   )
@@ -266,18 +236,6 @@ export const paginationValidator = validate(
             return true
           }
         },
-        optional: true
-      }
-    },
-    ['query']
-  )
-)
-
-export const getListPerformanceValidator = validate(
-  checkSchema(
-    {
-      name: {
-        ...nameSchema,
         optional: true
       }
     },

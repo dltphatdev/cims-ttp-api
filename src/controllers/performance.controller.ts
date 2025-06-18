@@ -6,6 +6,7 @@ import {
   UpdatePerformanceReqBody
 } from '@/models/requests/performance.request'
 import { RevenueReqQuery } from '@/models/requests/revenue.request'
+import { TokenPayLoad } from '@/models/requests/user.request'
 import performanceService from '@/services/performance.service'
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
@@ -14,8 +15,9 @@ export const createPerformanceController = async (
   req: Request<ParamsDictionary, any, CreatePerformanceReqBody>,
   res: Response
 ) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
   const payload = req.body
-  const result = await performanceService.createPerformance(payload)
+  const result = await performanceService.createPerformance({ payload, user_id })
   res.json(result)
   return
 }

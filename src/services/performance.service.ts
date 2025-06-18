@@ -8,12 +8,16 @@ import {
 } from '@/models/requests/performance.request'
 import { RevenueReqQuery } from '@/models/requests/revenue.request'
 import { RevenueDirection } from '@prisma/client'
+import { trim } from 'lodash'
 
 class PerformanceService {
-  async createPerformance(payload: CreatePerformanceReqBody) {
+  async createPerformance({ payload, user_id }: { payload: CreatePerformanceReqBody; user_id: number }) {
     const _payload = payload.assign_at ? { ...payload, assign_at: new Date(payload.assign_at) } : payload
     const performance = await prisma.performance.create({
-      data: _payload
+      data: {
+        ..._payload,
+        creator_id: user_id
+      }
     })
     const id = performance.id
     return {
@@ -126,7 +130,7 @@ class PerformanceService {
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
     let whereCondition: any = {}
-    if (payload.name || payload.phone) {
+    if (payload.name) {
       whereCondition = {
         OR: []
       }

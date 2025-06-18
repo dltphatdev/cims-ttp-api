@@ -711,15 +711,3 @@ export const getCustomerDetailValidator = validate(
     ['params']
   )
 )
-
-export const getListCustomerValidator = validate(
-  checkSchema(
-    {
-      name: {
-        ...nameSchema,
-        optional: true
-      }
-    },
-    ['query']
-  )
-)
