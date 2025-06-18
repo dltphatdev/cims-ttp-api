@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th6 17, 2025 lúc 10:01 AM
+-- Thời gian đã tạo: Th6 18, 2025 lúc 10:19 AM
 -- Phiên bản máy phục vụ: 8.4.3
 -- Phiên bản PHP: 8.3.16
 
@@ -58,7 +58,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `name`, `type`, `gender`, `email`, `phone`, `address_company`, `address_personal`, `note`, `attachment`, `tax_code`, `website`, `surrogate`, `contact_name`, `date_of_birth`, `status`, `verify`, `assign_at`, `creator_id`, `created_at`, `updated_at`, `cccd`, `consultantor_id`) VALUES
-(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', NULL, 1, '2025-06-11 04:37:53.400', '2025-06-15 14:17:16.000', NULL, NULL),
+(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', '2025-06-18 07:33:36.735', 1, '2025-06-11 04:37:53.400', '2025-06-18 07:33:36.757', '111111111111', 5),
 (5, 'Phat dev', 'Personal', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', NULL, 1, '2025-06-11 07:16:00.948', '2025-06-16 07:42:33.067', NULL, 2),
 (8, 'Grab', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:29:47.169', '2025-06-17 08:44:16.788', NULL, NULL),
 (9, 'aaaa', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:32:26.204', NULL, NULL, NULL),
@@ -134,7 +134,18 @@ CREATE TABLE `performance` (
 --
 
 INSERT INTO `performance` (`id`, `name`, `status`, `creator_id`, `customer_id`, `note`, `assign_at`, `created_at`, `updated_at`, `commission_cost`, `customer_care_cost`, `customer_cost`, `diplomatic_cost`, `operating_cost`, `reserve_cost`) VALUES
-(1, 'Test hieu qua cong viec update', 'New', 4, 4, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-17 09:41:10.222', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
+(1, 'Test hieu qua cong viec', 'New', 4, 4, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-18 08:06:20.199', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
+(2, 'asdsadasdsadasdsadadas', 'New', 1, 8, NULL, '2025-06-18 03:51:39.181', '2025-06-18 03:51:39.244', NULL, 0, 0, 0, 0, 0, 0),
+(3, 'aaweeeee', 'Approved', 1, 4, NULL, '2025-06-18 03:52:33.023', '2025-06-18 03:52:33.057', NULL, 0, 0, 0, 0, 0, 0),
+(4, 'ttyyyuuiiiiiii', 'New', 1, 13, NULL, '2025-06-18 03:52:54.057', '2025-06-18 03:52:54.089', NULL, 0, 0, 0, 0, 0, 0),
+(5, 'ggggggggg', 'New', 1, 12, NULL, '2025-06-18 03:53:10.289', '2025-06-18 03:53:10.321', NULL, 0, 0, 0, 0, 0, 0),
+(6, 'yyyyyyyyyyyy', 'Cancelled', 1, 4, NULL, '2025-06-18 03:53:29.897', '2025-06-18 03:53:29.926', NULL, 0, 0, 0, 0, 0, 0),
+(7, 'pppppppppppppppppppppppppppppppppp', 'New', 1, 14, NULL, '2025-06-18 03:53:54.826', '2025-06-18 03:53:54.856', NULL, 0, 0, 0, 0, 0, 0),
+(8, 'qqqqqqqqqqqqqqqqqqqqqqqqq', 'New', 1, 5, NULL, '2025-06-18 03:54:09.819', '2025-06-18 03:54:09.848', NULL, 0, 0, 0, 0, 0, 0),
+(9, 'trtrtrtrtrtrtrtrtrtr', 'New', 1, 8, NULL, '2025-06-18 03:54:33.897', '2025-06-18 03:54:33.926', NULL, 0, 0, 0, 0, 0, 0),
+(10, 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 'New', 1, 8, NULL, '2025-06-18 03:54:55.651', '2025-06-18 03:54:55.684', NULL, 0, 0, 0, 0, 0, 0),
+(11, 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', 'New', 1, 4, NULL, '2025-06-18 03:55:07.243', '2025-06-18 03:55:07.274', NULL, 0, 0, 0, 0, 0, 0),
+(12, 'aasdasdsadasdasdasdasdsada', 'Approved', 1, 4, NULL, '2025-06-18 08:45:08.879', '2025-06-18 08:45:08.899', NULL, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -183,7 +194,10 @@ CREATE TABLE `revenue` (
 --
 
 INSERT INTO `revenue` (`id`, `name`, `description`, `unit_caculate`, `type`, `performance_id`, `price`, `quantity`, `direction`, `created_at`, `updated_at`) VALUES
-(1, 'Chi phi lap dat cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 1000000.00, 30, 'In', '2025-06-17 09:54:26.373', '2025-06-17 09:55:21.071');
+(1, 'Chi phi lap dat cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 1000000.00, 30, 'In', '2025-06-17 09:54:26.373', '2025-06-17 09:55:21.071'),
+(2, 'Chi phi keo cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 2000000.00, 30, 'In', '2025-06-18 06:19:07.534', NULL),
+(5, 'Chi phi keo mang', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 1200000.00, 30, 'Out', '2025-06-18 06:21:10.336', NULL),
+(7, 'Chi setup server', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 2800000.00, 10, 'Out', '2025-06-18 06:24:39.270', NULL);
 
 -- --------------------------------------------------------
 
@@ -256,6 +270,7 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('ba7991d5-7517-4948-8c57-64fd92343709', 'f15cbbbd4a8e6ebca9de69839b20b9ee27aff466f8569372b5abec61324869c1', '2025-06-11 03:38:47.630', '20250611033846_change_default_consultantor_id_is_optional_default_nullable_schema_customer', NULL, NULL, '2025-06-11 03:38:47.407', 1),
 ('bddcfbb3-09f5-45a8-a7c1-e1f81a617ca3', '2f6f203860ef2c19496c148934f5635e28c3df9dbb2833b5f84576ee4aa253a5', '2025-06-16 06:44:18.086', '20250616064416_update_field_updated_at_user_schema', NULL, NULL, '2025-06-16 06:44:17.950', 1),
 ('d043284e-793b-420b-9468-a135a29f0ea6', '456107113ccbf1889c2050827b26052800b19d3285ec81cb43670fdaa61e64d5', '2025-06-16 09:07:03.729', '20250616090702_create_performance_schema', NULL, NULL, '2025-06-16 09:07:03.564', 1),
+('e16b1e0b-80f7-4c4f-a21f-eaf1eab78f80', 'c97cd113215540264e74b58878fbc22af4cc690f913c0cc013a68f23ec741e76', '2025-06-18 06:24:08.060', '20250618062406_change_name_revenue', NULL, NULL, '2025-06-18 06:24:08.041', 1),
 ('f61589b5-412f-4f69-9fec-f222d17ea918', '1036fe3a42663e58318c89ed44f9143ae96651cf806b7d3431540e227b19586b', '2025-06-11 04:13:18.881', '20250611041317_change_field_avatar_varchar_length_255_schema_user', NULL, NULL, '2025-06-11 04:13:18.845', 1);
 
 --
@@ -303,7 +318,6 @@ ALTER TABLE `refreshtoken`
 --
 ALTER TABLE `revenue`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `Revenue_name_key` (`name`),
   ADD KEY `Revenue_performance_id_fkey` (`performance_id`);
 
 --
@@ -340,7 +354,7 @@ ALTER TABLE `gallery`
 -- AUTO_INCREMENT cho bảng `performance`
 --
 ALTER TABLE `performance`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `refreshtoken`
@@ -352,7 +366,7 @@ ALTER TABLE `refreshtoken`
 -- AUTO_INCREMENT cho bảng `revenue`
 --
 ALTER TABLE `revenue`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
