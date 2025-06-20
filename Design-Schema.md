@@ -52,6 +52,13 @@ enum RevenueDirection {
   In // Doanh thu đầu vào
   Out // Chi phí, doanh thu đầu ra
 }
+
+enum ActivityStatus {
+  New // Mới
+  InProgress // Đang thực hiện
+  Completed // Hoàn thành
+  Cancelled // Hủy
+}
 ```
 
 ## Schema User
@@ -74,7 +81,7 @@ model User {
   role                  UserRole         @default(None)
   creatorCustomers      Customer[]       @relation("CreatedCustomers") // Một user có thể có nhiều customer
   consultantorCustomers Customer[]       @relation("ConsultantorCustomers") // Một user có thể tư vấn nhiều customer
-
+  creatorActivity  Activity[]  @relation("CreatedActivity")
   @@index([email, password])
 }
 ```
@@ -124,6 +131,7 @@ model Customer {
   creator          User            @relation("CreatedCustomers", fields: [creator_id], references: [id], onDelete: Cascade)
   consultantor     User?           @relation("ConsultantorCustomers", fields: [consultantor_id], references: [id])
   attachments Gallery[] @relation("CustomersAttachment")
+  activityCustomers Activity[]       @relation("ActivityCustomers")
 }
 
 ```
@@ -177,4 +185,41 @@ model Revenue {
   created_at     DateTime         @default(now())
   updated_at     DateTime?
 }
+```
+
+```prisma
+model Activity {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(255) // tieu de
+  phone            String?         @db.VarChar(255)
+  address  String?         @db.VarChar(255)
+  contact_name  String?         @db.VarChar(255)
+  creator_id         Int
+  customer_id  Int?
+  status             ActivityStatus @default(New)
+  time_start DateTime
+  time_end DateTime
+  created_at     DateTime         @default(now())
+  updated_at     DateTime?
+  customer     Customer?           @relation("ActivityCustomers", fields: [customer_id], references: [id])
+  creator  User      @relation("CreatedActivity", fields: [creator_id], references: [id], onDelete: Cascade)
+}
+```
+
+# Chạy lại migration cho MySQL
+
+```bash
+npx prisma migrate dev --name init
+```
+
+# Hoặc nếu bạn có schema sẵn mà không cần migration:
+
+```bash
+npx prisma db push
+```
+
+# Tạo lại Prisma Client
+
+```bash
+npx prisma generate
 ```

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th6 18, 2025 lúc 10:19 AM
+-- Thời gian đã tạo: Th6 20, 2025 lúc 04:40 AM
 -- Phiên bản máy phục vụ: 8.4.3
 -- Phiên bản PHP: 8.3.16
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `ttp_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `activity`
+--
+
+CREATE TABLE `activity` (
+  `id` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `creator_id` int NOT NULL,
+  `customer_id` int DEFAULT NULL,
+  `status` enum('New','InProgress','Completed','Cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'New',
+  `time_start` datetime(3) NOT NULL,
+  `time_end` datetime(3) NOT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` datetime(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -134,18 +155,19 @@ CREATE TABLE `performance` (
 --
 
 INSERT INTO `performance` (`id`, `name`, `status`, `creator_id`, `customer_id`, `note`, `assign_at`, `created_at`, `updated_at`, `commission_cost`, `customer_care_cost`, `customer_cost`, `diplomatic_cost`, `operating_cost`, `reserve_cost`) VALUES
-(1, 'Test hieu qua cong viec', 'New', 4, 4, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-18 08:06:20.199', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
+(1, 'Test hieu qua cong viec', 'New', 4, 4, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-19 10:01:17.615', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
 (2, 'asdsadasdsadasdsadadas', 'New', 1, 8, NULL, '2025-06-18 03:51:39.181', '2025-06-18 03:51:39.244', NULL, 0, 0, 0, 0, 0, 0),
 (3, 'aaweeeee', 'Approved', 1, 4, NULL, '2025-06-18 03:52:33.023', '2025-06-18 03:52:33.057', NULL, 0, 0, 0, 0, 0, 0),
 (4, 'ttyyyuuiiiiiii', 'New', 1, 13, NULL, '2025-06-18 03:52:54.057', '2025-06-18 03:52:54.089', NULL, 0, 0, 0, 0, 0, 0),
 (5, 'ggggggggg', 'New', 1, 12, NULL, '2025-06-18 03:53:10.289', '2025-06-18 03:53:10.321', NULL, 0, 0, 0, 0, 0, 0),
-(6, 'yyyyyyyyyyyy', 'Cancelled', 1, 4, NULL, '2025-06-18 03:53:29.897', '2025-06-18 03:53:29.926', NULL, 0, 0, 0, 0, 0, 0),
+(6, 'yyyyyyyyyyyy', 'New', 1, 4, NULL, '2025-06-18 03:53:29.897', '2025-06-18 03:53:29.926', '2025-06-19 04:29:49.517', 0, 0, 0, 0, 0.4, 0),
 (7, 'pppppppppppppppppppppppppppppppppp', 'New', 1, 14, NULL, '2025-06-18 03:53:54.826', '2025-06-18 03:53:54.856', NULL, 0, 0, 0, 0, 0, 0),
 (8, 'qqqqqqqqqqqqqqqqqqqqqqqqq', 'New', 1, 5, NULL, '2025-06-18 03:54:09.819', '2025-06-18 03:54:09.848', NULL, 0, 0, 0, 0, 0, 0),
 (9, 'trtrtrtrtrtrtrtrtrtr', 'New', 1, 8, NULL, '2025-06-18 03:54:33.897', '2025-06-18 03:54:33.926', NULL, 0, 0, 0, 0, 0, 0),
 (10, 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 'New', 1, 8, NULL, '2025-06-18 03:54:55.651', '2025-06-18 03:54:55.684', NULL, 0, 0, 0, 0, 0, 0),
 (11, 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', 'New', 1, 4, NULL, '2025-06-18 03:55:07.243', '2025-06-18 03:55:07.274', NULL, 0, 0, 0, 0, 0, 0),
-(12, 'aasdasdsadasdasdasdasdsada', 'Approved', 1, 4, NULL, '2025-06-18 08:45:08.879', '2025-06-18 08:45:08.899', NULL, 0, 0, 0, 0, 0, 0);
+(12, 'aasdasdsadasdasdasdasdsada', 'Approved', 1, 4, NULL, '2025-06-18 08:45:08.879', '2025-06-18 08:45:08.899', NULL, 0, 0, 0, 0, 0, 0),
+(13, 'test hieu qua', 'New', 1, 14, NULL, '2025-06-19 04:30:29.765', '2025-06-19 04:30:29.786', NULL, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -194,10 +216,13 @@ CREATE TABLE `revenue` (
 --
 
 INSERT INTO `revenue` (`id`, `name`, `description`, `unit_caculate`, `type`, `performance_id`, `price`, `quantity`, `direction`, `created_at`, `updated_at`) VALUES
-(1, 'Chi phi lap dat cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 1000000.00, 30, 'In', '2025-06-17 09:54:26.373', '2025-06-17 09:55:21.071'),
-(2, 'Chi phi keo cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 2000000.00, 30, 'In', '2025-06-18 06:19:07.534', NULL),
+(1, 'Chi phi lap dat cap', 'abacbbcab', 'abcbcc', 'OneTime', 1, 1000000.00, 300, 'In', '2025-06-17 09:54:26.373', '2025-06-20 04:02:03.485'),
+(2, 'Chi phi keo cap', 'abacbbcab', 'abc', 'OneTime', 1, 2000000.00, 30, 'In', '2025-06-18 06:19:07.534', '2025-06-20 03:52:45.469'),
 (5, 'Chi phi keo mang', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 1200000.00, 30, 'Out', '2025-06-18 06:21:10.336', NULL),
-(7, 'Chi setup server', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 2800000.00, 10, 'Out', '2025-06-18 06:24:39.270', NULL);
+(7, 'Chi setup server', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 2800000.00, 10, 'Out', '2025-06-18 06:24:39.270', NULL),
+(8, 'Chi setup server aaaa', 'abacbbcab', 'abcbcc', 'EveryMonth', 1, 2800000.00, 10, 'Out', '2025-06-19 10:10:33.789', NULL),
+(9, 'Chi phi lap dat may lanh', 'abc', 'ádasdasda', 'OneTime', 1, 200000.00, 1, 'In', '2025-06-20 02:42:47.963', NULL),
+(10, 'Di day am tuong', 'abcdef', 'aaaaaa', 'EveryMonth', 1, 400000.00, 2, 'Out', '2025-06-20 02:44:19.113', NULL);
 
 -- --------------------------------------------------------
 
@@ -271,11 +296,20 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('bddcfbb3-09f5-45a8-a7c1-e1f81a617ca3', '2f6f203860ef2c19496c148934f5635e28c3df9dbb2833b5f84576ee4aa253a5', '2025-06-16 06:44:18.086', '20250616064416_update_field_updated_at_user_schema', NULL, NULL, '2025-06-16 06:44:17.950', 1),
 ('d043284e-793b-420b-9468-a135a29f0ea6', '456107113ccbf1889c2050827b26052800b19d3285ec81cb43670fdaa61e64d5', '2025-06-16 09:07:03.729', '20250616090702_create_performance_schema', NULL, NULL, '2025-06-16 09:07:03.564', 1),
 ('e16b1e0b-80f7-4c4f-a21f-eaf1eab78f80', 'c97cd113215540264e74b58878fbc22af4cc690f913c0cc013a68f23ec741e76', '2025-06-18 06:24:08.060', '20250618062406_change_name_revenue', NULL, NULL, '2025-06-18 06:24:08.041', 1),
+('f4b35809-cb11-48fd-b786-9b5412a65182', '06491e60e89bd2478f08e5e9ec1dc3914be26ee028e6e2591485e1d538dc1780', '2025-06-20 04:39:16.716', '20250620043915_add_schema_activity', NULL, NULL, '2025-06-20 04:39:16.579', 1),
 ('f61589b5-412f-4f69-9fec-f222d17ea918', '1036fe3a42663e58318c89ed44f9143ae96651cf806b7d3431540e227b19586b', '2025-06-11 04:13:18.881', '20250611041317_change_field_avatar_varchar_length_255_schema_user', NULL, NULL, '2025-06-11 04:13:18.845', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
 --
+
+--
+-- Chỉ mục cho bảng `activity`
+--
+ALTER TABLE `activity`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Activity_customer_id_fkey` (`customer_id`),
+  ADD KEY `Activity_creator_id_fkey` (`creator_id`);
 
 --
 -- Chỉ mục cho bảng `customer`
@@ -339,6 +373,12 @@ ALTER TABLE `_prisma_migrations`
 --
 
 --
+-- AUTO_INCREMENT cho bảng `activity`
+--
+ALTER TABLE `activity`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `customer`
 --
 ALTER TABLE `customer`
@@ -354,7 +394,7 @@ ALTER TABLE `gallery`
 -- AUTO_INCREMENT cho bảng `performance`
 --
 ALTER TABLE `performance`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `refreshtoken`
@@ -366,7 +406,7 @@ ALTER TABLE `refreshtoken`
 -- AUTO_INCREMENT cho bảng `revenue`
 --
 ALTER TABLE `revenue`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
@@ -377,6 +417,13 @@ ALTER TABLE `user`
 --
 -- Ràng buộc đối với các bảng kết xuất
 --
+
+--
+-- Ràng buộc cho bảng `activity`
+--
+ALTER TABLE `activity`
+  ADD CONSTRAINT `Activity_creator_id_fkey` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Activity_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Ràng buộc cho bảng `customer`
