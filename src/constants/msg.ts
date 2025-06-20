@@ -25,7 +25,9 @@ const MSG = {
   NAME_CUSTOMER_MUST_BE_STRING: 'Tên dịch vụ phải là dạng chuỗi',
   FULLNAME_LENGTH: 'Họ và tên có độ dài từ 4 đến 160 ký tự',
   NAME_CUSTOMER_LENGTH: 'Tên dịch vụ có độ dài từ 3 đến 160 ký tự',
-  DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là ISO 8601',
+  DATE_OF_BIRTH_ISO8601: 'Ngày tháng năm sinh phải là dạng ISO8601',
+  TIME_START_ISO8601: 'Thời gian bắt đầu phải là dạng ISO8601',
+  TIME_END_ISO8601: 'Thời gian kết thúc phải là dạng ISO8601',
   ASSIGN_AT_ISO8601: 'Assign at phải là ISO 8601',
   AVATAR_MUST_BE_STRING: 'Ảnh đại diện phải là dạng chuỗi',
   AVATAR_LENGTH: 'Ảnh đại diện có độ dài từ 6 đến 255 ký tự',
@@ -58,6 +60,7 @@ const MSG = {
   SURROGATE_MUST_LENGTH: 'Người đại diện nhập vào có độ dài từ 4 đến 160 ký tự',
   ATTACHMENT_MUST_BE_STRING: 'File đính kèm phải là dạng chuỗi',
   NOTE_MAX_LENGTH: 'Ghi chú không được phép vượt quá 2000 ký tự',
+  CONTENT_MAX_LENGTH: 'Nội dung không được phép vượt quá 2000 ký tự',
   UPDATED_CUSTOMER_SUCCESS: 'Cập nhật thông tin khách hàng thành công',
   IS_CUSTOMER_COMPANY: 'Khách hàng phải là khách hàng doanh nghiệp',
   IS_CUSTOMER_PERSONAL: 'Khách hàng phải là khách hàng cá nhân',
@@ -119,7 +122,19 @@ const MSG = {
   REVENUE_NOT_FOUND: 'Không tìm thấy chi phí',
   CREATE_REVENUE_SUCCESS: 'Thêm chi phí thành công',
   UPDATE_REVENUE_SUCCESS: 'Cập nhật chi phí thành công',
-  GET_REVENUE_SUCCESS: 'Lấy thông tin chi tiết chi phí thành công'
+  GET_REVENUE_SUCCESS: 'Lấy thông tin chi tiết chi phí thành công',
+  NAME_ACTIVITY_MUST_BE_STRING: 'Tiêu đề hiệu quả hoạt động phải là dạng chuỗi',
+  NAME_ACTIVITY_IS_REQUIRED: 'Tiêu đề hiệu quả hoạt động là bắt buộc',
+  NAME_ACTIVITY_LENGTH: 'Tiêu đề hiệu quả hoạt động có độ dài từ 2 đến 160 ký tự',
+  CONTACT_NAME_ACTIVITY_MUST_BE_STRING: 'Tên người liên hệ phải là dạng chuỗi',
+  CONTACT_NAME_ACTIVITY_IS_REQUIRED: 'Tên người liên hệ phải là bắt buộc',
+  CONTACT_NAME_ACTIVITY_LENGTH: 'Tên người liên hệ có độ dài từ 2 đến 160 ký tự',
+  ACTIVITY_STATUS_INVALID: 'Trạng thái hoạt động không hợp lệ',
+  ACTIVITY_NOT_FOUND: 'Không tìm thấy hoạt động',
+  CREATE_ACTIVITY_SUCCESSS: 'Thêm hoạt động thành công',
+  UPDATE_ACTIVITY_SUCCESS: 'Cập nhật hoạt động thành công',
+  GET_DETAIL_ACTIVITY_SUCCESS: 'Lấy thông tin hoạt động thành công',
+  GET_LIST_ACTIVITY_SUCCESS: 'Lấy danh sách thông tin hoạt động thành công'
 } as const
 
 export default MSG

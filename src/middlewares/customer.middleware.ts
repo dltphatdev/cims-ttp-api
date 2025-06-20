@@ -164,20 +164,6 @@ const emailSchema: ParamSchema = {
   }
 }
 
-const attachmentSchema: ParamSchema = {
-  isString: {
-    errorMessage: MSG.ATTACHMENT_MUST_BE_STRING
-  },
-  trim: true,
-  isLength: {
-    options: {
-      min: 6,
-      max: 255
-    },
-    errorMessage: MSG.ATTACHMENT_LENGTH
-  }
-}
-
 const noteSchema: ParamSchema = {
   trim: true,
   isLength: {

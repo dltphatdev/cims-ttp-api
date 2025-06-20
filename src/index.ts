@@ -10,6 +10,7 @@ import serveRouter from '@/routes/serve.route'
 import customerRouter from '@/routes/customer.route'
 import performanceRouter from '@/routes/performance.route'
 import revenueRouter from '@/routes/revenue.route'
+import activityRouter from '@/routes/activity.route'
 
 initFolder()
 
@@ -29,6 +30,7 @@ app.use(PREFIX_API, userRouter)
 app.use(PREFIX_API, customerRouter)
 app.use(PREFIX_API, revenueRouter)
 app.use(PREFIX_API, performanceRouter)
+app.use(PREFIX_API, activityRouter)
 app.use(defaultErrorHandle)
 app.listen(port, () => {
   console.log(`Server API running on ${CONFIG_ENV.STATUS} with port ${port}`)

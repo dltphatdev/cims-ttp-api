@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th6 20, 2025 lúc 04:40 AM
+-- Thời gian đã tạo: Th6 20, 2025 lúc 08:24 AM
 -- Phiên bản máy phục vụ: 8.4.3
 -- Phiên bản PHP: 8.3.16
 
@@ -39,8 +39,21 @@ CREATE TABLE `activity` (
   `time_start` datetime(3) NOT NULL,
   `time_end` datetime(3) NOT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `updated_at` datetime(3) DEFAULT NULL
+  `updated_at` datetime(3) DEFAULT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci,
+  `assign_at` datetime(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `activity`
+--
+
+INSERT INTO `activity` (`id`, `name`, `phone`, `address`, `contact_name`, `creator_id`, `customer_id`, `status`, `time_start`, `time_end`, `created_at`, `updated_at`, `content`, `assign_at`) VALUES
+(1, 'Tư vấn khách hàng VNPT', '0987654321', '297 Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:04.779', NULL, NULL, NULL),
+(2, 'Tư vấn khách hàng FPT', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:23.392', NULL, NULL, NULL),
+(3, 'Tư vấn khách hàng Daikin', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:36.083', NULL, NULL, NULL),
+(4, 'Tư vấn dịch vụ camera', '0987654333', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:53.469', NULL, NULL, NULL),
+(5, 'Tư vấn dịch vụ mạng vina', '0987654330', 'Go Dau HCM', 'Phat dev', 1, 5, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:33:21.382', '2025-06-20 07:46:12.160', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -289,6 +302,7 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('68a41b7c-d999-4669-b2f8-5745bcdcd622', '34fed34587c8e19d874f817246640c0c803cd2446676ce20b0871998c8483ed6', '2025-06-13 08:34:20.263', '20250613083419_add_table_gallery_schema', NULL, NULL, '2025-06-13 08:34:20.168', 1),
 ('79283750-b95d-4650-b127-85137e8094ba', '485d9208bb9101d13cf5845624a27c6fb7d6fc175cb03f380d3877882484ea30', '2025-06-11 02:36:42.090', '20250611023641_update_schema_customer_varchar_str', NULL, NULL, '2025-06-11 02:36:42.035', 1),
 ('827746d0-285b-45cd-bd0d-73149bfac428', '13ebb361f3caf742110a5608abaad1f193e76db53336fd819054df1037295c6e', '2025-06-17 06:43:28.499', '20250617064326_update_unit_caculate', NULL, NULL, '2025-06-17 06:43:28.477', 1),
+('8c83296f-07a6-4af1-a6aa-0842bd6b0934', '512c159bcefddff3b99d3bd8a3ff614d0ed2b5373b03c88e855b197b8575c01d', '2025-06-20 04:45:46.521', '20250620044545_update_schema_activity', NULL, NULL, '2025-06-20 04:45:46.497', 1),
 ('8d79ee12-f26e-47d9-a38e-28047fa7a432', 'a4a290e1d602acddc5e9c2996786b5d31ae1aaa30c497f567557ee689f2eb7fc', '2025-06-16 10:13:37.167', '20250616101335_create_revenue_schema', NULL, NULL, '2025-06-16 10:13:37.018', 1),
 ('9c0e5b6b-d27d-4de7-8ba9-51f47c9eb8e2', 'd89b66a57ec54bf00738b43d72095cfb6606716895f52b28333826f4205b4fc5', '2025-06-10 08:48:04.942', '20250610084804_add_unique_to_token', NULL, NULL, '2025-06-10 08:48:04.787', 1),
 ('b065e32f-311f-4625-909e-604814a5eadf', '202f0bd55edc2eeb14ab87e357b0a3ff03b93a7c026fa76159f99df04d26acef', '2025-06-11 04:04:48.867', '20250611040447_change_field_email_unique_schema_customer', NULL, NULL, '2025-06-11 04:04:48.831', 1),
@@ -297,7 +311,8 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('d043284e-793b-420b-9468-a135a29f0ea6', '456107113ccbf1889c2050827b26052800b19d3285ec81cb43670fdaa61e64d5', '2025-06-16 09:07:03.729', '20250616090702_create_performance_schema', NULL, NULL, '2025-06-16 09:07:03.564', 1),
 ('e16b1e0b-80f7-4c4f-a21f-eaf1eab78f80', 'c97cd113215540264e74b58878fbc22af4cc690f913c0cc013a68f23ec741e76', '2025-06-18 06:24:08.060', '20250618062406_change_name_revenue', NULL, NULL, '2025-06-18 06:24:08.041', 1),
 ('f4b35809-cb11-48fd-b786-9b5412a65182', '06491e60e89bd2478f08e5e9ec1dc3914be26ee028e6e2591485e1d538dc1780', '2025-06-20 04:39:16.716', '20250620043915_add_schema_activity', NULL, NULL, '2025-06-20 04:39:16.579', 1),
-('f61589b5-412f-4f69-9fec-f222d17ea918', '1036fe3a42663e58318c89ed44f9143ae96651cf806b7d3431540e227b19586b', '2025-06-11 04:13:18.881', '20250611041317_change_field_avatar_varchar_length_255_schema_user', NULL, NULL, '2025-06-11 04:13:18.845', 1);
+('f61589b5-412f-4f69-9fec-f222d17ea918', '1036fe3a42663e58318c89ed44f9143ae96651cf806b7d3431540e227b19586b', '2025-06-11 04:13:18.881', '20250611041317_change_field_avatar_varchar_length_255_schema_user', NULL, NULL, '2025-06-11 04:13:18.845', 1),
+('f62f8cbb-b0c2-4f0c-b82e-bb0991faa112', '978cdd1087fce28e58a357ca51d7c0fc0015bdcfc00f42406b0bb8ad1ebdf0a8', '2025-06-20 07:56:35.966', '20250620075633_update_schema_activity_and_add_field_assign_at', NULL, NULL, '2025-06-20 07:56:35.939', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -376,7 +391,7 @@ ALTER TABLE `_prisma_migrations`
 -- AUTO_INCREMENT cho bảng `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `customer`

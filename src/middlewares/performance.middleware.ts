@@ -21,12 +21,6 @@ const nameSchema: ParamSchema = {
   }
 }
 
-const creatorIdSchema: ParamSchema = {
-  notEmpty: {
-    errorMessage: MSG.CREATOR_ID_IS_REQUIRED
-  }
-}
-
 const customerId: ParamSchema = {
   notEmpty: {
     errorMessage: MSG.CUSTOMER_ID_IS_REQUIRED

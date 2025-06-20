@@ -186,7 +186,9 @@ model Activity {
   contact_name String?        @db.VarChar(255)
   creator_id   Int
   customer_id  Int?
+  assign_at    DateTime?
   status       ActivityStatus @default(New)
+  content      String?        @db.Text // Noi dung
   time_start   DateTime
   time_end     DateTime
   created_at   DateTime       @default(now())

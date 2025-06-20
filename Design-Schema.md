@@ -196,6 +196,7 @@ model Activity {
   contact_name  String?         @db.VarChar(255)
   creator_id         Int
   customer_id  Int?
+  content      String?        @db.Text // Noi dung
   status             ActivityStatus @default(New)
   time_start DateTime
   time_end DateTime
