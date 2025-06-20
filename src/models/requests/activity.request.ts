@@ -14,21 +14,18 @@ export interface CreateActivityReqBody {
   assign_at?: string
 }
 
-export interface UpdateActivityReqBody
-  extends Pick<
-    CreateActivityReqBody,
-    | 'name'
-    | 'customer_id'
-    | 'contact_name'
-    | 'address'
-    | 'phone'
-    | 'status'
-    | 'time_start'
-    | 'time_end'
-    | 'content'
-    | 'assign_at'
-  > {
+export interface UpdateActivityReqBody {
   id: number
+  name?: string
+  customer_id?: number
+  contact_name?: string
+  address?: string
+  phone?: string
+  status?: ActivityStatus
+  time_start?: string
+  time_end?: string
+  content?: string
+  assign_at?: string
 }
 
 export interface GetDetailActivityReqParams extends ParamsDictionary {

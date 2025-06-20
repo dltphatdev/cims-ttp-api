@@ -227,7 +227,10 @@ export const updateActivityValidator = validate(
   checkSchema(
     {
       id: idSchema,
-      name: nameSchema,
+      name: {
+        ...nameSchema,
+        optional: true
+      },
       customer_id: {
         ...customerId,
         custom: {
@@ -249,18 +252,37 @@ export const updateActivityValidator = validate(
               throw error
             }
           }
-        }
+        },
+        optional: true
       },
-      contact_name: contactNameSchema,
-      address: addressSchema,
-      phone: phoneSchema,
+      contact_name: {
+        ...contactNameSchema,
+        optional: true
+      },
+      address: {
+        ...addressSchema,
+        optional: true
+      },
+      phone: {
+        ...phoneSchema,
+        optional: true
+      },
       content: {
         ...contentSchema,
         optional: true
       },
-      status: statusSchema,
-      time_start: timeStartSchema,
-      time_end: timeEndSchema,
+      status: {
+        ...statusSchema,
+        optional: true
+      },
+      time_start: {
+        ...timeStartSchema,
+        optional: true
+      },
+      time_end: {
+        ...timeEndSchema,
+        optional: true
+      },
       assign_at: {
         ...assignAtSchema,
         optional: true
