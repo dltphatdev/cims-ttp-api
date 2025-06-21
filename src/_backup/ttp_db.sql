@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th6 20, 2025 lúc 08:24 AM
+-- Thời gian đã tạo: Th6 21, 2025 lúc 10:16 AM
 -- Phiên bản máy phục vụ: 8.4.3
 -- Phiên bản PHP: 8.3.16
 
@@ -36,8 +36,8 @@ CREATE TABLE `activity` (
   `creator_id` int NOT NULL,
   `customer_id` int DEFAULT NULL,
   `status` enum('New','InProgress','Completed','Cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'New',
-  `time_start` datetime(3) NOT NULL,
-  `time_end` datetime(3) NOT NULL,
+  `time_start` datetime(3) DEFAULT NULL,
+  `time_end` datetime(3) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `updated_at` datetime(3) DEFAULT NULL,
   `content` text COLLATE utf8mb4_unicode_ci,
@@ -53,7 +53,12 @@ INSERT INTO `activity` (`id`, `name`, `phone`, `address`, `contact_name`, `creat
 (2, 'Tư vấn khách hàng FPT', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:23.392', NULL, NULL, NULL),
 (3, 'Tư vấn khách hàng Daikin', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:36.083', NULL, NULL, NULL),
 (4, 'Tư vấn dịch vụ camera', '0987654333', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:53.469', NULL, NULL, NULL),
-(5, 'Tư vấn dịch vụ mạng vina', '0987654330', 'Go Dau HCM', 'Phat dev', 1, 5, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:33:21.382', '2025-06-20 07:46:12.160', NULL, NULL);
+(5, 'Tư vấn dịch vụ mạng vina', '0987654330', 'Go Dau HCM', 'Phat dev', 1, 5, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:33:21.382', '2025-06-20 07:46:12.160', NULL, NULL),
+(6, 'Tư vấn dịch vụ mạng Viettel', '0997654330', 'HCM', 'Phat dev', 1, 5, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 08:48:33.353', NULL, NULL, NULL),
+(7, 'Activity release', '0987654321', 'Go Dau, Tan Phu - HCM', 'Nguyen Van A', 1, 9, 'Completed', NULL, NULL, '2025-06-21 07:41:34.787', '2025-06-21 10:15:25.029', 'test noi dung', NULL),
+(8, 'asdasdadsaa', '0987654322', 'Go Dau, Tan Phu - HCM', 'asds', 1, 5, 'New', '2025-06-21 03:10:10.940', '2025-06-22 08:47:25.000', '2025-06-21 08:48:17.157', NULL, NULL, '2025-06-21 08:48:17.119'),
+(9, 'oooooooo', '1234567890', 'Go Dau, Tan Phu - HCM', 'asdsdadsa', 1, 4, 'InProgress', '2025-06-21 02:09:09.999', '2025-06-22 02:10:09.000', '2025-06-21 08:50:12.005', NULL, NULL, '2025-06-21 08:50:11.969'),
+(10, 'aaaa', '0987654312', 'asdadsadasd', 'asdsadsadasd', 1, 8, 'New', '2025-06-21 09:02:28.183', '2025-06-28 09:02:28.000', '2025-06-21 09:03:02.717', NULL, NULL, '2025-06-21 09:03:02.630');
 
 -- --------------------------------------------------------
 
@@ -92,7 +97,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `name`, `type`, `gender`, `email`, `phone`, `address_company`, `address_personal`, `note`, `attachment`, `tax_code`, `website`, `surrogate`, `contact_name`, `date_of_birth`, `status`, `verify`, `assign_at`, `creator_id`, `created_at`, `updated_at`, `cccd`, `consultantor_id`) VALUES
-(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', '2025-06-18 07:33:36.735', 1, '2025-06-11 04:37:53.400', '2025-06-18 07:33:36.757', '111111111111', 5),
+(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Unverified', '2025-06-21 08:06:59.569', 1, '2025-06-11 04:37:53.400', '2025-06-21 08:06:59.633', '111111111111', 2),
 (5, 'Phat dev', 'Personal', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', NULL, 1, '2025-06-11 07:16:00.948', '2025-06-16 07:42:33.067', NULL, 2),
 (8, 'Grab', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:29:47.169', '2025-06-17 08:44:16.788', NULL, NULL),
 (9, 'aaaa', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:32:26.204', NULL, NULL, NULL),
@@ -168,7 +173,7 @@ CREATE TABLE `performance` (
 --
 
 INSERT INTO `performance` (`id`, `name`, `status`, `creator_id`, `customer_id`, `note`, `assign_at`, `created_at`, `updated_at`, `commission_cost`, `customer_care_cost`, `customer_cost`, `diplomatic_cost`, `operating_cost`, `reserve_cost`) VALUES
-(1, 'Test hieu qua cong viec', 'New', 4, 4, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-19 10:01:17.615', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
+(1, 'Test hieu qua cong viec', 'New', 4, 14, NULL, '2025-06-17 09:37:49.802', '2025-06-17 09:39:25.990', '2025-06-21 08:07:24.583', 0.1, 0.1, 0.1, 0.1, 0.1, 0.1),
 (2, 'asdsadasdsadasdsadadas', 'New', 1, 8, NULL, '2025-06-18 03:51:39.181', '2025-06-18 03:51:39.244', NULL, 0, 0, 0, 0, 0, 0),
 (3, 'aaweeeee', 'Approved', 1, 4, NULL, '2025-06-18 03:52:33.023', '2025-06-18 03:52:33.057', NULL, 0, 0, 0, 0, 0, 0),
 (4, 'ttyyyuuiiiiiii', 'New', 1, 13, NULL, '2025-06-18 03:52:54.057', '2025-06-18 03:52:54.089', NULL, 0, 0, 0, 0, 0, 0),
@@ -180,7 +185,14 @@ INSERT INTO `performance` (`id`, `name`, `status`, `creator_id`, `customer_id`, 
 (10, 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', 'New', 1, 8, NULL, '2025-06-18 03:54:55.651', '2025-06-18 03:54:55.684', NULL, 0, 0, 0, 0, 0, 0),
 (11, 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', 'New', 1, 4, NULL, '2025-06-18 03:55:07.243', '2025-06-18 03:55:07.274', NULL, 0, 0, 0, 0, 0, 0),
 (12, 'aasdasdsadasdasdasdasdsada', 'Approved', 1, 4, NULL, '2025-06-18 08:45:08.879', '2025-06-18 08:45:08.899', NULL, 0, 0, 0, 0, 0, 0),
-(13, 'test hieu qua', 'New', 1, 14, NULL, '2025-06-19 04:30:29.765', '2025-06-19 04:30:29.786', NULL, 0, 0, 0, 0, 0, 0);
+(13, 'test hieu qua', 'New', 1, 14, NULL, '2025-06-19 04:30:29.765', '2025-06-19 04:30:29.786', NULL, 0, 0, 0, 0, 0, 0),
+(14, 'Tets hieu qua', 'New', 1, 4, NULL, '2025-06-21 07:24:35.369', '2025-06-21 07:24:35.423', NULL, 0, 0, 0, 0, 0, 0),
+(15, 'tttttttttttttttttttt', 'Cancelled', 1, 4, NULL, '2025-06-21 07:25:47.483', '2025-06-21 07:25:47.534', NULL, 0, 0, 0, 0, 0, 0),
+(16, 'abcde', 'New', 1, 4, NULL, '2025-06-21 07:26:48.822', '2025-06-21 07:26:48.873', NULL, 0, 0, 0, 0, 0, 0),
+(17, 'abcr', 'New', 1, 4, NULL, '2025-06-21 07:31:26.467', '2025-06-21 07:31:26.519', NULL, 0, 0, 0, 0, 0, 0),
+(18, 'aaaaaaa', 'New', 1, 4, NULL, '2025-06-21 07:32:17.477', '2025-06-21 07:32:17.529', NULL, 0, 0, 0, 0, 0, 0),
+(19, 'Test hieu qua cong viec 222', 'New', 1, 8, NULL, '2025-06-21 07:34:38.416', '2025-06-21 07:34:38.467', NULL, 0, 0, 0, 0, 0, 0),
+(20, 'test hq', 'New', 1, 9, NULL, '2025-06-21 07:39:07.894', '2025-06-21 07:39:07.947', NULL, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -301,6 +313,7 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('6305c632-7907-40c1-991f-d4748af36ee5', '3cac71a9a0e9fb55996046f1a9d27b9f6fd433de7bfa8b36b148f832a9342906', '2025-06-11 03:08:30.306', '20250611030829_add_field_cccd_schema_customer', NULL, NULL, '2025-06-11 03:08:30.284', 1),
 ('68a41b7c-d999-4669-b2f8-5745bcdcd622', '34fed34587c8e19d874f817246640c0c803cd2446676ce20b0871998c8483ed6', '2025-06-13 08:34:20.263', '20250613083419_add_table_gallery_schema', NULL, NULL, '2025-06-13 08:34:20.168', 1),
 ('79283750-b95d-4650-b127-85137e8094ba', '485d9208bb9101d13cf5845624a27c6fb7d6fc175cb03f380d3877882484ea30', '2025-06-11 02:36:42.090', '20250611023641_update_schema_customer_varchar_str', NULL, NULL, '2025-06-11 02:36:42.035', 1),
+('794bc829-e43d-4a95-b4f8-7df434aa5805', 'a98f6e7a1d3c2ad16b844cc74d2fc9181dde8e980b5f6dddc0838939191ad69b', '2025-06-21 10:12:40.298', '20250621101238_update_schema_activity', NULL, NULL, '2025-06-21 10:12:40.217', 1),
 ('827746d0-285b-45cd-bd0d-73149bfac428', '13ebb361f3caf742110a5608abaad1f193e76db53336fd819054df1037295c6e', '2025-06-17 06:43:28.499', '20250617064326_update_unit_caculate', NULL, NULL, '2025-06-17 06:43:28.477', 1),
 ('8c83296f-07a6-4af1-a6aa-0842bd6b0934', '512c159bcefddff3b99d3bd8a3ff614d0ed2b5373b03c88e855b197b8575c01d', '2025-06-20 04:45:46.521', '20250620044545_update_schema_activity', NULL, NULL, '2025-06-20 04:45:46.497', 1),
 ('8d79ee12-f26e-47d9-a38e-28047fa7a432', 'a4a290e1d602acddc5e9c2996786b5d31ae1aaa30c497f567557ee689f2eb7fc', '2025-06-16 10:13:37.167', '20250616101335_create_revenue_schema', NULL, NULL, '2025-06-16 10:13:37.018', 1),
@@ -391,7 +404,7 @@ ALTER TABLE `_prisma_migrations`
 -- AUTO_INCREMENT cho bảng `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `customer`
@@ -409,7 +422,7 @@ ALTER TABLE `gallery`
 -- AUTO_INCREMENT cho bảng `performance`
 --
 ALTER TABLE `performance`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `refreshtoken`

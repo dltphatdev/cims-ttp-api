@@ -24,14 +24,23 @@ class ActivityService {
   }
 
   async updateActivity(payload: UpdateActivityReqBody) {
+    for (const key in payload) {
+      if (
+        payload[key as keyof typeof payload] === undefined ||
+        payload[key as keyof typeof payload] === '' ||
+        payload[key as keyof typeof payload] === null
+      ) {
+        delete payload[key as keyof typeof payload]
+      }
+    }
     await prisma.activity.update({
       where: {
         id: payload.id
       },
       data: {
         ...payload,
-        time_start: new Date(payload.time_start),
-        time_end: new Date(payload.time_end),
+        time_start: payload.time_start ? new Date(payload.time_start as string) : null,
+        time_end: payload.time_end ? new Date(payload.time_end as string) : null,
         updated_at: new Date(),
         assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
       }
@@ -55,6 +64,7 @@ class ActivityService {
         time_start: true,
         time_end: true,
         status: true,
+        content: true,
         contact_name: true,
         created_at: true,
         updated_at: true,
