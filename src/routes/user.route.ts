@@ -85,7 +85,7 @@ userRouter.patch(
  * Method: POST
  * Path: /create
  * Request header: { Authorization: Bearer <access_token> }
- * Request body: { email: string; password: string }
+ * Request body: CreateUserReqBody
  * */
 userRouter.post(
   `${PREFIX_USER}/create`,

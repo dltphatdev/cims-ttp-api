@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th6 21, 2025 lúc 10:16 AM
+-- Thời gian đã tạo: Th6 23, 2025 lúc 03:47 AM
 -- Phiên bản máy phục vụ: 8.4.3
 -- Phiên bản PHP: 8.3.16
 
@@ -49,8 +49,8 @@ CREATE TABLE `activity` (
 --
 
 INSERT INTO `activity` (`id`, `name`, `phone`, `address`, `contact_name`, `creator_id`, `customer_id`, `status`, `time_start`, `time_end`, `created_at`, `updated_at`, `content`, `assign_at`) VALUES
-(1, 'Tư vấn khách hàng VNPT', '0987654321', '297 Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:04.779', NULL, NULL, NULL),
-(2, 'Tư vấn khách hàng FPT', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:23.392', NULL, NULL, NULL),
+(1, 'Tư vấn khách hàng VNPT', '0987654321', '297 Go Dau HCM', 'Phat dev', 1, 13, 'New', NULL, NULL, '2025-06-20 07:32:04.779', '2025-06-23 02:41:55.153', NULL, NULL),
+(2, 'Tư vấn khách hàng FPT', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 14, 'New', NULL, NULL, '2025-06-20 07:32:23.392', '2025-06-23 02:43:58.451', NULL, NULL),
 (3, 'Tư vấn khách hàng Daikin', '0987654311', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:36.083', NULL, NULL, NULL),
 (4, 'Tư vấn dịch vụ camera', '0987654333', 'Go Dau HCM', 'Phat dev', 1, 4, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:32:53.469', NULL, NULL, NULL),
 (5, 'Tư vấn dịch vụ mạng vina', '0987654330', 'Go Dau HCM', 'Phat dev', 1, 5, 'New', '2025-06-20 07:30:36.257', '2025-06-20 07:30:36.257', '2025-06-20 07:33:21.382', '2025-06-20 07:46:12.160', NULL, NULL),
@@ -58,7 +58,8 @@ INSERT INTO `activity` (`id`, `name`, `phone`, `address`, `contact_name`, `creat
 (7, 'Activity release', '0987654321', 'Go Dau, Tan Phu - HCM', 'Nguyen Van A', 1, 9, 'Completed', NULL, NULL, '2025-06-21 07:41:34.787', '2025-06-21 10:15:25.029', 'test noi dung', NULL),
 (8, 'asdasdadsaa', '0987654322', 'Go Dau, Tan Phu - HCM', 'asds', 1, 5, 'New', '2025-06-21 03:10:10.940', '2025-06-22 08:47:25.000', '2025-06-21 08:48:17.157', NULL, NULL, '2025-06-21 08:48:17.119'),
 (9, 'oooooooo', '1234567890', 'Go Dau, Tan Phu - HCM', 'asdsdadsa', 1, 4, 'InProgress', '2025-06-21 02:09:09.999', '2025-06-22 02:10:09.000', '2025-06-21 08:50:12.005', NULL, NULL, '2025-06-21 08:50:11.969'),
-(10, 'aaaa', '0987654312', 'asdadsadasd', 'asdsadsadasd', 1, 8, 'New', '2025-06-21 09:02:28.183', '2025-06-28 09:02:28.000', '2025-06-21 09:03:02.717', NULL, NULL, '2025-06-21 09:03:02.630');
+(10, 'aaaa', '0987654312', 'asdadsadasd', 'asdsadsadasd', 1, 8, 'New', '2025-06-21 09:02:28.183', '2025-06-28 09:02:28.000', '2025-06-21 09:03:02.717', NULL, NULL, '2025-06-21 09:03:02.630'),
+(11, 'hoat dong testing', '0987654321', 'Ho Chi Minh City', 'nddndjdjdjjddjjd', 1, 5, 'InProgress', '2025-06-23 06:44:10.669', '2025-06-24 02:44:10.000', '2025-06-23 02:44:55.826', NULL, 'âdasdsadas', '2025-06-23 02:44:55.788');
 
 -- --------------------------------------------------------
 
@@ -97,8 +98,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `name`, `type`, `gender`, `email`, `phone`, `address_company`, `address_personal`, `note`, `attachment`, `tax_code`, `website`, `surrogate`, `contact_name`, `date_of_birth`, `status`, `verify`, `assign_at`, `creator_id`, `created_at`, `updated_at`, `cccd`, `consultantor_id`) VALUES
-(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Unverified', '2025-06-21 08:06:59.569', 1, '2025-06-11 04:37:53.400', '2025-06-21 08:06:59.633', '111111111111', 2),
-(5, 'Phat dev', 'Personal', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Deactivated', 'Verified', NULL, 1, '2025-06-11 07:16:00.948', '2025-06-16 07:42:33.067', NULL, 2),
+(4, 'Cty abcde', 'Company', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '12345678911', NULL, NULL, NULL, NULL, 'Deactivated', 'Unverified', '2025-06-21 08:06:59.569', 1, '2025-06-11 04:37:53.400', '2025-06-23 02:40:11.402', '111111111111', 3),
+(5, 'Phat dev', 'Personal', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Deactivated', 'Unverified', NULL, 1, '2025-06-11 07:16:00.948', '2025-06-23 02:40:27.401', NULL, 2),
 (8, 'Grab', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:29:47.169', '2025-06-17 08:44:16.788', NULL, NULL),
 (9, 'aaaa', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:32:26.204', NULL, NULL, NULL),
 (10, 'bbbbb', 'Company', 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', 'Deactivated', 'Unverified', NULL, 1, '2025-06-13 04:34:21.130', NULL, NULL, NULL),
@@ -280,7 +281,8 @@ INSERT INTO `user` (`id`, `email`, `password`, `fullname`, `verify`, `avatar`, `
 (2, 'phat1@hotmail.com', '767bad5d9e1e2eff8cea147ec01d72671b4e647aa614eb2775fa4f1c2ad96290', 'Thanh Phat 1', 'Verified', NULL, 'Tan Phu HCM', NULL, '111111', '1989-12-31 17:00:00.000', '2025-06-10 07:21:45.230', '2025-06-15 08:03:20.808', 'Admin'),
 (3, 'phat2@gmail.com', 'e20b924e8b1d396253fe2b6d05f91cce6a66b40b3bdcc35388c90ee7681fa448', 'Thanh Phat 2', 'Verified', NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', '2025-06-10 07:22:40.965', '2025-06-10 08:58:23.391', 'None'),
 (4, 'phat3@outlook.com', 'e20b924e8b1d396253fe2b6d05f91cce6a66b40b3bdcc35388c90ee7681fa448', 'Thanh Phat 3', 'Unverified', NULL, NULL, NULL, NULL, '1989-12-31 17:00:00.000', '2025-06-10 07:24:26.855', '2025-06-10 08:54:06.928', 'None'),
-(5, 'test_user@gamil.com', 'e20b924e8b1d396253fe2b6d05f91cce6a66b40b3bdcc35388c90ee7681fa448', 'User 123', 'Verified', NULL, 'Go Vap', NULL, NULL, '1998-01-29 17:00:00.000', '2025-06-16 06:36:43.509', '2025-06-16 07:05:22.651', 'None');
+(5, 'test_user@gamil.com', 'e20b924e8b1d396253fe2b6d05f91cce6a66b40b3bdcc35388c90ee7681fa448', 'User 123', 'Verified', NULL, 'Go Vap', NULL, NULL, '1998-01-29 17:00:00.000', '2025-06-16 06:36:43.509', '2025-06-16 07:05:22.651', 'None'),
+(6, 'ttp1@gmail.com', '767bad5d9e1e2eff8cea147ec01d72671b4e647aa614eb2775fa4f1c2ad96290', 'TTP User Acc', 'Verified', NULL, 'Go Vap', NULL, NULL, '1989-12-31 17:00:00.000', '2025-06-23 01:46:31.179', NULL, 'None');
 
 -- --------------------------------------------------------
 
@@ -404,7 +406,7 @@ ALTER TABLE `_prisma_migrations`
 -- AUTO_INCREMENT cho bảng `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT cho bảng `customer`
@@ -440,7 +442,7 @@ ALTER TABLE `revenue`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ràng buộc đối với các bảng kết xuất
