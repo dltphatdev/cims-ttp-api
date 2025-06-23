@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 import type { StringValue } from 'ms'
 const options = argv(process.argv.slice(2))
 export const isProduction = options.production === true
-config({ path: isProduction ? '.env.production' : '.env' })
+config()
 
 export const CONFIG_ENV = {
   PORT: process.env.PORT,
