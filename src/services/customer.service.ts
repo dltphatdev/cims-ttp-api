@@ -190,46 +190,90 @@ class CustomerService {
     }
   }
 
-  async getCustomerDetail(id: number) {
-    const customer = await prisma.customer.findUnique({
-      where: {
-        id
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        status: true,
-        verify: true,
-        gender: true,
-        tax_code: true,
-        cccd: true,
-        phone: true,
-        contact_name: true,
-        address_company: true,
-        address_personal: true,
-        created_at: true,
-        updated_at: true,
-        date_of_birth: true,
-        creator: {
-          select: {
-            fullname: true
-          }
+  async getCustomerDetail({ id, limit, page }: { id: number; page?: string; limit?: string }) {
+    const pageQuery = Number(page) || PAGE
+    const limitQuery = Number(limit) || LIMIT
+
+    const [customer, totalActivities] = await Promise.all([
+      prisma.customer.findUnique({
+        where: {
+          id
         },
-        consultantor: {
-          select: {
-            fullname: true,
-            id: true
-          }
-        },
-        attachments: {
-          select: {
-            filename: true
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          status: true,
+          verify: true,
+          gender: true,
+          tax_code: true,
+          cccd: true,
+          phone: true,
+          contact_name: true,
+          address_company: true,
+          address_personal: true,
+          created_at: true,
+          updated_at: true,
+          date_of_birth: true,
+          creator: {
+            select: {
+              fullname: true
+            }
+          },
+          consultantor: {
+            select: {
+              fullname: true,
+              id: true
+            }
+          },
+          attachments: {
+            select: {
+              filename: true
+            }
+          },
+          activityCustomers: {
+            skip: limitQuery * (pageQuery - 1),
+            take: limitQuery,
+            select: {
+              id: true,
+              name: true,
+              customer_id: true,
+              address: true,
+              phone: true,
+              time_start: true,
+              time_end: true,
+              status: true,
+              contact_name: true,
+              created_at: true,
+              updated_at: true,
+              creator: {
+                select: {
+                  fullname: true
+                }
+              },
+              customer: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
           }
         }
-      }
-    })
-    return customer
+      }),
+      prisma.activity.count({
+        where: {
+          customer_id: id
+        }
+      })
+    ])
+
+    return {
+      customer,
+      totalActivities,
+      page: pageQuery,
+      limit: limitQuery
+    }
   }
 }
 
