@@ -242,6 +242,19 @@ export const createCustomerValidator = validate(
       },
       tax_code: {
         ...taxCodeSchema,
+        custom: {
+          options: async (value: string) => {
+            const taxCode = await prisma.customer.findUnique({
+              where: {
+                tax_code: value
+              }
+            })
+            if (taxCode) {
+              throw new Error(MSG.TAX_CODE_IS_EXISTS)
+            }
+            return true
+          }
+        },
         optional: true
       },
       cccd: {

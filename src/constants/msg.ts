@@ -134,7 +134,8 @@ const MSG = {
   CREATE_ACTIVITY_SUCCESSS: 'Thêm hoạt động thành công',
   UPDATE_ACTIVITY_SUCCESS: 'Cập nhật hoạt động thành công',
   GET_DETAIL_ACTIVITY_SUCCESS: 'Lấy thông tin hoạt động thành công',
-  GET_LIST_ACTIVITY_SUCCESS: 'Lấy danh sách thông tin hoạt động thành công'
+  GET_LIST_ACTIVITY_SUCCESS: 'Lấy danh sách thông tin hoạt động thành công',
+  TAX_CODE_IS_EXISTS: 'Mã số thuế đã tồn tại'
 } as const
 
 export default MSG

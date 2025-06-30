@@ -112,7 +112,7 @@ model Customer {
   address_personal     String?         @db.VarChar(255)
   note                 String?         @db.Text
   attachment           String?         @db.VarChar(255) // optional one upload file attachment
-  tax_code             String?         @db.VarChar(255)
+  tax_code             String?         @unique @db.VarChar(255)
   cccd                 String?         @db.VarChar(255)
   website              String?         @db.VarChar(255)
   surrogate            String?         @db.VarChar(255)
