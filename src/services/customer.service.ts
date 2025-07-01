@@ -7,7 +7,7 @@ import {
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
-import { omit } from 'lodash'
+import { forEach, omit } from 'lodash'
 
 class CustomerService {
   async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
@@ -16,18 +16,29 @@ class CustomerService {
       ...payload,
       creator_id: user_id,
       date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
-      assign_at: payload?.assign_at ? new Date(payload.assign_at) : null,
-      consultantor_id: payload.consultantor_id ? payload.consultantor_id : null
+      assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
     }
     for (const key in _payload) {
       if (_payload[key as keyof typeof _payload] === undefined || _payload[key as keyof typeof _payload] === '') {
         delete _payload[key as keyof typeof _payload]
       }
     }
+
     const newCustomer = await prisma.customer.create({
       data: omit(_payload, ['attachments'])
     })
     const id = newCustomer.id
+    const userIds = payload.consultantor_ids
+    if (userIds && userIds.length > 0) {
+      userIds.forEach(async (userId) => {
+        await prisma.customerConsultant.create({
+          data: {
+            user_id: userId,
+            customer_id: id
+          }
+        })
+      })
+    }
     if (attachments) {
       attachments.forEach(
         async (attachment) =>
@@ -55,6 +66,22 @@ class CustomerService {
         updated_at: new Date()
       }
     })
+    const userIds = payload.consultantor_ids
+    if (userIds && userIds.length > 0) {
+      await prisma.customerConsultant.deleteMany({
+        where: {
+          user_id: { in: userIds }
+        }
+      })
+      userIds.forEach(async (userId) => {
+        await prisma.customerConsultant.create({
+          data: {
+            user_id: userId,
+            customer_id: payload.id
+          }
+        })
+      })
+    }
     if (payload.attachments) {
       payload.attachments.forEach(
         async (attachment) =>
@@ -169,8 +196,12 @@ class CustomerService {
           },
           consultantor: {
             select: {
-              fullname: true,
-              id: true
+              user: {
+                select: {
+                  fullname: true,
+                  id: true
+                }
+              }
             }
           },
           attachments: {
@@ -222,8 +253,12 @@ class CustomerService {
           },
           consultantor: {
             select: {
-              fullname: true,
-              id: true
+              user: {
+                select: {
+                  fullname: true,
+                  id: true
+                }
+              }
             }
           },
           attachments: {

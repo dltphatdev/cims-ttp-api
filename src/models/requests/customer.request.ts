@@ -7,7 +7,6 @@ export interface GetCustomerDetailReqParams extends ParamsDictionary {
 export interface CreateCustomerReqBody {
   name: string
   type: CustomerType
-  consultantor_id?: number
   tax_code?: string
   cccd?: string
   website?: string
@@ -24,13 +23,13 @@ export interface CreateCustomerReqBody {
   date_of_birth?: string
   gender?: CustomerGender
   attachments?: string[]
+  consultantor_ids?: number[]
 }
 
 export interface UpdateCustomerCompanyReqBody {
   id: number
   tax_code?: string
   cccd?: string
-  consultantor_id?: number
   name?: string
   website?: string
   surrogate?: string
@@ -43,6 +42,7 @@ export interface UpdateCustomerCompanyReqBody {
   verify?: CustomerVerify
   status?: CustomerStatus
   assign_at?: string
+  consultantor_ids?: number[]
 }
 
 export interface UpdateCustomerPersonalReqBody {
