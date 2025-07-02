@@ -10,14 +10,18 @@ import {
 import { forEach, omit } from 'lodash'
 
 class CustomerService {
-  async createService({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
+  async createCustomer({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
+    const consultantor_ids = payload.consultantor_ids
     const attachments = payload.attachments
-    const _payload = {
-      ...payload,
-      creator_id: user_id,
-      date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
-      assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
-    }
+    const _payload = omit(
+      {
+        ...payload,
+        creator_id: user_id,
+        date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
+        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
+      },
+      ['consultantor_ids']
+    )
     for (const key in _payload) {
       if (_payload[key as keyof typeof _payload] === undefined || _payload[key as keyof typeof _payload] === '') {
         delete _payload[key as keyof typeof _payload]
@@ -28,7 +32,7 @@ class CustomerService {
       data: omit(_payload, ['attachments'])
     })
     const id = newCustomer.id
-    const userIds = payload.consultantor_ids
+    const userIds = consultantor_ids
     if (userIds && userIds.length > 0) {
       userIds.forEach(async (userId) => {
         await prisma.customerConsultant.create({
@@ -70,7 +74,7 @@ class CustomerService {
     if (userIds && userIds.length > 0) {
       await prisma.customerConsultant.deleteMany({
         where: {
-          user_id: { in: userIds }
+          customer_id: payload.id
         }
       })
       userIds.forEach(async (userId) => {

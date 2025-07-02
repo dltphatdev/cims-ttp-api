@@ -62,7 +62,7 @@ customerRouter.patch(
     'note',
     'status',
     'verify',
-    'consultantor_id',
+    'consultantor_ids',
     'assign_at',
     'cccd'
   ]),

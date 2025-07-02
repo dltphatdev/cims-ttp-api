@@ -211,6 +211,23 @@ const attachmentsSchema: ParamSchema = {
   }
 }
 
+const consultantorIdsSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.CONSULTANTOR_IDS_IS_REQUIRED
+  },
+  isArray: {
+    errorMessage: MSG.CONSULTANTOR_IDS_MUST_BE_ARRAY
+  },
+  custom: {
+    options: (value: number[]) => {
+      if (value.length > 0 && !value.every((item) => typeof item === 'number')) {
+        throw new Error(MSG.CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER)
+      }
+      return true
+    }
+  }
+}
+
 export const createCustomerValidator = validate(
   checkSchema(
     {
@@ -236,8 +253,8 @@ export const createCustomerValidator = validate(
           errorMessage: MSG.CUSTOMER_TYPE_INVALID
         }
       },
-      consultantor_id: {
-        ...idSchema,
+      consultantor_ids: {
+        ...consultantorIdsSchema,
         optional: true
       },
       tax_code: {
@@ -383,18 +400,20 @@ export const updateCustomerCompanyValidator = validate(
           }
         }
       },
-      consultantor_id: {
-        ...idSchema,
+      consultantor_ids: {
+        ...consultantorIdsSchema,
         custom: {
-          options: async (value: number) => {
+          options: async (value: number[]) => {
             if (typeof value !== 'number') {
               throw new Error(MSG.ID_MUST_BE_NUMBER)
             }
             // eslint-disable-next-line no-useless-catch
             try {
-              const user = await prisma.user.findUnique({
+              const user = await prisma.user.findMany({
                 where: {
-                  id: value
+                  id: {
+                    in: value
+                  }
                 }
               })
               if (user === null) {
