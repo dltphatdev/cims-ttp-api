@@ -41,13 +41,11 @@ export interface UpdateCustomerCompanyReqBody {
   note?: string
   verify?: CustomerVerify
   status?: CustomerStatus
-  assign_at?: string
   consultantor_ids?: number[]
 }
 
 export interface UpdateCustomerPersonalReqBody {
   id: number
-  consultantor_id?: number
   name?: string
   cccd?: string
   date_of_birth?: string
@@ -58,8 +56,8 @@ export interface UpdateCustomerPersonalReqBody {
   address_personal?: string
   verify?: CustomerVerify
   status?: CustomerStatus
-  assign_at?: string
   attachments?: string[]
+  consultantor_ids?: number[]
 }
 
 export interface Pagination extends Query {

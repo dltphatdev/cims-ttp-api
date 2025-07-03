@@ -33,7 +33,7 @@ class CustomerService {
     const id = newCustomer.id
     const userIds = consultantor_ids
     if (userIds && userIds.length > 0) {
-      userIds.forEach(async (userId) => {
+      userIds.map(async (userId) => {
         await prisma.customerConsultant.create({
           data: {
             user_id: userId,
@@ -43,7 +43,7 @@ class CustomerService {
       })
     }
     if (attachments) {
-      attachments.forEach(
+      attachments.map(
         async (attachment) =>
           await prisma.gallery.create({
             data: {
@@ -89,7 +89,7 @@ class CustomerService {
       )
     }
     if (payload.attachments) {
-      payload.attachments.forEach(
+      payload.attachments.map(
         async (attachment) =>
           await prisma.gallery.create({
             data: {
@@ -110,13 +110,31 @@ class CustomerService {
         id: payload.id
       },
       data: {
-        ...omit(payload, ['attachments']),
+        ...omit(payload, ['attachments', 'id', 'consultantor_ids']),
         date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
         updated_at: new Date()
       }
     })
+    const userIds = payload.consultantor_ids
+    if (userIds && userIds.length > 0) {
+      await prisma.customerConsultant.deleteMany({
+        where: {
+          customer_id: payload.id
+        }
+      })
+      await Promise.all(
+        userIds.map((userId) =>
+          prisma.customerConsultant.create({
+            data: {
+              user_id: userId,
+              customer_id: payload.id
+            }
+          })
+        )
+      )
+    }
     if (payload.attachments) {
-      payload.attachments.forEach(
+      payload.attachments.map(
         async (attachment) =>
           await prisma.gallery.create({
             data: {

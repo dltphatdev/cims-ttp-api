@@ -450,6 +450,27 @@ export const updateCustomerCompanyValidator = validate(
       },
       tax_code: {
         ...taxCodeSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const taxCodes = await prisma.customer.findMany({
+                where: {
+                  id: {
+                    not: req.body.id
+                  }
+                }
+              })
+              const checkIsExistTaxCode = taxCodes.some((item) => item.tax_code === value)
+              if (checkIsExistTaxCode) {
+                throw new Error(MSG.TAX_CODE_IS_EXISTS)
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        },
         optional: true
       },
       name: {
@@ -536,6 +557,27 @@ export const updateCustomerCompanyValidator = validate(
       },
       cccd: {
         ...cccdSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const cccd = await prisma.customer.findMany({
+                where: {
+                  id: {
+                    not: req.body.id
+                  }
+                }
+              })
+              const checkIsExistCccd = cccd.some((item) => item.cccd === value)
+              if (checkIsExistCccd) {
+                throw new Error(MSG.CCCD_IS_EXISTS)
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        },
         optional: true
       }
     },
@@ -579,18 +621,21 @@ export const updateCustomerPersonalValidator = validate(
           }
         }
       },
-      consultantor_id: {
-        ...idSchema,
+      consultantor_ids: {
+        ...consultantorIdsSchema,
         custom: {
-          options: async (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(MSG.ID_MUST_BE_NUMBER)
+          options: async (value: number[]) => {
+            const isArrId = value.every((item) => typeof item === 'number')
+            if (!isArrId) {
+              throw new Error(MSG.CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER)
             }
             // eslint-disable-next-line no-useless-catch
             try {
-              const user = await prisma.user.findUnique({
+              const user = await prisma.user.findMany({
                 where: {
-                  id: value
+                  id: {
+                    in: value
+                  }
                 }
               })
               if (user === null) {
@@ -631,10 +676,6 @@ export const updateCustomerPersonalValidator = validate(
         ...dateOfBirthSchema,
         optional: true
       },
-      assign_at: {
-        ...assignAtSchema,
-        optional: true
-      },
       email: {
         ...emailSchema,
         custom: {
@@ -657,6 +698,27 @@ export const updateCustomerPersonalValidator = validate(
       },
       cccd: {
         ...cccdSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const cccd = await prisma.customer.findMany({
+                where: {
+                  id: {
+                    not: req.body.id
+                  }
+                }
+              })
+              const checkIsExistCccd = cccd.some((item) => item.cccd === value)
+              if (checkIsExistCccd) {
+                throw new Error(MSG.CCCD_IS_EXISTS)
+              }
+              return true
+            } catch (error) {
+              throw error
+            }
+          }
+        },
         optional: true
       },
       phone: {
