@@ -17,8 +17,7 @@ class CustomerService {
       {
         ...payload,
         creator_id: user_id,
-        date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
-        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
+        date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null
       },
       ['consultantor_ids']
     )
@@ -66,7 +65,7 @@ class CustomerService {
         id: payload.id
       },
       data: {
-        ...omit(payload, ['attachments']),
+        ...omit(payload, ['attachments', 'id', 'consultantor_ids']),
         updated_at: new Date()
       }
     })
@@ -77,14 +76,17 @@ class CustomerService {
           customer_id: payload.id
         }
       })
-      userIds.forEach(async (userId) => {
-        await prisma.customerConsultant.create({
-          data: {
-            user_id: userId,
-            customer_id: payload.id
-          }
-        })
-      })
+
+      await Promise.all(
+        userIds.map((userId) =>
+          prisma.customerConsultant.create({
+            data: {
+              user_id: userId,
+              customer_id: payload.id
+            }
+          })
+        )
+      )
     }
     if (payload.attachments) {
       payload.attachments.forEach(
@@ -110,7 +112,6 @@ class CustomerService {
       data: {
         ...omit(payload, ['attachments']),
         date_of_birth: payload?.date_of_birth ? new Date(payload.date_of_birth) : null,
-        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null,
         updated_at: new Date()
       }
     })

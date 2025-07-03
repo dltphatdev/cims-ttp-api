@@ -138,7 +138,8 @@ const MSG = {
   TAX_CODE_IS_EXISTS: 'Mã số thuế đã tồn tại',
   CONSULTANTOR_IDS_IS_REQUIRED: 'Id người tư vấn là bắt buộc',
   CONSULTANTOR_IDS_MUST_BE_ARRAY: 'Id người tư vấn phải là mảng các id',
-  CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER: 'Các phần tử id trong mảng phải là dạng số'
+  CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER: 'Các phần tử id trong mảng phải là dạng số',
+  CCCD_IS_EXISTS: 'CCCD đã tồn tại'
 } as const
 
 export default MSG

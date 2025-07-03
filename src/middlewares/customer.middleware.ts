@@ -276,6 +276,19 @@ export const createCustomerValidator = validate(
       },
       cccd: {
         ...cccdSchema,
+        custom: {
+          options: async (value: string) => {
+            const cccd = await prisma.customer.findUnique({
+              where: {
+                cccd: value
+              }
+            })
+            if (cccd) {
+              throw new Error(MSG.CCCD_IS_EXISTS)
+            }
+            return true
+          }
+        },
         optional: true
       },
       website: {
@@ -404,8 +417,9 @@ export const updateCustomerCompanyValidator = validate(
         ...consultantorIdsSchema,
         custom: {
           options: async (value: number[]) => {
-            if (typeof value !== 'number') {
-              throw new Error(MSG.ID_MUST_BE_NUMBER)
+            const isArrId = value.every((item) => typeof item === 'number')
+            if (!isArrId) {
+              throw new Error(MSG.CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER)
             }
             // eslint-disable-next-line no-useless-catch
             try {

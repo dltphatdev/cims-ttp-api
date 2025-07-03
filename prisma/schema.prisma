@@ -68,28 +68,27 @@ enum ActivityStatus {
 }
 
 model User {
-  id               Int              @id @default(autoincrement())
-  email            String           @unique
-  password         String
-  fullname         String?
-  verify           UserVerifyStatus @default(Unverified)
-  avatar           String?          @db.VarChar(255)
-  address          String?
-  phone            String?
-  code             String?
-  refreshTokens    RefreshToken[]
-  date_of_birth    DateTime?
-  created_at       DateTime         @default(now())
-  updated_at       DateTime?
-  role             UserRole         @default(None)
-  creatorCustomers Customer[] // 1 user - n customer 
-
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  password            String
+  fullname            String?
+  verify              UserVerifyStatus     @default(Unverified)
+  avatar              String?              @db.VarChar(255)
+  address             String?
+  phone               String?
+  code                String?
+  refreshTokens       RefreshToken[]
+  date_of_birth       DateTime?
+  created_at          DateTime             @default(now())
+  updated_at          DateTime?
+  role                UserRole             @default(None)
+  creatorCustomers    Customer[] // 1 user - n customer 
   consultantCustomers CustomerConsultant[] // 1 user tư vấn - n customer
-
-  creatorPerformance Performance[] // 1 user - n hiệu quả
-  creatorActivity    Activity[]
+  creatorPerformance  Performance[] // 1 user - n hiệu quả
+  creatorActivity     Activity[]
 
   @@index([email, password])
+  @@map("user")
 }
 
 model RefreshToken {
@@ -101,39 +100,38 @@ model RefreshToken {
   user    User     @relation(fields: [user_id], references: [id])
 
   @@index([exp])
+  @@map("refreshtoken")
 }
 
 model Customer {
-  id               Int             @id @default(autoincrement())
-  name             String          @unique @db.VarChar(255)
-  type             CustomerType    @default(Company)
-  gender           CustomerGender?
-  email            String?         @unique @db.VarChar(255)
-  phone            String?         @db.VarChar(255)
-  address_company  String?         @db.VarChar(255)
-  address_personal String?         @db.VarChar(255)
-  note             String?         @db.Text
-  attachment       String?         @db.VarChar(255)
-  tax_code         String?         @unique @db.VarChar(255)
-  cccd             String?         @db.VarChar(255)
-  website          String?         @db.VarChar(255)
-  surrogate        String?         @db.VarChar(255)
-  contact_name     String?         @db.VarChar(255)
-  date_of_birth    DateTime?
-  status           CustomerStatus  @default(Deactivated)
-  verify           CustomerVerify  @default(Unverified)
-  assign_at        DateTime?
-  creator_id       Int
-  created_at       DateTime        @default(now())
-  updated_at       DateTime?
-  creator          User            @relation(fields: [creator_id], references: [id], onDelete: Cascade)
-
-  consultantor CustomerConsultant[] // Danh sách người tư vấn 
-
+  id                   Int                  @id @default(autoincrement())
+  name                 String               @unique @db.VarChar(255)
+  type                 CustomerType         @default(Company)
+  gender               CustomerGender?
+  email                String?              @unique @db.VarChar(255)
+  phone                String?              @db.VarChar(255)
+  address_company      String?              @db.VarChar(255)
+  address_personal     String?              @db.VarChar(255)
+  note                 String?              @db.Text
+  attachment           String?              @db.VarChar(255)
+  tax_code             String?              @unique @db.VarChar(255)
+  cccd                 String?              @unique @db.VarChar(255)
+  website              String?              @db.VarChar(255)
+  surrogate            String?              @db.VarChar(255)
+  contact_name         String?              @db.VarChar(255)
+  date_of_birth        DateTime?
+  status               CustomerStatus       @default(Deactivated)
+  verify               CustomerVerify       @default(Unverified)
+  creator_id           Int
+  created_at           DateTime             @default(now())
+  updated_at           DateTime?
+  creator              User                 @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  consultantor         CustomerConsultant[] // Danh sách người tư vấn 
   customersPerformance Performance[] // Danh sách sách hiệu quả 
+  attachments          Gallery[] // Danh sách file attachments
+  activityCustomers    Activity[] // Danh sách hoạt động 
 
-  attachments       Gallery[] // Danh sách file attachments
-  activityCustomers Activity[] // Danh sách hoạt động 
+  @@map("customer")
 }
 
 model Gallery {
@@ -142,6 +140,8 @@ model Gallery {
   filename    String   @unique @db.VarChar(255)
   created_at  DateTime @default(now())
   customer    Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("gallery")
 }
 
 model Performance {
@@ -160,10 +160,11 @@ model Performance {
   customer_cost      Float             @default(0) // Chi phí khách hàng (%)
   created_at         DateTime          @default(now())
   updated_at         DateTime?
+  creator            User              @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  customer           Customer?         @relation(fields: [customer_id], references: [id])
+  revenues           Revenue[] // Danh sách doanh thu 
 
-  creator  User      @relation(fields: [creator_id], references: [id], onDelete: Cascade)
-  customer Customer? @relation(fields: [customer_id], references: [id])
-  revenues Revenue[] // Danh sách doanh thu 
+  @@map("performance")
 }
 
 model Revenue {
@@ -179,6 +180,8 @@ model Revenue {
   performance    Performance      @relation(fields: [performance_id], references: [id])
   created_at     DateTime         @default(now())
   updated_at     DateTime?
+
+  @@map("revenue")
 }
 
 model Activity {
@@ -198,13 +201,17 @@ model Activity {
   updated_at   DateTime?
   customer     Customer?      @relation(fields: [customer_id], references: [id])
   creator      User           @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+
+  @@map("activity")
 }
 
 model CustomerConsultant {
   id          Int      @id @default(autoincrement())
   customer_id Int
-  user_id     Int      @unique
-  assigned_at DateTime @default(now())
+  user_id     Int
+  assigned_at DateTime @default(now()) @updatedAt
   customer    Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("customerconsultant")
 }
