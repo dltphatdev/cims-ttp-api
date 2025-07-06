@@ -3,6 +3,7 @@ import {
   ChangePasswordReqBody,
   CreateUserReqBody,
   GetUserDetailReqParams,
+  ListDocumentFilesReqQuery,
   RefreshTokenReqBody,
   ResetPasswordReqBody,
   TokenPayLoad,
@@ -20,7 +21,7 @@ import { ParamsDictionary } from 'express-serve-static-core'
 
 export const loginController = async (req: Request<ParamsDictionary, any, UserLoginReqBody>, res: Response) => {
   const user = req.user as User
-  const result = await userService.login({ user_id: user.id, verify: user.verify })
+  const result = await userService.login({ user_id: user.id, verify: user.verify, role: user.role })
   res.json({
     message: MSG.LOGIN_SUCCESS,
     data: result
@@ -80,6 +81,45 @@ export const uploadAvatarController = async (req: Request, res: Response) => {
   return
 }
 
+export const uploadDocumentController = async (req: Request, res: Response) => {
+  const result = await mediaService.handleUploadFiles(req)
+  res.json({
+    message: MSG.UPLOAD_FILE_SUCCESSFULLY,
+    data: result
+  })
+  return
+}
+
+export const createDocumentFilesController = async (
+  req: Request<ParamsDictionary, any, { attachments: string[] }>,
+  res: Response
+) => {
+  const { user_id } = req.decode_authorization as TokenPayLoad
+  const payload = req.body
+  const result = await userService.createDocumentFiles({ payload, user_id })
+  res.json(result)
+  return
+}
+
+export const getListDocumentFilesController = async (
+  req: Request<ParamsDictionary, any, any, ListDocumentFilesReqQuery>,
+  res: Response
+) => {
+  const payload = req.query
+  const { galleries, totalGalleries, limit, page } = await userService.listDocumentFiles(payload)
+  const totalPages = Math.ceil(totalGalleries / limit)
+  res.json({
+    message: MSG.GET_LIST_DOCUMENTS_FILES_SUCCESS,
+    data: {
+      galleries,
+      page,
+      limit,
+      totalPages
+    }
+  })
+  return
+}
+
 export const getListUserController = async (
   req: Request<ParamsDictionary, any, any, UserListReqQuery>,
   res: Response
@@ -114,9 +154,9 @@ export const refreshTokenController = async (
   req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
   res: Response
 ) => {
-  const { user_id, exp, verify } = req.decode_refresh_token as TokenPayLoad
+  const { user_id, exp, verify, role } = req.decode_refresh_token as TokenPayLoad
   const { refresh_token } = req.body
-  const result = await userService.refreshToken({ user_id, refresh_token, exp, verify })
+  const result = await userService.refreshToken({ user_id, refresh_token, exp, verify, role })
   res.json({
     message: MSG.REFRESH_TOKEN_SUCCESS,
     data: result

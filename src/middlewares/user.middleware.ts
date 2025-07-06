@@ -331,24 +331,6 @@ export const resetPasswordValidator = validate(
   )
 )
 
-export const userRoleValidator = async (req: Request, res: Response, next: NextFunction) => {
-  const { user_id } = req.decode_authorization as TokenPayLoad
-  const user = await prisma.user.findUnique({
-    where: {
-      id: user_id
-    }
-  })
-  if (user?.role !== UserRole.SuperAdmin) {
-    return next(
-      new ErrorsWithStatus({
-        message: MSG.NO_PERMISSION_CREATE_USER,
-        status: HTTP_STATUS_CODE.FORBIDDEN
-      })
-    )
-  }
-  next()
-}
-
 export const createUserValidator = validate(
   checkSchema(
     {
@@ -441,10 +423,6 @@ export const updateUserValidator = validate(
       },
       phone: {
         ...phoneSchema,
-        optional: true
-      },
-      password: {
-        ...passwordSchema,
         optional: true
       }
     },

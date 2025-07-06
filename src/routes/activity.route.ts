@@ -12,6 +12,7 @@ import {
   updateActivityValidator
 } from '@/middlewares/activity.middleware'
 import { filterMiddleware } from '@/middlewares/common.middleware'
+import { permissionActivityDetailValidator } from '@/middlewares/permission.middleware'
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
 import { UpdateActivityReqBody } from '@/models/requests/activity.request'
 import { wrapRequestHandler } from '@/utils/handler'
@@ -89,6 +90,7 @@ activityRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   getDetailActivityValidator,
+  permissionActivityDetailValidator,
   wrapRequestHandler(getDetailActivityController)
 )
 

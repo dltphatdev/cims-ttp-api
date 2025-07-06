@@ -11,7 +11,6 @@ import customerRouter from '@/routes/customer.route'
 import performanceRouter from '@/routes/performance.route'
 import revenueRouter from '@/routes/revenue.route'
 import activityRouter from '@/routes/activity.route'
-
 initFolder()
 
 export const prisma = new PrismaClient()

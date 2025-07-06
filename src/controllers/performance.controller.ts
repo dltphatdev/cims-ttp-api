@@ -70,8 +70,9 @@ export const getListPerformanceController = async (
   req: Request<ParamsDictionary, any, any, ListPerformanceReqQuery>,
   res: Response
 ) => {
+  const { role } = req.decode_authorization as TokenPayLoad
   const payload = req.query
-  const { performances, totalPerformances, limit, page } = await performanceService.performanceList(payload)
+  const { performances, totalPerformances, limit, page } = await performanceService.performanceList({ payload, role })
   const totalPages = Math.ceil(totalPerformances / limit)
   res.json({
     message: MSG.GET_LIST_PERFORMANCE_SUCCESS,

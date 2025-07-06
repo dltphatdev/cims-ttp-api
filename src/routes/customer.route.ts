@@ -19,6 +19,7 @@ import {
 } from '@/middlewares/customer.middleware'
 import { filterMiddleware } from '@/middlewares/common.middleware'
 import { UpdateCustomerCompanyReqBody, UpdateCustomerPersonalReqBody } from '@/models/requests/customer.request'
+import { permissionGetDetailCustomerValidator } from '@/middlewares/permission.middleware'
 const customerRouter = Router()
 
 /**
@@ -90,6 +91,7 @@ customerRouter.patch(
     'attachments',
     'note',
     'address_personal',
+    'consultantor_ids',
     'status',
     'verify',
     'cccd'
@@ -140,6 +142,7 @@ customerRouter.get(
   verifiedUserValidator,
   getCustomerDetailValidator,
   paginationValidator,
+  permissionGetDetailCustomerValidator,
   wrapRequestHandler(getCustomerDetailController)
 )
 

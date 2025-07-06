@@ -12,6 +12,7 @@ import {
   paginationValidator,
   updatePerformanceValidator
 } from '@/middlewares/performance.middleware'
+import { permissionGetPerformanceDetailValidator } from '@/middlewares/permission.middleware'
 import { inputPaginationValidator, outputPaginationValidator } from '@/middlewares/revenue.middleware'
 import { accessTokenValidator, verifiedUserValidator } from '@/middlewares/user.middleware'
 import { UpdatePerformanceReqBody } from '@/models/requests/performance.request'
@@ -66,6 +67,7 @@ performanceRouter.get(
   getPerformanceValidator,
   inputPaginationValidator,
   outputPaginationValidator,
+  permissionGetPerformanceDetailValidator,
   wrapRequestHandler(getPerformanceController)
 )
 

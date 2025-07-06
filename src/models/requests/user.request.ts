@@ -12,6 +12,10 @@ export interface Pagination extends Query {
   limit?: string
 }
 
+export interface ListDocumentFilesReqQuery extends Pagination {
+  filename?: string
+}
+
 export interface UserListReqQuery extends Pagination {
   fullname?: string
   phone?: string
@@ -19,6 +23,7 @@ export interface UserListReqQuery extends Pagination {
 
 export interface TokenPayLoad extends JwtPayload {
   user_id: number
+  role: UserRole
   token_type: TokenType
   verify: UserVerifyStatus
   iat: number
@@ -65,7 +70,6 @@ export interface UpdateUserReqBody {
   fullname?: string
   avatar?: string
   address?: string
-  password?: string
   verify?: UserVerifyStatus
   phone?: string
   code?: string

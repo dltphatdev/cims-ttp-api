@@ -57,7 +57,7 @@ export const getListCustomerController = async (
   res: Response
 ) => {
   const payload = req.query
-  const { customers, totalCustomers, limit, page } = await customerService.serviceList(payload)
+  const { customers, totalCustomers, limit, page } = await customerService.customerList(payload)
   const totalPages = Math.ceil(totalCustomers / limit)
   res.json({
     message: MSG.GET_LIST_CUSTOMER_SUCCESS,

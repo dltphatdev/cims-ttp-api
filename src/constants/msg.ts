@@ -139,7 +139,10 @@ const MSG = {
   CONSULTANTOR_IDS_IS_REQUIRED: 'Id người tư vấn là bắt buộc',
   CONSULTANTOR_IDS_MUST_BE_ARRAY: 'Id người tư vấn phải là mảng các id',
   CONSULTANTOR_IDS_ITEM_MUST_BE_ARRAY_NUMBER: 'Các phần tử id trong mảng phải là dạng số',
-  CCCD_IS_EXISTS: 'CCCD đã tồn tại'
+  CCCD_IS_EXISTS: 'CCCD đã tồn tại',
+  NO_PERMISSION_ALLOW_PAGE: 'Bạn không được quyền truy cập vào trang này. Khi chưa được cấp quyền truy cập',
+  UPLOAD_DOCUMENTS_SUCCESSFULLY: 'Upload tài liệu thành công',
+  GET_LIST_DOCUMENTS_FILES_SUCCESS: 'Lấy danh sách tài liệu file thành công'
 } as const
 
 export default MSG

@@ -5,6 +5,7 @@ import { LIMIT, PAGE } from '@/constants/pagination'
 import { prisma } from '@/index'
 import {
   CreateUserReqBody,
+  ListDocumentFilesReqQuery,
   UpdateProfileReqBody,
   UpdateUserReqBody,
   UserListReqQuery
@@ -12,15 +13,16 @@ import {
 import { convertToSeconds } from '@/utils/common'
 import { hashPassword } from '@/utils/crypto'
 import { signToken, verifyToken } from '@/utils/jwt'
-import { UserVerifyStatus } from '@prisma/client'
+import { UserRole, UserVerifyStatus } from '@prisma/client'
 
 class UserService {
-  private signAccessToken({ user_id, verify }: { user_id: number; verify: UserVerifyStatus }) {
+  private signAccessToken({ user_id, verify, role }: { user_id: number; verify: UserVerifyStatus; role: UserRole }) {
     return signToken({
       payload: {
         user_id,
         token_type: TokenType.AccessToken,
-        verify
+        verify,
+        role
       },
       privateKey: CONFIG_ENV.JWT_ACCESS_TOKEN_SECRET_KEY,
       options: {
@@ -29,14 +31,25 @@ class UserService {
     })
   }
 
-  private signRefreshToken({ user_id, verify, exp }: { user_id: number; verify: UserVerifyStatus; exp?: number }) {
+  private signRefreshToken({
+    user_id,
+    verify,
+    exp,
+    role
+  }: {
+    user_id: number
+    verify: UserVerifyStatus
+    exp?: number
+    role: UserRole
+  }) {
     if (exp) {
       return signToken({
         payload: {
           user_id,
           token_type: TokenType.RefreshToken,
           verify,
-          exp
+          exp,
+          role
         },
         privateKey: CONFIG_ENV.JWT_REFRESH_TOKEN_SECRET_KEY
       })
@@ -45,7 +58,8 @@ class UserService {
       payload: {
         user_id,
         token_type: TokenType.RefreshToken,
-        verify
+        verify,
+        role
       },
       privateKey: CONFIG_ENV.JWT_REFRESH_TOKEN_SECRET_KEY,
       options: {
@@ -54,16 +68,27 @@ class UserService {
     })
   }
 
-  private signAccessTokenRefreshToken({ user_id, verify }: { user_id: number; verify: UserVerifyStatus }) {
-    return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
+  private signAccessTokenRefreshToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: number
+    verify: UserVerifyStatus
+    role: UserRole
+  }) {
+    return Promise.all([
+      this.signAccessToken({ user_id, verify, role }),
+      this.signRefreshToken({ user_id, verify, role })
+    ])
   }
 
   private decodeRefreshToken(refresh_token: string) {
     return verifyToken({ token: refresh_token, secretOrPublicKey: CONFIG_ENV.JWT_REFRESH_TOKEN_SECRET_KEY })
   }
 
-  async login({ user_id, verify }: { user_id: number; verify: UserVerifyStatus }) {
-    const [access_token, refresh_token] = await this.signAccessTokenRefreshToken({ user_id, verify })
+  async login({ user_id, verify, role }: { user_id: number; verify: UserVerifyStatus; role: UserRole }) {
+    const [access_token, refresh_token] = await this.signAccessTokenRefreshToken({ user_id, verify, role })
     const { iat, exp } = await this.decodeRefreshToken(refresh_token)
     const [user] = await Promise.all([
       prisma.user.findUnique({
@@ -148,7 +173,6 @@ class UserService {
       },
       data: {
         ..._payload,
-        password: hashPassword(_payload.password as string),
         updated_at: new Date()
       },
       select: {
@@ -255,9 +279,6 @@ class UserService {
         })
       }
     }
-    whereCondition.id = {
-      not: user_id
-    }
     const [users, totalUsers] = await Promise.all([
       prisma.user.findMany({
         where: whereCondition,
@@ -281,19 +302,22 @@ class UserService {
     user_id,
     exp,
     refresh_token,
-    verify
+    verify,
+    role
   }: {
     user_id: number
     exp: number
     refresh_token: string
     verify: UserVerifyStatus
+    role: UserRole
   }) {
     const [new_access_token, new_refresh_token] = await Promise.all([
       this.signAccessToken({
         user_id,
-        verify
+        verify,
+        role
       }),
-      this.signRefreshToken({ user_id, exp, verify }),
+      this.signRefreshToken({ user_id, exp, verify, role }),
       prisma.refreshToken.delete({
         where: {
           token: refresh_token
@@ -381,6 +405,80 @@ class UserService {
     })
     return {
       message: MSG.RESET_PASSWORD_SUCCESS
+    }
+  }
+
+  async listDocumentFiles(payload: ListDocumentFilesReqQuery) {
+    const page = Number(payload?.page) || PAGE
+    const limit = Number(payload?.limit) || LIMIT
+    let whereCondition: any = {}
+    if (payload.filename) {
+      whereCondition = {
+        OR: []
+      }
+      if (Array.isArray(payload.filename)) {
+        payload.filename.forEach((item) => {
+          whereCondition.OR.push({
+            filename: {
+              contains: item.toLocaleLowerCase()
+            }
+          })
+        })
+      } else if (payload.filename) {
+        whereCondition.OR.push({
+          filename: {
+            contains: payload.filename.toLocaleLowerCase()
+          }
+        })
+      }
+    }
+
+    const [galleries, totalGalleries] = await Promise.all([
+      prisma.gallery.findMany({
+        where: whereCondition,
+        skip: limit * (page - 1),
+        take: limit,
+        orderBy: {
+          created_at: 'asc'
+        },
+        select: {
+          id: true,
+          filename: true,
+          created_at: true,
+          user: {
+            select: {
+              id: true,
+              role: true,
+              fullname: true
+            }
+          }
+        }
+      }),
+      prisma.gallery.count({ where: whereCondition })
+    ])
+    return {
+      galleries,
+      totalGalleries,
+      page,
+      limit
+    }
+  }
+
+  async createDocumentFiles({ payload, user_id }: { payload: { attachments: string[] }; user_id: number }) {
+    const { attachments } = payload
+    if (attachments) {
+      attachments.map(
+        async (attachment) =>
+          await prisma.gallery.create({
+            data: {
+              user_id,
+              filename: attachment
+            }
+          })
+      )
+    }
+    return {
+      message: MSG.UPLOAD_DOCUMENTS_SUCCESSFULLY
     }
   }
 }

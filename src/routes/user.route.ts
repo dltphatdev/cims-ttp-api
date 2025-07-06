@@ -2,7 +2,9 @@ import { Router } from 'express'
 import { PREFIX_USER } from '@/constants/path'
 import {
   changePasswordController,
+  createDocumentFilesController,
   createUserController,
+  getListDocumentFilesController,
   getListUserController,
   getMeController,
   getUserDetailController,
@@ -12,7 +14,8 @@ import {
   resetPasswordController,
   updateProfileController,
   updateUserController,
-  uploadAvatarController
+  uploadAvatarController,
+  uploadDocumentController
 } from '@/controllers/user.controller'
 import { filterMiddleware } from '@/middlewares/common.middleware'
 import {
@@ -21,7 +24,6 @@ import {
   refreshTokenValidator,
   updateUserValidator,
   loginValidator,
-  userRoleValidator,
   verifiedUserValidator,
   changePasswordValidator,
   updateProfileValidator,
@@ -91,7 +93,6 @@ userRouter.post(
   `${PREFIX_USER}/create`,
   accessTokenValidator,
   verifiedUserValidator,
-  // userRoleValidator,
   createUserValidator,
   wrapRequestHandler(createUserController)
 )
@@ -107,7 +108,7 @@ userRouter.patch(
   `${PREFIX_USER}/update`,
   accessTokenValidator,
   verifiedUserValidator,
-  userRoleValidator,
+  // userRoleValidator,
   updateUserValidator,
   filterMiddleware<UpdateUserReqBody>([
     'id',
@@ -118,7 +119,6 @@ userRouter.patch(
     'date_of_birth',
     'role',
     'verify',
-    'password',
     'phone'
   ]),
   wrapRequestHandler(updateUserController)
@@ -136,6 +136,34 @@ userRouter.post(
   accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(uploadAvatarController)
+)
+
+/**
+ * Description: Upload document user account
+ * Path: /upload-document
+ * Method: POST
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request form data: { attachments: string }
+ * */
+userRouter.post(
+  `${PREFIX_USER}/upload-document`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(uploadDocumentController)
+)
+
+/**
+ * Description: Create document user account
+ * Path: /create-document
+ * Method: POST
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request form data: { attachments: string[] }
+ * */
+userRouter.post(
+  `${PREFIX_USER}/create-document`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(createDocumentFilesController)
 )
 
 /**
@@ -164,7 +192,6 @@ userRouter.get(
   `${PREFIX_USER}/detail/:id`,
   accessTokenValidator,
   verifiedUserValidator,
-  // userRoleValidator,
   getUserDetailValidator,
   wrapRequestHandler(getUserDetailController)
 )
@@ -198,6 +225,21 @@ userRouter.patch(
   verifiedUserValidator,
   resetPasswordValidator,
   wrapRequestHandler(resetPasswordController)
+)
+
+/**
+ * Description: Get list document files (search with filename with pagination)
+ * Path: /list-document-files
+ * Method: GET
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request Query: ListDocumentFilesReqQuery
+ * */
+userRouter.get(
+  `${PREFIX_USER}/list-document-files`,
+  accessTokenValidator,
+  verifiedUserValidator,
+  paginationValidator,
+  wrapRequestHandler(getListDocumentFilesController)
 )
 
 export default userRouter

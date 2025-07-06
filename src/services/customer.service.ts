@@ -7,6 +7,7 @@ import {
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
+import { UserRole } from '@prisma/client'
 import { forEach, omit } from 'lodash'
 
 class CustomerService {
@@ -87,6 +88,12 @@ class CustomerService {
           })
         )
       )
+    } else if (userIds && userIds.length === 0) {
+      await prisma.customerConsultant.deleteMany({
+        where: {
+          customer_id: payload.id
+        }
+      })
     }
     if (payload.attachments) {
       payload.attachments.map(
@@ -132,6 +139,12 @@ class CustomerService {
           })
         )
       )
+    } else if (userIds && userIds.length === 0) {
+      await prisma.customerConsultant.deleteMany({
+        where: {
+          customer_id: payload.id
+        }
+      })
     }
     if (payload.attachments) {
       payload.attachments.map(
@@ -149,11 +162,12 @@ class CustomerService {
     }
   }
 
-  async serviceList(payload: ListCustomerReqQuery) {
+  async customerList(payload: ListCustomerReqQuery) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
     let whereCondition: any = {}
+
     if (payload.name || payload.phone) {
       whereCondition = {
         OR: []
@@ -191,6 +205,7 @@ class CustomerService {
         })
       }
     }
+
     const [customers, totalCustomers] = await Promise.all([
       prisma.customer.findMany({
         where: whereCondition,
@@ -212,9 +227,11 @@ class CustomerService {
           address_company: true,
           address_personal: true,
           created_at: true,
+          creator_id: true,
           creator: {
             select: {
-              fullname: true
+              fullname: true,
+              id: true
             }
           },
           consultantor: {
@@ -222,7 +239,8 @@ class CustomerService {
               user: {
                 select: {
                   fullname: true,
-                  id: true
+                  id: true,
+                  role: true
                 }
               }
             }

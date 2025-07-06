@@ -66,6 +66,7 @@ class ActivityService {
         status: true,
         content: true,
         contact_name: true,
+        creator_id: true,
         created_at: true,
         updated_at: true,
         creator: {
@@ -128,6 +129,7 @@ class ActivityService {
           time_end: true,
           status: true,
           contact_name: true,
+          creator_id: true,
           created_at: true,
           updated_at: true,
           creator: {
@@ -138,7 +140,18 @@ class ActivityService {
           customer: {
             select: {
               id: true,
-              name: true
+              name: true,
+              consultantor: {
+                select: {
+                  user: {
+                    select: {
+                      fullname: true,
+                      id: true,
+                      role: true
+                    }
+                  }
+                }
+              }
             }
           }
         }

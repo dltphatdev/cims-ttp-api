@@ -7,7 +7,7 @@ import {
   UpdatePerformanceReqBody
 } from '@/models/requests/performance.request'
 import { RevenueReqQuery } from '@/models/requests/revenue.request'
-import { RevenueDirection } from '@prisma/client'
+import { RevenueDirection, UserRole } from '@prisma/client'
 import { trim } from 'lodash'
 
 class PerformanceService {
@@ -125,7 +125,7 @@ class PerformanceService {
     }
   }
 
-  async performanceList(payload: ListPerformanceReqQuery) {
+  async performanceList({ payload, role }: { payload: ListPerformanceReqQuery; role: UserRole }) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
@@ -182,7 +182,18 @@ class PerformanceService {
           customer: {
             select: {
               name: true,
-              id: true
+              id: true,
+              consultantor: {
+                select: {
+                  user: {
+                    select: {
+                      fullname: true,
+                      id: true,
+                      role: true
+                    }
+                  }
+                }
+              }
             }
           },
           revenues: {
