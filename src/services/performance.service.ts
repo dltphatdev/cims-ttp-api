@@ -125,7 +125,15 @@ class PerformanceService {
     }
   }
 
-  async performanceList({ payload, role }: { payload: ListPerformanceReqQuery; role: UserRole }) {
+  async performanceList({
+    payload,
+    role,
+    user_id
+  }: {
+    payload: ListPerformanceReqQuery
+    role: UserRole
+    user_id: number
+  }) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
@@ -150,6 +158,14 @@ class PerformanceService {
           }
         })
       }
+    }
+
+    // Giới hạn theo creator_id nếu không phải Admin hoặc SuperAdmin
+    if (role !== UserRole.Admin && role !== UserRole.SuperAdmin) {
+      whereCondition.AND = whereCondition.AND || []
+      whereCondition.AND.push({
+        creator_id: user_id
+      })
     }
     const [performances, totalPerformances] = await Promise.all([
       prisma.performance.findMany({

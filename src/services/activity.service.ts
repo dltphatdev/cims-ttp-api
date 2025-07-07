@@ -6,6 +6,7 @@ import {
   GetListActivityReqQuery,
   UpdateActivityReqBody
 } from '@/models/requests/activity.request'
+import { UserRole } from '@prisma/client'
 
 class ActivityService {
   async createActivity({ payload, user_id }: { payload: CreateActivityReqBody; user_id: number }) {
@@ -85,16 +86,22 @@ class ActivityService {
     return activity
   }
 
-  async getListActivity(payload: GetListActivityReqQuery) {
+  async getListActivity({
+    payload,
+    role,
+    user_id
+  }: {
+    payload: GetListActivityReqQuery
+    user_id: number
+    role: UserRole
+  }) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
     let whereCondition: any = {}
-    if (payload.name) {
-      whereCondition = {
-        OR: []
-      }
 
+    if (payload.name) {
+      whereCondition.OR = []
       if (Array.isArray(payload.name)) {
         payload.name.forEach((item) => {
           whereCondition.OR.push({
@@ -103,7 +110,7 @@ class ActivityService {
             }
           })
         })
-      } else if (payload.name) {
+      } else {
         whereCondition.OR.push({
           name: {
             contains: payload.name.toLocaleLowerCase()
@@ -111,6 +118,14 @@ class ActivityService {
         })
       }
     }
+
+    if (role !== UserRole.Admin && role !== UserRole.SuperAdmin) {
+      whereCondition.AND = whereCondition.AND || []
+      whereCondition.AND.push({
+        creator_id: user_id
+      })
+    }
+
     const [activities, totalActivities] = await Promise.all([
       prisma.activity.findMany({
         where: whereCondition,

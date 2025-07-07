@@ -45,8 +45,9 @@ export const getListActivityController = async (
   req: Request<ParamsDictionary, any, any, GetListActivityReqQuery>,
   res: Response
 ) => {
+  const { user_id, role } = req.decode_authorization as TokenPayLoad
   const payload = req.query
-  const { activities, totalActivities, limit, page } = await activityService.getListActivity(payload)
+  const { activities, totalActivities, limit, page } = await activityService.getListActivity({ payload, role, user_id })
   const totalPages = Math.ceil(totalActivities / limit)
   res.json({
     message: MSG.GET_LIST_ACTIVITY_SUCCESS,

@@ -8,7 +8,7 @@ import {
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
 import { UserRole } from '@prisma/client'
-import { forEach, omit } from 'lodash'
+import { omit } from 'lodash'
 
 class CustomerService {
   async createCustomer({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
@@ -34,24 +34,27 @@ class CustomerService {
     const id = newCustomer.id
     const userIds = consultantor_ids
     if (userIds && userIds.length > 0) {
-      userIds.map(async (userId) => {
-        await prisma.customerConsultant.create({
-          data: {
-            user_id: userId,
-            customer_id: id
-          }
+      await Promise.all(
+        userIds.map((userId) => {
+          prisma.customerConsultant.create({
+            data: {
+              user_id: userId,
+              customer_id: id
+            }
+          })
         })
-      })
+      )
     }
-    if (attachments) {
-      attachments.map(
-        async (attachment) =>
-          await prisma.gallery.create({
+    if (attachments && attachments.length) {
+      await Promise.all(
+        attachments.map((attachment) =>
+          prisma.gallery.create({
             data: {
               customer_id: id,
               filename: attachment
             }
           })
+        )
       )
     }
     return {
@@ -95,15 +98,17 @@ class CustomerService {
         }
       })
     }
-    if (payload.attachments) {
-      payload.attachments.map(
-        async (attachment) =>
-          await prisma.gallery.create({
+
+    if (payload.attachments?.length) {
+      await Promise.all(
+        payload.attachments.map((attachment) =>
+          prisma.gallery.create({
             data: {
               customer_id: payload.id,
               filename: attachment
             }
           })
+        )
       )
     }
     return {
@@ -146,15 +151,16 @@ class CustomerService {
         }
       })
     }
-    if (payload.attachments) {
-      payload.attachments.map(
-        async (attachment) =>
-          await prisma.gallery.create({
+    if (payload.attachments?.length) {
+      await Promise.all(
+        payload.attachments.map((attachment) =>
+          prisma.gallery.create({
             data: {
               customer_id: payload.id,
               filename: attachment
             }
           })
+        )
       )
     }
     return {
@@ -162,7 +168,7 @@ class CustomerService {
     }
   }
 
-  async customerList(payload: ListCustomerReqQuery) {
+  async customerList({ payload, role, user_id }: { payload: ListCustomerReqQuery; user_id: number; role: UserRole }) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
@@ -204,6 +210,14 @@ class CustomerService {
           }
         })
       }
+    }
+
+    // Giới hạn theo creator_id nếu không phải Admin hoặc SuperAdmin
+    if (role !== UserRole.Admin && role !== UserRole.SuperAdmin) {
+      whereCondition.AND = whereCondition.AND || []
+      whereCondition.AND.push({
+        creator_id: user_id
+      })
     }
 
     const [customers, totalCustomers] = await Promise.all([

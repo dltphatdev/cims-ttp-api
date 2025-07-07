@@ -10,9 +10,7 @@ type SupperAdminAndAdmin = 'SuperAdmin' | 'Admin'
 
 const roles = [UserRole.Admin, UserRole.SuperAdmin]
 
-const isSupperAdmin = (role: UserRole) => (role === UserRole.SuperAdmin ? true : false)
-
-const isSupperAdminAndAdmin = (role: 'SuperAdmin' | 'Admin') => {
+const isSupperAdminAndAdmin = (role: SupperAdminAndAdmin) => {
   const condition = roles.includes(role)
   return condition
 }
@@ -87,6 +85,50 @@ export const permissionActivityDetailValidator = async (
   const isCreatorPerformance = activity?.creator_id === user_id
   const conditionActivity = !isCreatorPerformance && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
   if (conditionActivity) {
+    return next(
+      new ErrorsWithStatus({
+        message: MSG.NO_PERMISSION_ALLOW_PAGE,
+        status: HTTP_STATUS_CODE.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
+
+export const permissionRevenueValidator = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  const { user_id, role } = req.decode_authorization as TokenPayLoad
+  const idPerformance = req.params.id
+  const performance = await prisma.performance.findUnique({
+    where: {
+      id: Number(idPerformance)
+    }
+  })
+
+  const isCreatorCreateRevenue = performance?.creator_id === user_id
+  const conditionRevenue = !isCreatorCreateRevenue && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
+  if (conditionRevenue) {
+    return next(
+      new ErrorsWithStatus({
+        message: MSG.NO_PERMISSION_ALLOW_PAGE,
+        status: HTTP_STATUS_CODE.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
+
+export const permissionUserValidator = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  const { user_id, role } = req.decode_authorization as TokenPayLoad
+  const idUser = req.params.id
+  const user = await prisma.user.findUnique({
+    where: {
+      id: Number(idUser)
+    }
+  })
+
+  const isCreatorUser = user?.id === user_id
+  const conditionUser = !isCreatorUser && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
+  if (conditionUser) {
     return next(
       new ErrorsWithStatus({
         message: MSG.NO_PERMISSION_ALLOW_PAGE,

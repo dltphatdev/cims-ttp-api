@@ -56,8 +56,9 @@ export const getListCustomerController = async (
   req: Request<ParamsDictionary, any, any, ListCustomerReqQuery>,
   res: Response
 ) => {
+  const { user_id, role } = req.decode_authorization as TokenPayLoad
   const payload = req.query
-  const { customers, totalCustomers, limit, page } = await customerService.customerList(payload)
+  const { customers, totalCustomers, limit, page } = await customerService.customerList({ payload, role, user_id })
   const totalPages = Math.ceil(totalCustomers / limit)
   res.json({
     message: MSG.GET_LIST_CUSTOMER_SUCCESS,

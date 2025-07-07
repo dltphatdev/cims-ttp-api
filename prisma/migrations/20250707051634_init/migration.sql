@@ -66,7 +66,8 @@ CREATE TABLE `customer` (
 -- CreateTable
 CREATE TABLE `gallery` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `customer_id` INTEGER NOT NULL,
+    `customer_id` INTEGER NULL,
+    `user_id` INTEGER NULL,
     `filename` VARCHAR(255) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -151,6 +152,9 @@ ALTER TABLE `customer` ADD CONSTRAINT `customer_creator_id_fkey` FOREIGN KEY (`c
 
 -- AddForeignKey
 ALTER TABLE `gallery` ADD CONSTRAINT `gallery_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `customer`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `gallery` ADD CONSTRAINT `gallery_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `performance` ADD CONSTRAINT `performance_creator_id_fkey` FOREIGN KEY (`creator_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

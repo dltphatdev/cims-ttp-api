@@ -237,11 +237,16 @@ class UserService {
       data: user
     }
   }
-  async userList({ user_id, payload }: { user_id: number; payload: UserListReqQuery }) {
+
+  async userList(payload: UserListReqQuery) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
     // eslint-disable-next-line prefer-const
-    let whereCondition: any = {}
+    let whereCondition: any = {
+      NOT: {
+        role: UserRole.SuperAdmin
+      }
+    }
     if (payload.fullname || payload.phone) {
       whereCondition = {
         OR: []
@@ -411,25 +416,38 @@ class UserService {
   async listDocumentFiles(payload: ListDocumentFilesReqQuery) {
     const page = Number(payload?.page) || PAGE
     const limit = Number(payload?.limit) || LIMIT
-    let whereCondition: any = {}
-    if (payload.filename) {
-      whereCondition = {
-        OR: []
+    let whereCondition: any = {
+      NOT: {
+        user_id: null
       }
+    }
+
+    if (payload.filename) {
+      const filenameConditions = []
+
       if (Array.isArray(payload.filename)) {
-        payload.filename.forEach((item) => {
-          whereCondition.OR.push({
+        for (const item of payload.filename) {
+          filenameConditions.push({
             filename: {
               contains: item.toLocaleLowerCase()
             }
           })
-        })
-      } else if (payload.filename) {
-        whereCondition.OR.push({
+        }
+      } else {
+        filenameConditions.push({
           filename: {
             contains: payload.filename.toLocaleLowerCase()
           }
         })
+      }
+
+      whereCondition = {
+        AND: [
+          whereCondition,
+          {
+            OR: filenameConditions
+          }
+        ]
       }
     }
 
@@ -466,15 +484,16 @@ class UserService {
 
   async createDocumentFiles({ payload, user_id }: { payload: { attachments: string[] }; user_id: number }) {
     const { attachments } = payload
-    if (attachments) {
-      attachments.map(
-        async (attachment) =>
-          await prisma.gallery.create({
+    if (attachments?.length) {
+      await Promise.all(
+        attachments.map((attachment) =>
+          prisma.gallery.create({
             data: {
               user_id,
               filename: attachment
             }
           })
+        )
       )
     }
     return {

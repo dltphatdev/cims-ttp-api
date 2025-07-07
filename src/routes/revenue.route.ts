@@ -5,6 +5,7 @@ import {
   updateRevenueController
 } from '@/controllers/revenue.controller'
 import { filterMiddleware } from '@/middlewares/common.middleware'
+import { permissionRevenueValidator } from '@/middlewares/permission.middleware'
 import {
   createRevenueValidator,
   getRevenueDetailQueryValidator,
@@ -62,6 +63,7 @@ revenueRouter.get(
   verifiedUserValidator,
   getRevenueDetailValidator,
   getRevenueDetailQueryValidator,
+  permissionRevenueValidator,
   wrapRequestHandler(getRevenueController)
 )
 

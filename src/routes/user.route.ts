@@ -33,6 +33,7 @@ import {
 } from '@/middlewares/user.middleware'
 import { UpdateProfileReqBody, UpdateUserReqBody } from '@/models/requests/user.request'
 import { wrapRequestHandler } from '@/utils/handler'
+import { permissionUserValidator } from '@/middlewares/permission.middleware'
 
 const userRouter = Router()
 
@@ -193,6 +194,7 @@ userRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   getUserDetailValidator,
+  permissionUserValidator,
   wrapRequestHandler(getUserDetailController)
 )
 

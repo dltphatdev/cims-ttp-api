@@ -124,9 +124,8 @@ export const getListUserController = async (
   req: Request<ParamsDictionary, any, any, UserListReqQuery>,
   res: Response
 ) => {
-  const { user_id } = req.decode_authorization as TokenPayLoad
   const payload = req.query
-  const { users, totalUsers, limit, page } = await userService.userList({ user_id, payload })
+  const { users, totalUsers, limit, page } = await userService.userList(payload)
   const totalPages = Math.ceil(totalUsers / limit)
   res.json({
     message: MSG.GET_LIST_USER_SUCCESS,
