@@ -148,7 +148,7 @@ class UserService {
       data: {
         ..._payload,
         verify: UserVerifyStatus.Verified,
-        password: hashPassword(_payload.password)
+        password: await hashPassword(_payload.password)
       }
     })
     return {
@@ -202,7 +202,7 @@ class UserService {
         id: user_id
       },
       data: {
-        password: hashPassword(password)
+        password: await hashPassword(password)
       }
     })
     return {
@@ -405,7 +405,7 @@ class UserService {
         id
       },
       data: {
-        password: hashPassword(password)
+        password: await hashPassword(password)
       }
     })
     return {

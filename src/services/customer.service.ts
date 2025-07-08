@@ -35,14 +35,14 @@ class CustomerService {
     const userIds = consultantor_ids
     if (userIds && userIds.length > 0) {
       await Promise.all(
-        userIds.map((userId) => {
+        userIds.map((userId) =>
           prisma.customerConsultant.create({
             data: {
               user_id: userId,
               customer_id: id
             }
           })
-        })
+        )
       )
     }
     if (attachments && attachments.length) {
