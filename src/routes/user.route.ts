@@ -109,7 +109,6 @@ userRouter.patch(
   `${PREFIX_USER}/update`,
   accessTokenValidator,
   verifiedUserValidator,
-  // userRoleValidator,
   updateUserValidator,
   filterMiddleware<UpdateUserReqBody>([
     'id',

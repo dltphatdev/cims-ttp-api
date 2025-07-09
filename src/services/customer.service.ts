@@ -212,11 +212,30 @@ class CustomerService {
       }
     }
 
-    // Giới hạn theo creator_id nếu không phải Admin hoặc SuperAdmin
+    // Supper Admin và Admin xem được toàn bộ khách hàng
+    // Người tạo ra khách hàng đó được phép xem
+    // Người được phân bổ khách hàng đó được phép xem
     if (role !== UserRole.Admin && role !== UserRole.SuperAdmin) {
-      whereCondition.AND = whereCondition.AND || []
-      whereCondition.AND.push({
+      whereCondition = {
+        OR: []
+      }
+      whereCondition.OR.push({
         creator_id: user_id
+      })
+
+      const customerIds = await prisma.customerConsultant.findMany({
+        where: {
+          user_id
+        },
+        select: {
+          customer_id: true
+        }
+      })
+
+      customerIds.forEach((item) => {
+        whereCondition.OR.push({
+          id: item.customer_id
+        })
       })
     }
 
