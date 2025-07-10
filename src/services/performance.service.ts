@@ -160,20 +160,37 @@ class PerformanceService {
       }
     }
 
-    // Giới hạn theo creator_id nếu không phải Admin hoặc SuperAdmin
     if (role !== UserRole.Admin && role !== UserRole.SuperAdmin) {
-      whereCondition.AND = whereCondition.AND || []
-      whereCondition.AND.push({
+      whereCondition = {
+        OR: []
+      }
+      whereCondition.OR.push({
         creator_id: user_id
       })
+
+      const customerIds = await prisma.customerConsultant.findMany({
+        where: {
+          user_id
+        },
+        select: {
+          customer_id: true
+        }
+      })
+
+      customerIds.forEach((item) => {
+        whereCondition.OR.push({
+          customer_id: item.customer_id
+        })
+      })
     }
+
     const [performances, totalPerformances] = await Promise.all([
       prisma.performance.findMany({
         where: whereCondition,
         skip: limit * (page - 1),
         take: limit,
         orderBy: {
-          created_at: 'asc'
+          created_at: 'desc'
         },
         select: {
           id: true,
@@ -231,6 +248,7 @@ class PerformanceService {
       }),
       prisma.performance.count({ where: whereCondition })
     ])
+
     return {
       performances,
       totalPerformances,

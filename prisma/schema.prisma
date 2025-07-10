@@ -130,7 +130,6 @@ model Customer {
   consultantor         CustomerConsultant[] // Danh sách người tư vấn 
   customersPerformance Performance[] // Danh sách sách hiệu quả 
   attachments          Gallery[] // Danh sách file attachments
-  activityCustomers    Activity[] // Danh sách hoạt động 
 
   @@map("customer")
 }
@@ -194,15 +193,12 @@ model Activity {
   address      String?        @db.VarChar(255)
   contact_name String?        @db.VarChar(255)
   creator_id   Int
-  customer_id  Int?
-  assign_at    DateTime?
   status       ActivityStatus @default(New)
   content      String?        @db.Text
   time_start   DateTime?
   time_end     DateTime?
   created_at   DateTime       @default(now())
   updated_at   DateTime?
-  customer     Customer?      @relation(fields: [customer_id], references: [id])
   creator      User           @relation(fields: [creator_id], references: [id], onDelete: Cascade)
 
   @@map("activity")

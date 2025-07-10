@@ -29,7 +29,17 @@ export const permissionGetDetailCustomerValidator = async (
   })
   const isCreatorCustomer = customer?.creator_id === user_id
 
-  const conditionPermission = !isCreatorCustomer && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
+  const customerConsultant = await prisma.customerConsultant.findFirst({
+    where: {
+      customer_id: Number(idCustomer),
+      user_id
+    }
+  })
+
+  const isCustomerConsultant = customerConsultant !== null
+
+  const conditionPermission =
+    !isCreatorCustomer && !isCustomerConsultant && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
 
   if (conditionPermission) {
     return next(
@@ -57,7 +67,19 @@ export const permissionGetPerformanceDetailValidator = async (
 
   const isCreatorPerformance = performance?.creator_id === user_id
 
-  const conditionPermission = !isCreatorPerformance && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
+  const idCustomer = performance?.customer_id
+
+  const customerConsultant = await prisma.customerConsultant.findFirst({
+    where: {
+      customer_id: Number(idCustomer),
+      user_id
+    }
+  })
+
+  const isCustomerConsultant = customerConsultant !== null
+
+  const conditionPermission =
+    !isCreatorPerformance && !isCustomerConsultant && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
   if (conditionPermission) {
     return next(
       new ErrorsWithStatus({

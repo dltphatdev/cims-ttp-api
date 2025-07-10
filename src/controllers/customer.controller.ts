@@ -72,25 +72,15 @@ export const getListCustomerController = async (
   return
 }
 
-export const getCustomerDetailController = async (
-  req: Request<GetCustomerDetailReqParams, any, any, Pagination>,
-  res: Response
-) => {
+export const getCustomerDetailController = async (req: Request<GetCustomerDetailReqParams>, res: Response) => {
   const id = Number(req.params?.id)
   const reqQuery = req.query
-  const { customer, limit, page, totalActivities } = await customerService.getCustomerDetail({
-    id,
-    page: reqQuery.page,
-    limit: reqQuery.limit
-  })
-  const totalPagesActivities = Math.ceil(totalActivities / limit)
+  const { customer } = await customerService.getCustomerDetail(id)
+
   res.json({
     message: MSG.GET_CUSTOMER_SUCCESS,
     data: {
-      customer,
-      limit_activities: limit,
-      page_activities: page,
-      totalPagesActivities
+      customer
     }
   })
   return

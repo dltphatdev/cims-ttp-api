@@ -15,8 +15,7 @@ class ActivityService {
         ...payload,
         creator_id: user_id,
         time_start: new Date(payload.time_start),
-        time_end: new Date(payload.time_end),
-        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
+        time_end: new Date(payload.time_end)
       }
     })
     return {
@@ -42,8 +41,7 @@ class ActivityService {
         ...payload,
         time_start: payload.time_start ? new Date(payload.time_start as string) : null,
         time_end: payload.time_end ? new Date(payload.time_end as string) : null,
-        updated_at: new Date(),
-        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
+        updated_at: new Date()
       }
     })
     return {
@@ -59,7 +57,6 @@ class ActivityService {
       select: {
         id: true,
         name: true,
-        customer_id: true,
         address: true,
         phone: true,
         time_start: true,
@@ -73,12 +70,6 @@ class ActivityService {
         creator: {
           select: {
             fullname: true
-          }
-        },
-        customer: {
-          select: {
-            id: true,
-            name: true
           }
         }
       }
@@ -132,12 +123,11 @@ class ActivityService {
         skip: limit * (page - 1),
         take: limit,
         orderBy: {
-          created_at: 'asc'
+          created_at: 'desc'
         },
         select: {
           id: true,
           name: true,
-          customer_id: true,
           address: true,
           phone: true,
           time_start: true,
@@ -150,23 +140,6 @@ class ActivityService {
           creator: {
             select: {
               fullname: true
-            }
-          },
-          customer: {
-            select: {
-              id: true,
-              name: true,
-              consultantor: {
-                select: {
-                  user: {
-                    select: {
-                      fullname: true,
-                      id: true,
-                      role: true
-                    }
-                  }
-                }
-              }
             }
           }
         }
