@@ -160,3 +160,43 @@ export const permissionUserValidator = async (req: Request<{ id: string }>, res:
   }
   next()
 }
+
+export const permissionDocumentDetailValidator = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id, role } = req.decode_authorization as TokenPayLoad
+  const idDocument = req.params.id
+  const documentRow = await prisma.document.findUnique({
+    where: {
+      id: Number(idDocument)
+    }
+  })
+  const isCreatorDocument = documentRow?.creator_id === user_id
+
+  const conditionPermission = !isCreatorDocument && !isSupperAdminAndAdmin(role as SupperAdminAndAdmin)
+
+  if (conditionPermission) {
+    return next(
+      new ErrorsWithStatus({
+        message: MSG.NO_PERMISSION_ALLOW_PAGE,
+        status: HTTP_STATUS_CODE.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
+
+export const permissionCreateDocumentValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const { role } = req.decode_authorization as TokenPayLoad
+  if (!isSupperAdminAndAdmin(role as SupperAdminAndAdmin)) {
+    return next(
+      new ErrorsWithStatus({
+        message: MSG.NO_PERMISSION_ALLOW_PAGE,
+        status: HTTP_STATUS_CODE.FORBIDDEN
+      })
+    )
+  }
+  next()
+}

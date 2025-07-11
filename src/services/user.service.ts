@@ -5,7 +5,6 @@ import { LIMIT, PAGE } from '@/constants/pagination'
 import { prisma } from '@/index'
 import {
   CreateUserReqBody,
-  ListDocumentFilesReqQuery,
   UpdateProfileReqBody,
   UpdateUserReqBody,
   UserListReqQuery
@@ -410,94 +409,6 @@ class UserService {
     })
     return {
       message: MSG.RESET_PASSWORD_SUCCESS
-    }
-  }
-
-  async listDocumentFiles(payload: ListDocumentFilesReqQuery) {
-    const page = Number(payload?.page) || PAGE
-    const limit = Number(payload?.limit) || LIMIT
-    let whereCondition: any = {
-      NOT: {
-        user_id: null
-      }
-    }
-
-    if (payload.filename) {
-      const filenameConditions = []
-
-      if (Array.isArray(payload.filename)) {
-        for (const item of payload.filename) {
-          filenameConditions.push({
-            filename: {
-              contains: item.toLocaleLowerCase()
-            }
-          })
-        }
-      } else {
-        filenameConditions.push({
-          filename: {
-            contains: payload.filename.toLocaleLowerCase()
-          }
-        })
-      }
-
-      whereCondition = {
-        AND: [
-          whereCondition,
-          {
-            OR: filenameConditions
-          }
-        ]
-      }
-    }
-
-    const [galleries, totalGalleries] = await Promise.all([
-      prisma.gallery.findMany({
-        where: whereCondition,
-        skip: limit * (page - 1),
-        take: limit,
-        orderBy: {
-          created_at: 'asc'
-        },
-        select: {
-          id: true,
-          filename: true,
-          created_at: true,
-          user: {
-            select: {
-              id: true,
-              role: true,
-              fullname: true
-            }
-          }
-        }
-      }),
-      prisma.gallery.count({ where: whereCondition })
-    ])
-    return {
-      galleries,
-      totalGalleries,
-      page,
-      limit
-    }
-  }
-
-  async createDocumentFiles({ payload, user_id }: { payload: { attachments: string[] }; user_id: number }) {
-    const { attachments } = payload
-    if (attachments?.length) {
-      await Promise.all(
-        attachments.map((attachment) =>
-          prisma.gallery.create({
-            data: {
-              user_id,
-              filename: attachment
-            }
-          })
-        )
-      )
-    }
-    return {
-      message: MSG.UPLOAD_DOCUMENTS_SUCCESSFULLY
     }
   }
 }

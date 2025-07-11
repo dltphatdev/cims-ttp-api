@@ -12,10 +12,6 @@ export interface Pagination extends Query {
   limit?: string
 }
 
-export interface ListDocumentFilesReqQuery extends Pagination {
-  filename?: string
-}
-
 export interface UserListReqQuery extends Pagination {
   fullname?: string
   phone?: string

@@ -3,7 +3,6 @@ import {
   ChangePasswordReqBody,
   CreateUserReqBody,
   GetUserDetailReqParams,
-  ListDocumentFilesReqQuery,
   RefreshTokenReqBody,
   ResetPasswordReqBody,
   TokenPayLoad,
@@ -86,36 +85,6 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
   res.json({
     message: MSG.UPLOAD_FILE_SUCCESSFULLY,
     data: result
-  })
-  return
-}
-
-export const createDocumentFilesController = async (
-  req: Request<ParamsDictionary, any, { attachments: string[] }>,
-  res: Response
-) => {
-  const { user_id } = req.decode_authorization as TokenPayLoad
-  const payload = req.body
-  const result = await userService.createDocumentFiles({ payload, user_id })
-  res.json(result)
-  return
-}
-
-export const getListDocumentFilesController = async (
-  req: Request<ParamsDictionary, any, any, ListDocumentFilesReqQuery>,
-  res: Response
-) => {
-  const payload = req.query
-  const { galleries, totalGalleries, limit, page } = await userService.listDocumentFiles(payload)
-  const totalPages = Math.ceil(totalGalleries / limit)
-  res.json({
-    message: MSG.GET_LIST_DOCUMENTS_FILES_SUCCESS,
-    data: {
-      galleries,
-      page,
-      limit,
-      totalPages
-    }
   })
   return
 }

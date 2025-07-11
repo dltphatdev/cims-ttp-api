@@ -2,9 +2,7 @@ import { Router } from 'express'
 import { PREFIX_USER } from '@/constants/path'
 import {
   changePasswordController,
-  createDocumentFilesController,
   createUserController,
-  getListDocumentFilesController,
   getListUserController,
   getMeController,
   getUserDetailController,
@@ -153,20 +151,6 @@ userRouter.post(
 )
 
 /**
- * Description: Create document user account
- * Path: /create-document
- * Method: POST
- * Request header: { Authorization: Bearer <access_token> }
- * Request form data: { attachments: string[] }
- * */
-userRouter.post(
-  `${PREFIX_USER}/create-document`,
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(createDocumentFilesController)
-)
-
-/**
  * Description: Get list user account (search with fullname or phone with pagination)
  * Path: /
  * Method: GET
@@ -226,21 +210,6 @@ userRouter.patch(
   verifiedUserValidator,
   resetPasswordValidator,
   wrapRequestHandler(resetPasswordController)
-)
-
-/**
- * Description: Get list document files (search with filename with pagination)
- * Path: /list-document-files
- * Method: GET
- * Request header: { Authorization: Bearer <access_token> }
- * Request Query: ListDocumentFilesReqQuery
- * */
-userRouter.get(
-  `${PREFIX_USER}/list-document-files`,
-  accessTokenValidator,
-  verifiedUserValidator,
-  paginationValidator,
-  wrapRequestHandler(getListDocumentFilesController)
 )
 
 export default userRouter

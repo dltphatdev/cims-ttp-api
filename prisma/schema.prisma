@@ -87,6 +87,7 @@ model User {
   creatorPerformance  Performance[] // 1 user - n hiệu quả
   creatorActivity     Activity[]
   attachments         Gallery[] // Danh sách file attachments
+  documents           Document[] // 1 user - n document
 
   @@index([email, password])
   @@map("user")
@@ -138,8 +139,11 @@ model Gallery {
   id          Int       @id @default(autoincrement())
   customer_id Int?
   user_id     Int?
+  document_id Int?
   filename    String    @unique @db.VarChar(255)
+  version     Int?      @default(0)
   created_at  DateTime  @default(now())
+  document    Document? @relation(fields: [document_id], references: [id], onDelete: Cascade)
   customer    Customer? @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   user        User?     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -213,4 +217,17 @@ model CustomerConsultant {
   user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("customerconsultant")
+}
+
+model Document {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String?   @db.Text
+  creator_id  Int
+  attachments Gallery[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  creator     User      @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+
+  @@map("document")
 }

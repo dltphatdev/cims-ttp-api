@@ -142,7 +142,20 @@ const MSG = {
   CCCD_IS_EXISTS: 'CCCD đã tồn tại',
   NO_PERMISSION_ALLOW_PAGE: 'Bạn không được quyền truy cập vào trang này. Khi chưa được cấp quyền truy cập',
   UPLOAD_DOCUMENTS_SUCCESSFULLY: 'Upload tài liệu thành công',
-  GET_LIST_DOCUMENTS_FILES_SUCCESS: 'Lấy danh sách tài liệu file thành công'
+  GET_LIST_DOCUMENTS_FILES_SUCCESS: 'Lấy danh sách tài liệu file thành công',
+  NAME_DOCUMENT_MUST_BE_STRING: 'Tên tài liệu phải là dạng chuỗi',
+  NAME_DOCUMENT_LENGTH: 'Tên tài liệu có độ dài từ 1 đến 160 ký tự',
+  DESCRIPTION_IS_REQUIRED: 'Mô tả là bắt buộc',
+  DESCRIPTION_MUST_BE_STRING: 'Mô tả phải là dạng chuỗi',
+  DESCRIPTION_MAX_LENGTH: 'Mô tả chỉ cho phép nhập tối đa 2000 ký tự',
+  CREATED_DOCUMENT_SUCCESS: 'Tạo tài liệu thành công',
+  ATTACHMENT_IS_REQUIRED: 'File đính kèm là bắt buộc',
+  VERSION_IS_REQUIRED: 'Phiên bản là bắt buộc',
+  VERSION_MUST_BE_INTEGER: 'Phiên bản phải là số nguyên',
+  DOCUMENT_NOT_FOUND: 'Không tìm thấy tài liệu',
+  ID_MUST_BE_INTEGER: 'Id phải là số nguyên',
+  UPDATED_DOCUMENT_SUCCESS: 'Cập nhật tài liệu thông tin thành công',
+  GET_DETAIL_DOCUMENT_SUCCESS: 'Lấy thông tin chi tiết tài liệu thông tin thành công'
 } as const
 
 export default MSG
