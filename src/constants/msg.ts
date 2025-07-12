@@ -155,7 +155,8 @@ const MSG = {
   DOCUMENT_NOT_FOUND: 'Không tìm thấy tài liệu',
   ID_MUST_BE_INTEGER: 'Id phải là số nguyên',
   UPDATED_DOCUMENT_SUCCESS: 'Cập nhật tài liệu thông tin thành công',
-  GET_DETAIL_DOCUMENT_SUCCESS: 'Lấy thông tin chi tiết tài liệu thông tin thành công'
+  GET_DETAIL_DOCUMENT_SUCCESS: 'Lấy thông tin chi tiết tài liệu thông tin thành công',
+  DOCUMENT_NAME_ALREADY_EXISTS: 'Tài liệu đã tồn tại'
 } as const
 
 export default MSG

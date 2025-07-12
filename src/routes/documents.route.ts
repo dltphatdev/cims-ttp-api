@@ -1,16 +1,16 @@
 import { PREFIX_DOCUMENT } from '@/constants/path'
 import {
-  createDocumentController,
+  // createDocumentController,
   getDocumentDetailController,
   getListDocumentController,
-  updateDocumentController,
+  // updateDocumentController,
   uploadFileDocumentController
 } from '@/controllers/document.controller'
 import {
-  createDocumentValidator,
+  // createDocumentValidator,
   getDocumentDetailValidator,
-  paginationValidator,
-  updateDocumentValidator
+  paginationValidator
+  // updateDocumentValidator
 } from '@/middlewares/document.middleware'
 import {
   permissionCreateDocumentValidator,
@@ -29,14 +29,14 @@ const documentRouter = Router()
  * Request header: { Authorization: Bearer <access_token> }
  * Request body: CreateDocumentReqBody
  * */
-documentRouter.post(
-  `${PREFIX_DOCUMENT}/create`,
-  accessTokenValidator,
-  verifiedUserValidator,
-  createDocumentValidator,
-  permissionCreateDocumentValidator,
-  wrapRequestHandler(createDocumentController)
-)
+// documentRouter.post(
+//   `${PREFIX_DOCUMENT}/create`,
+//   accessTokenValidator,
+//   verifiedUserValidator,
+//   createDocumentValidator,
+//   permissionCreateDocumentValidator,
+//   wrapRequestHandler(createDocumentController)
+// )
 
 /**
  * Description: Update document
@@ -45,13 +45,13 @@ documentRouter.post(
  * Request header: { Authorization: Bearer <access_token> }
  * Request body: UpdateDocumentReqBody
  * */
-documentRouter.patch(
-  `${PREFIX_DOCUMENT}/update`,
-  accessTokenValidator,
-  verifiedUserValidator,
-  updateDocumentValidator,
-  wrapRequestHandler(updateDocumentController)
-)
+// documentRouter.patch(
+//   `${PREFIX_DOCUMENT}/update`,
+//   accessTokenValidator,
+//   verifiedUserValidator,
+//   updateDocumentValidator,
+//   wrapRequestHandler(updateDocumentController)
+// )
 
 /**
  * Description: get document detail
@@ -97,5 +97,14 @@ documentRouter.get(
   paginationValidator,
   wrapRequestHandler(getListDocumentController)
 )
+
+/**
+ * Description: Upsert document
+ * Path: /
+ * Method: PUT
+ * Request header: { Authorization: Bearer <access_token> }
+ * Request body: UpsertDocumentReqBody
+ * */
+documentRouter.put(PREFIX_DOCUMENT, accessTokenValidator, verifiedUserValidator)
 
 export default documentRouter

@@ -7,6 +7,7 @@ import {
   UpdatePerformanceReqBody
 } from '@/models/requests/performance.request'
 import { RevenueReqQuery } from '@/models/requests/revenue.request'
+import { filterPayload } from '@/utils/common'
 import { RevenueDirection, UserRole } from '@prisma/client'
 import { trim } from 'lodash'
 
@@ -262,21 +263,13 @@ class PerformanceService {
       ...payload,
       assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
     }
-    for (const key in _payload) {
-      if (
-        _payload[key as keyof typeof _payload] === undefined ||
-        _payload[key as keyof typeof _payload] === '' ||
-        _payload[key as keyof typeof _payload] === null
-      ) {
-        delete _payload[key as keyof typeof _payload]
-      }
-    }
+    const payloadData = filterPayload(_payload)
     await prisma.performance.update({
       where: {
-        id: _payload.id
+        id: payloadData.id
       },
       data: {
-        ..._payload,
+        ...payloadData,
         updated_at: new Date()
       }
     })

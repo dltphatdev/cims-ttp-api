@@ -221,7 +221,7 @@ model CustomerConsultant {
 
 model Document {
   id          Int       @id @default(autoincrement())
-  name        String    @db.VarChar(255)
+  name        String    @unique @db.VarChar(255)
   description String?   @db.Text
   creator_id  Int
   attachments Gallery[]

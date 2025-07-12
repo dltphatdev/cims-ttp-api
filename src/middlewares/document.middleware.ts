@@ -33,56 +33,94 @@ const descriptionSchema: ParamSchema = {
   }
 }
 
-const attachmentSchema: ParamSchema = {
+const attachmentsSchema: ParamSchema = {
   notEmpty: {
-    errorMessage: MSG.ATTACHMENT_IS_REQUIRED
+    errorMessage: MSG.ATTACHMENTS_IS_REQUIRED
   },
-  isString: {
-    errorMessage: MSG.ATTACHMENT_MUST_BE_STRING
+  isArray: {
+    errorMessage: MSG.ATTACHMENTS_MUST_BE_ARRAY
   },
-  trim: true
+  custom: {
+    options: (value: string[]) => {
+      if (value.length > 0 && !value.every((item) => typeof item === 'string')) {
+        throw new Error(MSG.ATTACHMENT_ITEM_MUST_BE_ARRAY_STRING)
+      }
+      return true
+    }
+  }
 }
 
-export const createDocumentValidator = validate(
-  checkSchema(
-    {
-      name: nameSchema,
-      description: {
-        ...descriptionSchema,
-        optional: true
-      },
-      attachment: attachmentSchema
-    },
-    ['body']
-  )
-)
+// export const createDocumentValidator = validate(
+//   checkSchema(
+//     {
+//       name: nameSchema,
+//       description: {
+//         ...descriptionSchema,
+//         optional: true
+//       },
+//       attachment: attachmentSchema
+//     },
+//     ['body']
+//   )
+// )
 
-export const updateDocumentValidator = validate(
+// export const updateDocumentValidator = validate(
+//   checkSchema(
+//     {
+//       id: {
+//         notEmpty: {
+//           errorMessage: MSG.ID_IS_REQUIRED
+//         },
+//         isInt: {
+//           errorMessage: MSG.ID_MUST_BE_INTEGER
+//         },
+//         custom: {
+//           options: async (value: number) => {
+//             const document = await prisma.document.findUnique({
+//               where: {
+//                 id: value
+//               }
+//             })
+//             if (!document) {
+//               throw new Error(MSG.DOCUMENT_NOT_FOUND)
+//             }
+//           }
+//         }
+//       },
+//       name: nameSchema,
+//       description: {
+//         ...descriptionSchema,
+//         optional: true
+//       }
+//     },
+//     ['body']
+//   )
+// )
+
+export const upsertDocumentValidator = validate(
   checkSchema(
     {
-      id: {
-        notEmpty: {
-          errorMessage: MSG.ID_IS_REQUIRED
-        },
-        isInt: {
-          errorMessage: MSG.ID_MUST_BE_INTEGER
-        },
+      name: {
+        ...nameSchema,
         custom: {
-          options: async (value: number) => {
+          options: async (value: string) => {
             const document = await prisma.document.findUnique({
               where: {
-                id: value
+                name: value
               }
             })
-            if (!document) {
-              throw new Error(MSG.DOCUMENT_NOT_FOUND)
+            if (document) {
+              throw new Error(MSG.DOCUMENT_NAME_ALREADY_EXISTS)
             }
           }
         }
       },
-      name: nameSchema,
       description: {
         ...descriptionSchema,
+        optional: true
+      },
+      attachments: {
+        ...attachmentsSchema,
         optional: true
       }
     },

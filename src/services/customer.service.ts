@@ -7,12 +7,13 @@ import {
   UpdateCustomerCompanyReqBody,
   UpdateCustomerPersonalReqBody
 } from '@/models/requests/customer.request'
+import { filterPayload } from '@/utils/common'
 import { UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 
 class CustomerService {
   async createCustomer({ payload, user_id }: { payload: CreateCustomerReqBody; user_id: number }) {
-    const consultantor_ids = payload.consultantor_ids
+    const userIds = payload.consultantor_ids
     const attachments = payload.attachments
     const _payload = omit(
       {
@@ -22,39 +23,35 @@ class CustomerService {
       },
       ['consultantor_ids']
     )
-    for (const key in _payload) {
-      if (_payload[key as keyof typeof _payload] === undefined || _payload[key as keyof typeof _payload] === '') {
-        delete _payload[key as keyof typeof _payload]
-      }
-    }
+
+    const payloadData = filterPayload(_payload)
 
     const newCustomer = await prisma.customer.create({
-      data: omit(_payload, ['attachments'])
+      data: omit(payloadData, ['attachments'])
     })
     const id = newCustomer.id
-    const userIds = consultantor_ids
     if (userIds && userIds.length > 0) {
       await Promise.all(
-        userIds.map((userId) =>
-          prisma.customerConsultant.create({
+        userIds.map((userId) => {
+          return prisma.customerConsultant.create({
             data: {
               user_id: userId,
               customer_id: id
             }
           })
-        )
+        })
       )
     }
     if (attachments && attachments.length) {
       await Promise.all(
-        attachments.map((attachment) =>
-          prisma.gallery.create({
+        attachments.map((attachment) => {
+          return prisma.gallery.create({
             data: {
               customer_id: id,
               filename: attachment
             }
           })
-        )
+        })
       )
     }
     return {
@@ -310,6 +307,10 @@ class CustomerService {
         tax_code: true,
         cccd: true,
         phone: true,
+        note: true,
+        surrogate: true,
+        website: true,
+        email: true,
         contact_name: true,
         address_company: true,
         address_personal: true,

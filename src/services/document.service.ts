@@ -2,19 +2,25 @@ import MSG from '@/constants/msg'
 import { LIMIT, PAGE } from '@/constants/pagination'
 import { prisma } from '@/index'
 import {
-  CreateDocumentReqBody,
+  // CreateDocumentReqBody,
   GetListDocumentReqQuery,
-  UpdateDocumentReqBody
+  UpsertDocumentReqBody
+  // UpdateDocumentReqBody
 } from '@/models/requests/document.request'
+import { filterPayload } from '@/utils/common'
 import { UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 
-interface CreateDocumentServicePayLoad extends CreateDocumentReqBody {
-  user_id: number
-}
+// interface CreateDocumentServicePayLoad extends CreateDocumentReqBody {
+//   user_id: number
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface UpdateDocumentServicePayload extends UpdateDocumentReqBody {}
+// interface UpdateDocumentServicePayload extends UpdateDocumentReqBody {}
+
+interface UpsertDocumentServicePayload extends UpsertDocumentReqBody {
+  user_id: number
+}
 
 interface DocumentListServicePayload {
   payload: GetListDocumentReqQuery
@@ -23,64 +29,64 @@ interface DocumentListServicePayload {
 }
 
 class DocumentService {
-  async create({ user_id, ...payload }: CreateDocumentServicePayLoad) {
-    const attachment = payload.attachment
-    for (const key in payload) {
-      if (payload[key as keyof typeof payload] === undefined || payload[key as keyof typeof payload] === '') {
-        delete payload[key as keyof typeof payload]
-      }
-    }
-    const documentRow = await prisma.document.create({
-      data: {
-        ...omit(payload, ['attachment']),
-        creator_id: user_id
-      }
-    })
+  // async create({ user_id, ...payload }: CreateDocumentServicePayLoad) {
+  //   const attachment = payload.attachment
+  //   for (const key in payload) {
+  //     if (payload[key as keyof typeof payload] === undefined || payload[key as keyof typeof payload] === '') {
+  //       delete payload[key as keyof typeof payload]
+  //     }
+  //   }
+  //   const documentRow = await prisma.document.create({
+  //     data: {
+  //       ...omit(payload, ['attachment']),
+  //       creator_id: user_id
+  //     }
+  //   })
 
-    const id = documentRow.id
+  //   const id = documentRow.id
 
-    const lastVersionFileAttachment = await prisma.gallery.findFirst({
-      where: {
-        document_id: id
-      },
-      select: {
-        version: true
-      },
-      orderBy: { version: 'desc' }
-    })
+  //   const lastVersionFileAttachment = await prisma.gallery.findFirst({
+  //     where: {
+  //       document_id: id
+  //     },
+  //     select: {
+  //       version: true
+  //     },
+  //     orderBy: { version: 'desc' }
+  //   })
 
-    const versionFileAttachment = lastVersionFileAttachment ? Number(lastVersionFileAttachment) + 1 : 0
+  //   const versionFileAttachment = lastVersionFileAttachment ? Number(lastVersionFileAttachment) + 1 : 0
 
-    await prisma.gallery.create({
-      data: {
-        document_id: id,
-        filename: attachment,
-        version: versionFileAttachment
-      }
-    })
+  //   await prisma.gallery.create({
+  //     data: {
+  //       document_id: id,
+  //       filename: attachment,
+  //       version: versionFileAttachment
+  //     }
+  //   })
 
-    return {
-      message: MSG.CREATED_DOCUMENT_SUCCESS,
-      id
-    }
-  }
+  //   return {
+  //     message: MSG.CREATED_DOCUMENT_SUCCESS,
+  //     id
+  //   }
+  // }
 
-  async update(payload: UpdateDocumentServicePayload) {
-    for (const key in payload) {
-      if (payload[key as keyof typeof payload] === undefined || payload[key as keyof typeof payload] === '') {
-        delete payload[key as keyof typeof payload]
-      }
-    }
-    await prisma.document.update({
-      where: {
-        id: payload.id
-      },
-      data: omit(payload, ['id'])
-    })
-    return {
-      message: MSG.UPDATED_DOCUMENT_SUCCESS
-    }
-  }
+  // async update(payload: UpdateDocumentServicePayload) {
+  //   for (const key in payload) {
+  //     if (payload[key as keyof typeof payload] === undefined || payload[key as keyof typeof payload] === '') {
+  //       delete payload[key as keyof typeof payload]
+  //     }
+  //   }
+  //   await prisma.document.update({
+  //     where: {
+  //       id: payload.id
+  //     },
+  //     data: omit(payload, ['id'])
+  //   })
+  //   return {
+  //     message: MSG.UPDATED_DOCUMENT_SUCCESS
+  //   }
+  // }
 
   async getDocumentDetail(id: number) {
     const [document, gallery] = await Promise.all([
@@ -174,6 +180,55 @@ class DocumentService {
       totalDocuments,
       page,
       limit
+    }
+  }
+
+  async upsert({ user_id, ...payload }: UpsertDocumentServicePayload) {
+    const fileAttachments = payload?.attachments
+    const payloadData = filterPayload(payload)
+
+    const document = await prisma.document.upsert({
+      where: {
+        name: payloadData.name
+      },
+      update: {
+        ...omit(payloadData, ['attachments'])
+      },
+      create: {
+        ...omit(payloadData, ['attachments']),
+        creator_id: user_id
+      }
+    })
+
+    const documentId = document.id
+
+    const lastVersionFileAttachment = await prisma.gallery.findFirst({
+      where: {
+        document_id: documentId
+      },
+      select: {
+        version: true
+      },
+      orderBy: { version: 'desc' }
+    })
+
+    const version = lastVersionFileAttachment ? Number(lastVersionFileAttachment) + 1 : 0
+
+    if (fileAttachments && fileAttachments.length > 0) {
+      await Promise.all(
+        fileAttachments.map((fileAttachment) => {
+          return prisma.gallery.create({
+            data: {
+              document_id: documentId,
+              filename: fileAttachment,
+              version
+            }
+          })
+        })
+      )
+    }
+    return {
+      message: MSG.CREATED_DOCUMENT_SUCCESS
     }
   }
 }

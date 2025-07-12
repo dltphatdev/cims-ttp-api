@@ -6,6 +6,7 @@ import {
   GetListActivityReqQuery,
   UpdateActivityReqBody
 } from '@/models/requests/activity.request'
+import { filterPayload } from '@/utils/common'
 import { UserRole } from '@prisma/client'
 
 class ActivityService {
@@ -24,21 +25,13 @@ class ActivityService {
   }
 
   async updateActivity(payload: UpdateActivityReqBody) {
-    for (const key in payload) {
-      if (
-        payload[key as keyof typeof payload] === undefined ||
-        payload[key as keyof typeof payload] === '' ||
-        payload[key as keyof typeof payload] === null
-      ) {
-        delete payload[key as keyof typeof payload]
-      }
-    }
+    const payloadData = filterPayload(payload)
     await prisma.activity.update({
       where: {
-        id: payload.id
+        id: payloadData.id
       },
       data: {
-        ...payload,
+        ...payloadData,
         time_start: payload.time_start ? new Date(payload.time_start as string) : null,
         time_end: payload.time_end ? new Date(payload.time_end as string) : null,
         updated_at: new Date()
