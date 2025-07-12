@@ -134,12 +134,14 @@ customerRouter.get(
  * Method: GET
  * Request header: { Authorization: Bearer <access_token> }
  * Request params: {id: string}
+ * Query String: { page?: string; limit?: string }
  *  * */
 customerRouter.get(
   `${PREFIX_CUSTOMER}/detail/:id`,
   accessTokenValidator,
   verifiedUserValidator,
   getCustomerDetailValidator,
+  paginationValidator,
   permissionGetDetailCustomerValidator,
   wrapRequestHandler(getCustomerDetailController)
 )

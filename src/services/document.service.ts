@@ -186,7 +186,6 @@ class DocumentService {
   async upsert({ user_id, ...payload }: UpsertDocumentServicePayload) {
     const fileAttachments = payload?.attachments
     const payloadData = filterPayload(payload)
-
     const document = await prisma.document.upsert({
       where: {
         name: payloadData.name
@@ -199,9 +198,7 @@ class DocumentService {
         creator_id: user_id
       }
     })
-
     const documentId = document.id
-
     const lastVersionFileAttachment = await prisma.gallery.findFirst({
       where: {
         document_id: documentId

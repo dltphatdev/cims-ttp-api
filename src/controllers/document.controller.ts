@@ -2,7 +2,8 @@ import MSG from '@/constants/msg'
 import {
   // CreateDocumentReqBody,
   GetDocumentDetailReqParams,
-  GetListDocumentReqQuery
+  GetListDocumentReqQuery,
+  UpsertDocumentReqBody
   // UpdateDocumentReqBody
 } from '@/models/requests/document.request'
 import { TokenPayLoad } from '@/models/requests/user.request'
@@ -70,10 +71,13 @@ export const getListDocumentController = async (
   return
 }
 
-export const upsertDocumentController = async (req: Request, res: Response) => {
+export const upsertDocumentController = async (
+  req: Request<ParamsDictionary, any, UpsertDocumentReqBody>,
+  res: Response
+) => {
   const { user_id } = req.decode_authorization as TokenPayLoad
   const payload = req.body
-  // const result = await documentService.upsert()
-  // res.json(result)
+  const result = await documentService.upsert({ user_id, ...payload })
+  res.json(result)
   return
 }

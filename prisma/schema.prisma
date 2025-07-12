@@ -85,6 +85,7 @@ model User {
   creatorCustomers    Customer[] // 1 user - n customer 
   consultantCustomers CustomerConsultant[] // 1 user tư vấn - n customer
   creatorPerformance  Performance[] // 1 user - n hiệu quả
+  creatorRevenue      Revenue[] // 1 user - n doanh thu
   creatorActivity     Activity[]
   attachments         Gallery[] // Danh sách file attachments
   documents           Document[] // 1 user - n document
@@ -131,6 +132,7 @@ model Customer {
   consultantor         CustomerConsultant[] // Danh sách người tư vấn 
   customersPerformance Performance[] // Danh sách sách hiệu quả 
   attachments          Gallery[] // Danh sách file attachments
+  activityCustomers    Activity[] // Danh sách hoạt động 
 
   @@map("customer")
 }
@@ -180,10 +182,12 @@ model Revenue {
   unit_caculate  String?          @db.VarChar(255) // Đơn vị tính dạng string 
   type           TypeRevenue      @default(OneTime) // Loại doanh thu 
   performance_id Int
+  creator_id     Int
   price          Decimal          @db.Decimal(15, 2) // Đơn giá
   quantity       Int              @default(1)
   direction      RevenueDirection @default(In) // Xác định đây là doanh thu gì
   performance    Performance      @relation(fields: [performance_id], references: [id])
+  creator        User             @relation(fields: [creator_id], references: [id], onDelete: Cascade)
   created_at     DateTime         @default(now())
   updated_at     DateTime?
 
@@ -197,6 +201,8 @@ model Activity {
   address      String?        @db.VarChar(255)
   contact_name String?        @db.VarChar(255)
   creator_id   Int
+  customer_id  Int?
+  assign_at    DateTime?
   status       ActivityStatus @default(New)
   content      String?        @db.Text
   time_start   DateTime?
@@ -204,6 +210,7 @@ model Activity {
   created_at   DateTime       @default(now())
   updated_at   DateTime?
   creator      User           @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  customer     Customer?      @relation(fields: [customer_id], references: [id])
 
   @@map("activity")
 }

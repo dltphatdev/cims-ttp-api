@@ -100,21 +100,7 @@ const attachmentsSchema: ParamSchema = {
 export const upsertDocumentValidator = validate(
   checkSchema(
     {
-      name: {
-        ...nameSchema,
-        custom: {
-          options: async (value: string) => {
-            const document = await prisma.document.findUnique({
-              where: {
-                name: value
-              }
-            })
-            if (document) {
-              throw new Error(MSG.DOCUMENT_NAME_ALREADY_EXISTS)
-            }
-          }
-        }
-      },
+      name: nameSchema,
       description: {
         ...descriptionSchema,
         optional: true

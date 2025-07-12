@@ -16,7 +16,8 @@ class ActivityService {
         ...payload,
         creator_id: user_id,
         time_start: new Date(payload.time_start),
-        time_end: new Date(payload.time_end)
+        time_end: new Date(payload.time_end),
+        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
       }
     })
     return {
@@ -34,7 +35,8 @@ class ActivityService {
         ...payloadData,
         time_start: payload.time_start ? new Date(payload.time_start as string) : null,
         time_end: payload.time_end ? new Date(payload.time_end as string) : null,
-        updated_at: new Date()
+        updated_at: new Date(),
+        assign_at: payload?.assign_at ? new Date(payload.assign_at) : null
       }
     })
     return {
@@ -50,6 +52,7 @@ class ActivityService {
       select: {
         id: true,
         name: true,
+        customer_id: true,
         address: true,
         phone: true,
         time_start: true,
@@ -63,6 +66,12 @@ class ActivityService {
         creator: {
           select: {
             fullname: true
+          }
+        },
+        customer: {
+          select: {
+            id: true,
+            name: true
           }
         }
       }
@@ -133,6 +142,23 @@ class ActivityService {
           creator: {
             select: {
               fullname: true
+            }
+          },
+          customer: {
+            select: {
+              id: true,
+              name: true,
+              consultantor: {
+                select: {
+                  user: {
+                    select: {
+                      fullname: true,
+                      id: true,
+                      role: true
+                    }
+                  }
+                }
+              }
             }
           }
         }

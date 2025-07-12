@@ -18,15 +18,3 @@ export interface UpsertDocumentReqBody {
   description?: string
   attachments?: string[]
 }
-
-// export interface CreateDocumentReqBody {
-//   name: string
-//   description: string
-//   attachment: string
-// }
-
-// export interface UpdateDocumentReqBody {
-//   id: number
-//   name: string
-//   description?: string
-// }

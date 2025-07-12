@@ -49,6 +49,7 @@ activityRouter.put(
   updateActivityValidator,
   filterMiddleware<UpdateActivityReqBody>([
     'name',
+    'customer_id',
     'contact_name',
     'address',
     'phone',
@@ -56,7 +57,8 @@ activityRouter.put(
     'time_start',
     'time_end',
     'content',
-    'id'
+    'id',
+    'assign_at'
   ]),
   wrapRequestHandler(updateActivityController)
 )

@@ -48,6 +48,12 @@ const nameSchema: ParamSchema = {
   }
 }
 
+const customerId: ParamSchema = {
+  notEmpty: {
+    errorMessage: MSG.CUSTOMER_ID_IS_REQUIRED
+  }
+}
+
 const contactNameSchema: ParamSchema = {
   isString: {
     errorMessage: MSG.CONTACT_NAME_ACTIVITY_MUST_BE_STRING
@@ -62,6 +68,16 @@ const contactNameSchema: ParamSchema = {
       max: 160
     },
     errorMessage: MSG.CONTACT_NAME_ACTIVITY_LENGTH
+  }
+}
+
+const assignAtSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: MSG.ASSIGN_AT_ISO8601
   }
 }
 
@@ -167,6 +183,29 @@ export const paginationValidator = validate(
 export const createActivityValidator = validate(
   checkSchema({
     name: nameSchema,
+    customer_id: {
+      ...customerId,
+      custom: {
+        options: async (value: number) => {
+          if (typeof value !== 'number') {
+            throw new Error(MSG.ID_MUST_BE_NUMBER)
+          }
+          // eslint-disable-next-line no-useless-catch
+          try {
+            const customer = await prisma.customer.findUnique({
+              where: {
+                id: value
+              }
+            })
+            if (!customer) {
+              throw new Error(MSG.CUSTOMER_NOT_FOUND)
+            }
+          } catch (error) {
+            throw error
+          }
+        }
+      }
+    },
     contact_name: contactNameSchema,
     address: addressSchema,
     phone: phoneSchema,
@@ -176,7 +215,11 @@ export const createActivityValidator = validate(
     },
     status: statusSchema,
     time_start: timeStartSchema,
-    time_end: timeEndSchema
+    time_end: timeEndSchema,
+    assign_at: {
+      ...assignAtSchema,
+      optional: true
+    }
   })
 )
 
@@ -186,6 +229,30 @@ export const updateActivityValidator = validate(
       id: idSchema,
       name: {
         ...nameSchema,
+        optional: true
+      },
+      customer_id: {
+        ...customerId,
+        custom: {
+          options: async (value: number) => {
+            if (typeof value !== 'number') {
+              throw new Error(MSG.ID_MUST_BE_NUMBER)
+            }
+            // eslint-disable-next-line no-useless-catch
+            try {
+              const customer = await prisma.customer.findUnique({
+                where: {
+                  id: value
+                }
+              })
+              if (!customer) {
+                throw new Error(MSG.CUSTOMER_NOT_FOUND)
+              }
+            } catch (error) {
+              throw error
+            }
+          }
+        },
         optional: true
       },
       contact_name: {
@@ -214,6 +281,10 @@ export const updateActivityValidator = validate(
       },
       time_end: {
         ...timeEndSchema,
+        optional: true
+      },
+      assign_at: {
+        ...assignAtSchema,
         optional: true
       }
     },

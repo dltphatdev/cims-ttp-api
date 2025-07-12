@@ -4,12 +4,14 @@ import {
   getDocumentDetailController,
   getListDocumentController,
   // updateDocumentController,
-  uploadFileDocumentController
+  uploadFileDocumentController,
+  upsertDocumentController
 } from '@/controllers/document.controller'
 import {
   // createDocumentValidator,
   getDocumentDetailValidator,
-  paginationValidator
+  paginationValidator,
+  upsertDocumentValidator
   // updateDocumentValidator
 } from '@/middlewares/document.middleware'
 import {
@@ -105,6 +107,12 @@ documentRouter.get(
  * Request header: { Authorization: Bearer <access_token> }
  * Request body: UpsertDocumentReqBody
  * */
-documentRouter.put(PREFIX_DOCUMENT, accessTokenValidator, verifiedUserValidator)
+documentRouter.put(
+  'document',
+  accessTokenValidator,
+  verifiedUserValidator,
+  upsertDocumentValidator,
+  wrapRequestHandler(upsertDocumentController)
+)
 
 export default documentRouter
